@@ -1,0 +1,105 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "orchestrator",
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".agent/README.md",
+    "docs/workflows/001-test-task-sop.md",
+    "docs/workflows/002-multi-agent-orchestration.md",
+    "docs/workflows/003-bugfix-sop.md",
+    "docs/constitution/004-quality-gate.md"
+  ],
+  "references": {
+    "constitution": {
+      "path": "docs/constitution",
+      "description": "Non-negotiables, POM architecture, anti-hallucination, quality gate"
+    },
+    "workflows": {
+      "path": "docs/workflows",
+      "description": "SOPs for test tasks, multi-agent orchestration, bugfix"
+    },
+    "personas": {
+      "path": "docs/personas",
+      "description": "Agent persona definitions: orchestrator, researcher, builder, reviewer, qa-gatekeeper"
+    },
+    "skills-ref": {
+      "path": "skills",
+      "description": "E2E test dispatching and selector quality skills"
+    }
+  },
+  "agent": {
+    "researcher": {
+      "description": "Read-only code explorer. Finds routes, components, selectors, API endpoints. Never modifies code.",
+      "mode": "subagent",
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "bash": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "task": "deny",
+        "todowrite": "deny",
+        "memory": "deny"
+      }
+    },
+    "builder": {
+      "description": "Implements POM files and spec files. Creates/edits test code only.",
+      "mode": "subagent",
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "bash": "allow",
+        "todowrite": "deny",
+        "task": "deny"
+      }
+    },
+    "reviewer": {
+      "description": "Audits POM and spec files for quality and spec compliance. Read-only gate.",
+      "mode": "subagent",
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "bash": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "task": "deny",
+        "todowrite": "deny"
+      }
+    },
+    "qa-gatekeeper": {
+      "description": "Runs tests, generates structured evidence, produces pass/fail summary. Read-only outside test execution.",
+      "mode": "subagent",
+      "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "bash": "allow",
+        "edit": "deny",
+        "write": "deny",
+        "task": "deny",
+        "todowrite": "deny"
+      }
+    },
+    "orchestrator": {
+      "description": "Lead architect. Plans, dispatches sub-agents, tracks progress, generates summaries.",
+      "mode": "primary",
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "write": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "bash": "allow",
+        "task": "allow",
+        "todowrite": "allow",
+        "memory": "allow"
+      }
+    }
+  }
+}
