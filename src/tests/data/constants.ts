@@ -1,6 +1,8 @@
+import { requireEnv } from '../utils/env';
+
 export const TEST_USER = {
-  email: process.env.TEST_USER_EMAIL || 'REDACTED_EMAIL',
-  password: process.env.TEST_USER_PASSWORD || 'REDACTED_PASSWORD',
+  email: requireEnv('TEST_USER_EMAIL'),
+  password: requireEnv('TEST_USER_PASSWORD'),
   name: 'QA Tester',
   phone: '81234567890',
   countryCode: '+62',

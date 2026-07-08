@@ -33,9 +33,11 @@ export function generateRegisterPayload(overrides?: Partial<{
   };
 }
 
+import { requireEnv } from '../utils/env';
+
 export const VALID_CREDENTIALS = {
-  email: process.env.TEST_USER_EMAIL || 'REDACTED_EMAIL',
-  password: process.env.TEST_USER_PASSWORD || 'REDACTED_PASSWORD',
+  email: requireEnv('TEST_USER_EMAIL'),
+  password: requireEnv('TEST_USER_PASSWORD'),
 };
 
 export const INVALID_CREDENTIALS = {
