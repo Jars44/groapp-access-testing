@@ -1,0 +1,74 @@
+{
+  "description": "Agent runtime configuration — persona configs, retry policies, validation rules",
+  "version": "2.0.0",
+  "sourceDir": "../groapp-access",
+  "defaultPersona": "senior-qa-engineer",
+  "personas": {
+    "lead-architect": {
+      "allowedTools": ["read", "write", "edit", "glob", "grep", "bash", "task", "todowrite"],
+      "timeout": 300000,
+      "restrictedTools": ["playwright_*", "firecrawl_*"],
+      "restrictedPaths": ["node_modules/**", ".git/**"]
+    },
+    "researcher": {
+      "allowedTools": ["read", "glob", "grep", "bash"],
+      "timeout": 180000,
+      "restrictedTools": ["write", "edit", "playwright_*", "firecrawl_*", "task", "todowrite", "memory_*"],
+      "restrictedPaths": ["node_modules/**", ".git/**"],
+      "readOnly": true
+    },
+    "builder": {
+      "allowedTools": ["read", "write", "edit", "glob", "grep", "bash"],
+      "timeout": 300000,
+      "restrictedTools": ["playwright_*", "firecrawl_*", "task", "todowrite"],
+      "restrictedPaths": ["node_modules/**", ".git/**"]
+    },
+    "reviewer": {
+      "allowedTools": ["read", "glob", "grep"],
+      "timeout": 120000,
+      "restrictedTools": ["write", "edit", "bash", "playwright_*", "firecrawl_*", "task", "todowrite", "memory_*"],
+      "readOnly": true
+    },
+    "qa-gatekeeper": {
+      "allowedTools": ["read", "glob", "grep", "bash"],
+      "timeout": 300000,
+      "restrictedTools": ["write", "edit", "firecrawl_*", "task", "todowrite"],
+      "restrictedPaths": ["node_modules/**", ".git/**"],
+      "runScripts": ["npx playwright test"]
+    }
+  },
+  "retry": {
+    "maxAttempts": 3,
+    "backoffMs": 1000,
+    "backoffMultiplier": 2,
+    "maxBackoffMs": 30000
+  },
+  "validation": {
+    "preflight": {
+      "checkSourceDir": true,
+      "checkPlaywright": true,
+      "checkNodeModules": true
+    },
+    "handoff": {
+      "validateStateOnRead": true,
+      "validateStateOnWrite": true,
+      "strictPhaseOrder": true
+    }
+  },
+  "quality": {
+    "gateFile": "docs/constitution/004-quality-gate.md",
+    "flakinessRuns": 3,
+    "maxFlakinessFailures": 0,
+    "blockOnCriticalIssues": true
+  },
+  "task": {
+    "stateFile": ".agent/state.json",
+    "maxSubagents": 5,
+    "timeout": 300000
+  },
+  "security": {
+    "restrictedCommands": ["curl", "wget", "chmod", "chown", "sudo", "su"],
+    "restrictedPaths": [".env*", "node_modules/**", ".git/**", "**/secrets/**"],
+    "allowedDomains": ["localhost", "*.groapp.id", "firebase.googleapis.com"]
+  }
+}

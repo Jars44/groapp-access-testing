@@ -1,0 +1,95 @@
+{
+  "version": "2.1.0",
+  "description": "Pipeline state machine with human-verifiable task tracking. Each task has evidence, status, and verification criteria.",
+  "metadata": {
+    "project": "groapp-access-testing",
+    "started_at": null,
+    "completed_at": null,
+    "last_updated": null
+  },
+  "pipeline": {
+    "mode": "pipeline",
+    "phase": "idle",
+    "status": "idle",
+    "attempt": 0,
+    "max_attempts": 3
+  },
+  "errors": [],
+  "tasks": [],
+  "artifacts": {
+    "test_plan": null,
+    "research_findings": [],
+    "pom_files": [],
+    "spec_files": [],
+    "data_factories": [],
+    "fixtures": [],
+    "reports": [],
+    "summary": null
+  },
+  "summary": {
+    "generated_at": null,
+    "total_todos": 0,
+    "passed": 0,
+    "blocked": 0,
+    "skipped": 0,
+    "gaps": [],
+    "summary_path": ""
+  },
+  "validation": {
+    "last_preflight": null,
+    "last_handoff_validation": null,
+    "preflight_ok": false
+  },
+  "schema": {
+    "version": "2.1.0",
+    "tasks": [
+      {
+        "id": "string — TC-001",
+        "description": "string — short description",
+        "scenario_type": "happy path | error | edge case | validation",
+        "route": "string — target URL",
+        "test_data_ref": "string — factory function or constant path",
+        "selectors": ["string — list of selectors used"],
+        "expected": "string — expected outcome for human to verify",
+        "status": "not_started | implemented | passed | blocked | skipped",
+        "evidence": {
+          "spec_file": "string — path to spec file",
+          "spec_line": "number — line number of test",
+          "pom_file": "string — path to POM file",
+          "pom_line": "number — line number of selector/action",
+          "test_run_result": "pass | fail | flaky | not_run",
+          "verification_notes": "string — human-readable notes for reviewer"
+        }
+      }
+    ],
+    "errors": [
+      {
+        "phase": "string",
+        "agent": "string",
+        "code": "string — error taxonomy",
+        "message": "string",
+        "evidence": "string — file:line or test output",
+        "recovery": "retry | skip | block",
+        "timestamp": "string — ISO 8601"
+      }
+    ],
+    "error_taxonomy": {
+      "E001": "state_unreadable",
+      "E002": "handoff_invalid",
+      "E003": "source_dir_missing",
+      "E004": "test_run_failed",
+      "E005": "flaky_test",
+      "E006": "quality_block",
+      "E007": "artifact_missing",
+      "E008": "timeout",
+      "E009": "tool_restricted",
+      "E010": "pipeline_blocked"
+    },
+    "handoff_protocol": {
+      "lead_to_researcher": { "required": ["pipeline.phase", "artifacts.test_plan"], "phase": "discovery" },
+      "researcher_to_builder": { "required": ["artifacts.research_findings"], "phase": "exploration" },
+      "builder_to_gatekeeper": { "required": ["artifacts.pom_files", "artifacts.spec_files"], "phase": "implementation" },
+      "gatekeeper_to_lead": { "required": ["artifacts.reports"], "phase": "verification" }
+    }
+  }
+}

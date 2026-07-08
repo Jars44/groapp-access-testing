@@ -61,7 +61,7 @@
 ## Directory Structure
 
 ```text
-groapp/
+groapp-access/
 ├── CLAUDE.md                       # Claude Code operating instructions
 ├── README.md
 ├── cloudbuild.yaml                 # GCP Cloud Build CI/CD

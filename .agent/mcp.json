@@ -1,0 +1,38 @@
+{
+  "description": "Persona-scoped MCP tool schema. Each persona gets only the tools it needs.",
+  "version": "2.0.0",
+  "personaAccess": {
+    "lead-architect": {
+      "filesystem": { "mode": "readwrite", "patterns": ["**/*.md", "**/*.json", "**/*.ts", "**/AGENTS.md"] },
+      "terminal": { "mode": "execute", "allowedCommands": ["npx playwright", "npm", "git", "ls", "cat"] },
+      "task": { "mode": "dispatch", "allowedPersonas": ["researcher", "builder", "reviewer", "qa-gatekeeper"] },
+      "memory": { "mode": "readwrite" }
+    },
+    "researcher": {
+      "filesystem": { "mode": "readonly", "patterns": ["**/*.tsx", "**/*.ts", "**/*.json", "**/*.md"] },
+      "terminal": { "mode": "execute", "allowedCommands": ["ls", "cat", "find", "grep"] },
+      "web": { "mode": "readonly" }
+    },
+    "builder": {
+      "filesystem": { "mode": "readwrite", "patterns": ["src/tests/**/*.ts", "src/tests/**/*.tsx"] },
+      "terminal": { "mode": "execute", "allowedCommands": ["npx playwright", "npm", "ls", "cat"] },
+      "web": { "mode": "none" }
+    },
+    "reviewer": {
+      "filesystem": { "mode": "readonly", "patterns": ["src/tests/**/*.ts", "src/tests/**/*.tsx"] },
+      "terminal": { "mode": "execute", "allowedCommands": ["ls", "cat", "grep"] },
+      "web": { "mode": "none" }
+    },
+    "qa-gatekeeper": {
+      "filesystem": { "mode": "readonly", "patterns": ["src/tests/**/*.ts", "src/tests/**/*.tsx"] },
+      "terminal": { "mode": "execute", "allowedCommands": ["npx playwright", "npm", "ls", "cat"] },
+      "memory": { "mode": "readwrite" },
+      "browser": { "mode": "debug" }
+    }
+  },
+  "contextLayers": {
+    "layer1_always": ["AGENTS.md", "CLAUDE.md", ".agent/README.md"],
+    "layer2_ondemand": ["skills/*/SKILL.md", "docs/constitution/*", "docs/workflows/*", "docs/personas/*"],
+    "layer3_tools": ["docs/reference/*", ".agent/templates/*", ".agent/mcp.json"]
+  }
+}

@@ -31,7 +31,7 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev:testing',
     url: 'http://localhost:5173',
-    cwd: '/home/jarsz/code/groapp',
+    cwd: process.env.GROAPP_ACCESS_SOURCE_DIR || '../groapp-access',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
