@@ -1,6 +1,7 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
 import { TableComponent } from '../components/table.component';
+import { SEL } from '../../data/selectors';
 
 export class UserListPage extends BasePage {
   readonly table: TableComponent;
@@ -14,7 +15,7 @@ export class UserListPage extends BasePage {
     return this.page.getByRole('button', { name: /undang|invite/i });
   }
   get searchInput(): Locator {
-    return this.page.getByPlaceholder(/cari|search/i);
+    return this.page.locator(SEL.form.search);
   }
   get filterByRole(): Locator {
     return this.page.getByTestId('filter-role');
@@ -48,7 +49,7 @@ export class UserDetailPage extends BasePage {
     return this.page.getByTestId('user-profile');
   }
   get membershipTable(): Locator {
-    return this.page.locator('table');
+    return this.page.getByRole('table');
   }
   get roleDropdown(): Locator {
     return this.page.getByTestId('role-select');
@@ -64,7 +65,7 @@ export class UserInviteModalPage extends BasePage {
   }
 
   get emailInput(): Locator {
-    return this.page.getByRole('dialog').getByLabel(/email/i);
+    return this.page.getByRole('dialog').locator(SEL.form.email);
   }
   get roleDropdown(): Locator {
     return this.page.getByRole('dialog').getByTestId('role-select');
@@ -73,14 +74,11 @@ export class UserInviteModalPage extends BasePage {
     return this.page.getByRole('dialog').getByRole('button', { name: /undang|invite|kirim/i });
   }
   get errorText(): Locator {
-    return this.page.getByRole('dialog').locator('[data-helper-text], [data-error]');
+    return this.page.getByRole('dialog').locator(SEL.state.error);
   }
 
   async fillEmail(email: string): Promise<void> {
     await this.emailInput.fill(email);
-  }
-  async selectRole(roleName: string): Promise<void> {
-    await this.roleDropdown.selectOption(roleName);
   }
   async submit(): Promise<void> {
     await this.inviteButton.click();

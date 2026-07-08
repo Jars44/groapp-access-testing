@@ -392,16 +392,15 @@ test.describe("Company List", () => {
 
 ### 6.2 Selector Strategy Priority
 
-| Priority | Method                          | When                                   |
-| -------- | ------------------------------- | -------------------------------------- |
-| 1        | `getByTestId(testId)`           | Component has `data-testid` attribute  |
-| 2        | `getByRole(role, { name })`     | Semantic role + accessible name        |
-| 3        | `getByLabel(label)`             | Form inputs with labels                |
-| 4        | `getByPlaceholder(placeholder)` | Inputs with unique placeholder         |
-| 5        | `getByText(text)`               | Unique visible text                    |
-| 6        | `getByTitle(title)`             | Elements with title attribute          |
-| 7        | `locator(css)`                  | Last resort — fragile to style changes |
-| 8        | `locator(xpath)`                | Never — most fragile                   |
+| Priority | Method                          | When                                        | Stability                                                                                                                                                               |
+| -------- | ------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1        | `getByTestId(testId)`           | Component has data-testid attribute         | **Most stable.** Explicit for testing, centralized via constants, immune to refactor/copy/schema/locale changes. Widely adopted in codebase (role, user, profile, etc.) |
+| 2        | `getByRole(role, { name })`     | Semantic role + accessible name             | **Accessible, resilient.** But label text from translation() may change. Suitable for general assertions (button, checkbox, link)                                       |
+| 3        | `locator('input[name="..."]')`  | Form fields with name attribute from schema | **Stable despite copy changes.** Direct from form schema. But if field name in schema changes, breaks completely.                                                       |
+| 4        | `getByLabel(label)`             | Inputs with `<label>` association           | **Vulnerable to locale/copy changes.** Depends on `<label htmlFor>` or `aria-label`. Similar to getByRole but less flexible.                                            |
+| 5        | `getByPlaceholder(placeholder)` | Inputs with placeholder                     | **Most fragile.** Placeholder often changes due to UX, not all fields have it. Last resort before raw CSS.                                                              |
+| 6        | `locator(css)`                  | Last resort — fragile to style changes      | Raw CSS selector without semantic context                                                                                                                               |
+| 7        | `locator(xpath)`                | Never — most fragile                        | **FORBIDDEN.** Not resilient, not readable, not indexed by Playwright                                                                                                   |
 
 ### 6.3 Naming Conventions
 

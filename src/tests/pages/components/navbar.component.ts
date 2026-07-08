@@ -1,14 +1,15 @@
 import { type Locator, type Page } from '@playwright/test';
+import { SEL } from '../../data/selectors';
 
 export class NavbarComponent {
   readonly root: Locator;
 
   constructor(readonly page: Page) {
-    this.root = page.locator('[data-testid="navbar"], nav:has([data-testid])');
+    this.root = page.getByTestId('navbar');
   }
 
   get notificationBadge(): Locator {
-    return this.page.getByTestId('notification-badge');
+    return this.page.locator(SEL.indicator.badge);
   }
 
   get profileDropdown(): Locator {
@@ -28,6 +29,6 @@ export class NavbarComponent {
   }
 
   async getTitle(): Promise<string> {
-    return await this.root.locator('h1, h2, [data-testid="page-title"]').innerText();
+    return await this.root.getByTestId('page-title').innerText();
   }
 }

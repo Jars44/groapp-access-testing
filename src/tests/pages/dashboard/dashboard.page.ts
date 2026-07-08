@@ -12,18 +12,18 @@ export class DashboardPage extends BasePage {
     return this.page.getByTestId('welcome-section');
   }
   get moduleCards(): Locator {
-    return this.page.locator('[data-testid="module-card"]');
+    return this.page.getByTestId('module-card');
   }
   get quickActions(): Locator {
-    return this.page.locator('[data-testid="quick-action"]');
+    return this.page.getByTestId('quick-action');
   }
   get inviteTeamButton(): Locator {
-    return this.page.getByText(/undang tim|invite team/i);
+    return this.page.getByRole('button', { name: /undang tim|invite team/i });
   }
   get manageRoleButton(): Locator {
-    return this.page.getByText(/kelola peran|manage role/i);
+    return this.page.getByRole('button', { name: /kelola peran|manage role/i });
   }
   get auditLogButton(): Locator {
-    return this.page.getByText(/audit log/i);
+    return this.page.getByRole('button', { name: /audit log/i });
   }
 }

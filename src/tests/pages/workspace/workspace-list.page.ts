@@ -1,5 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
+import { SEL } from '../../data/selectors';
 
 export class WorkspaceListPage extends BasePage {
   readonly url = '/workspaces';
@@ -9,22 +10,22 @@ export class WorkspaceListPage extends BasePage {
   }
 
   get createButton(): Locator {
-    return this.page.getByRole('button', { name: /tambah|buat|create/i });
+    return this.page.getByRole('button', { name: SEL.button.tambah });
   }
   get searchInput(): Locator {
-    return this.page.getByPlaceholder(/cari|search/i);
+    return this.page.locator(SEL.form.search);
   }
   get workspaceCards(): Locator {
-    return this.page.locator('[data-testid="workspace-card"]');
+    return this.page.getByTestId('workspace-card');
   }
   get emptyState(): Locator {
     return this.page.getByTestId('empty-data');
   }
   get loadMoreTrigger(): Locator {
-    return this.page.locator('[data-testid="infinite-scroll-trigger"]');
+    return this.page.getByTestId('infinite-scroll-trigger');
   }
   get typeToConfirmInput(): Locator {
-    return this.page.getByLabel(/ketik|type|confirm/i);
+    return this.page.locator('input[name="confirmName"], input[placeholder*="ketik" i]');
   }
   get deleteConfirmButton(): Locator {
     return this.page.getByRole('button', { name: /hapus|delete/i });
@@ -52,16 +53,16 @@ export class WorkspaceFormModalPage extends BasePage {
   }
 
   get nameInput(): Locator {
-    return this.page.getByRole('dialog').getByLabel(/nama|name/i);
+    return this.page.getByRole('dialog').locator('input[name="name"]');
   }
   get submitButton(): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: /simpan|save|buat|create/i });
+    return this.page.getByRole('dialog').getByRole('button', { name: SEL.button.simpan });
   }
   get errorText(): Locator {
-    return this.page.getByRole('dialog').locator('[data-helper-text], [data-error]');
+    return this.page.getByRole('dialog').locator(SEL.state.error);
   }
   get cancelButton(): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: /batal|cancel/i });
+    return this.page.getByRole('dialog').getByRole('button', { name: SEL.button.batal });
   }
 
   async fillName(name: string): Promise<void> {

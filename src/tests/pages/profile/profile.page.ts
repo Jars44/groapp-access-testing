@@ -1,5 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
+import { SEL } from '../../data/selectors';
 
 export class ProfilePage extends BasePage {
   readonly url = '/profile';
@@ -24,10 +25,10 @@ export class ProfilePage extends BasePage {
     return this.page.getByRole('button', { name: /edit/i });
   }
   get changePasswordButton(): Locator {
-    return this.page.getByText(/ganti password|change password/i);
+    return this.page.getByRole('button', { name: /ganti password|change password/i });
   }
   get deleteAccountButton(): Locator {
-    return this.page.getByText(/hapus akun|delete account/i);
+    return this.page.getByRole('button', { name: /hapus akun|delete account/i });
   }
 }
 
@@ -37,13 +38,13 @@ export class EditProfilePage extends BasePage {
   }
 
   get nameInput(): Locator {
-    return this.page.getByLabel(/nama|name/i);
+    return this.page.locator(SEL.form.name);
   }
   get saveButton(): Locator {
-    return this.page.getByRole('button', { name: /simpan|save/i });
+    return this.page.getByRole('button', { name: SEL.button.simpan });
   }
   get cancelButton(): Locator {
-    return this.page.getByRole('button', { name: /batal|cancel/i });
+    return this.page.getByRole('button', { name: SEL.button.batal });
   }
 }
 
@@ -53,19 +54,19 @@ export class ChangePasswordPage extends BasePage {
   }
 
   get currentPasswordInput(): Locator {
-    return this.page.getByLabel(/password saat ini|current password/i);
+    return this.page.locator('input[name="currentPassword"], [name="current_password"], [name="oldPassword"]');
   }
   get newPasswordInput(): Locator {
-    return this.page.getByLabel(/password baru|new password/i);
+    return this.page.locator(SEL.form.password);
   }
   get confirmPasswordInput(): Locator {
-    return this.page.getByLabel(/konfirmasi password|confirm password/i);
+    return this.page.locator(SEL.form.confirmPassword);
   }
   get submitButton(): Locator {
     return this.page.getByRole('button', { name: /simpan|save|ubah/i });
   }
   get passwordStrengthIndicator(): Locator {
-    return this.page.locator('[data-testid="password-strength"]');
+    return this.page.getByTestId('password-strength');
   }
 
   async fillCurrentPassword(password: string): Promise<void> {

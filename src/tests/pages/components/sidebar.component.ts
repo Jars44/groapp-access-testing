@@ -4,11 +4,11 @@ export class SidebarComponent {
   readonly root: Locator;
 
   constructor(readonly page: Page) {
-    this.root = page.locator('[data-testid="sidebar"], aside');
+    this.root = page.getByTestId('sidebar');
   }
 
   get menuItems(): Locator {
-    return this.root.locator('a, button[role="menuitem"]');
+    return this.root.getByRole('link');
   }
 
   async navigateTo(label: string | RegExp): Promise<void> {

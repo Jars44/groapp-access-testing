@@ -1,28 +1,26 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
+import { SEL } from '../../data/selectors';
 
 export class CompanyDetailPage extends BasePage {
-  readonly url: string;
-
   constructor(page: Page, companyId?: string) {
-    super(page);
-    this.url = companyId ? `/companies/${companyId}` : '/companies/:id';
+    super(page, companyId ? `/companies/${companyId}` : '/companies/:id');
   }
 
   get companyName(): Locator {
     return this.page.getByTestId('company-name');
   }
   get navigationCards(): Locator {
-    return this.page.locator('[data-testid="nav-card"]');
+    return this.page.getByTestId('nav-card');
   }
   get profileLink(): Locator {
-    return this.page.getByText(/profile/i);
+    return this.page.getByRole('link', { name: /profile/i });
   }
   get deleteButton(): Locator {
     return this.page.getByRole('button', { name: /hapus|delete/i });
   }
   get loadingSkeleton(): Locator {
-    return this.page.locator('[data-testid="skeleton"]');
+    return this.page.locator(SEL.state.skeleton);
   }
   get forbiddenMessage(): Locator {
     return this.page.getByText(/akses ditolak|forbidden/i);
@@ -30,11 +28,8 @@ export class CompanyDetailPage extends BasePage {
 }
 
 export class CompanyProfilePage extends BasePage {
-  readonly url: string;
-
   constructor(page: Page, companyId?: string) {
-    super(page);
-    this.url = companyId ? `/companies/${companyId}/profile` : '/companies/:id/profile';
+    super(page, companyId ? `/companies/${companyId}/profile` : '/companies/:id/profile');
   }
 
   get editIdentityButton(): Locator {
@@ -50,9 +45,9 @@ export class CompanyProfilePage extends BasePage {
     return this.page.getByRole('button', { name: /edit legal/i });
   }
   get confirmNameInput(): Locator {
-    return this.page.getByLabel(/konfirmasi nama/i);
+    return this.page.locator('input[name="confirmName"], [name="confirmName"], [name="confirm_name"]');
   }
   get saveButton(): Locator {
-    return this.page.getByRole('button', { name: /simpan|save/i });
+    return this.page.getByRole('button', { name: SEL.button.simpan });
   }
 }

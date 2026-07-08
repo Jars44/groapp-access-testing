@@ -163,17 +163,17 @@ Do NOT use these phrases:
 
 ## 5. Testing Standards Quick Reference
 
-| Standard       | Rule                                                                                         |
-| -------------- | -------------------------------------------------------------------------------------------- |
-| **POM**        | Page Objects in `tests/pages/`, Component POMs in `tests/pages/components/`                  |
-| **Fixtures**   | Auth setup in `auth.setup.ts`, feature fixtures in `tests/fixtures/`                         |
-| **Test data**  | Factory functions in `tests/data/`, never hardcoded in specs                                 |
-| **Selectors**  | `getByTestId` > `getByRole` > `getByLabel` > `getByText` > `locator(css)` > never XPath      |
-| **Waits**      | Auto-waiting actions only. No `waitFor(ms)`. Use `waitForResponse`, `waitForURL`, `toPass()` |
-| **Assertions** | Every test needs at least one. `toBeVisible` > `toBeTruthy`                                  |
-| **Isolation**  | No shared mutable state. `beforeEach` for setup.                                             |
-| **Describe**   | `test.describe('Feature Name', ...)` for grouping                                            |
-| **Test names** | `'should [expected behavior] when [condition]'`                                              |
+| Standard       | Rule                                                                                                                 |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **POM**        | Page Objects in `tests/pages/`, Component POMs in `tests/pages/components/`                                          |
+| **Fixtures**   | Auth setup in `auth.setup.ts`, feature fixtures in `tests/fixtures/`                                                 |
+| **Test data**  | Factory functions in `tests/data/`, never hardcoded in specs                                                         |
+| **Selectors**  | `getByTestId` > `getByRole` > `input[name="..."]` > `getByLabel` > `getByPlaceholder` > `locator(css)` > never XPath |
+| **Waits**      | Auto-waiting actions only. No `waitFor(ms)`. Use `waitForResponse`, `waitForURL`, `toPass()`                         |
+| **Assertions** | Every test needs at least one. `toBeVisible` > `toBeTruthy`                                                          |
+| **Isolation**  | No shared mutable state. `beforeEach` for setup.                                                                     |
+| **Describe**   | `test.describe('Feature Name', ...)` for grouping                                                                    |
+| **Test names** | `'should [expected behavior] when [condition]'`                                                                      |
 
 ### 5.1 Common Patterns
 

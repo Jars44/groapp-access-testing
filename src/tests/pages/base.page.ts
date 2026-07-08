@@ -1,16 +1,14 @@
-import { type Locator, type Page, expect } from '@playwright/test';
+import { type Page } from '@playwright/test';
 import { ToastComponent } from './components/toast.component';
 import { ModalComponent } from './components/modal.component';
 
 export abstract class BasePage {
-  readonly page: Page;
   readonly toast: ToastComponent;
   readonly modal: ModalComponent;
 
-  constructor(readonly _page: Page, readonly url?: string) {
-    this.page = _page;
-    this.toast = new ToastComponent(_page);
-    this.modal = new ModalComponent(_page);
+  constructor(readonly page: Page, readonly url?: string) {
+    this.toast = new ToastComponent(page);
+    this.modal = new ModalComponent(page);
   }
 
   async goto(subpath?: string): Promise<void> {

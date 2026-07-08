@@ -1,5 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
+import { SEL } from '../../data/selectors';
 
 export class NotificationListPage extends BasePage {
   readonly url = '/notifications';
@@ -9,16 +10,16 @@ export class NotificationListPage extends BasePage {
   }
 
   get notificationList(): Locator {
-    return this.page.locator('[data-testid="notification-item"]');
+    return this.page.getByTestId('notification-item');
   }
   get emptyState(): Locator {
-    return this.page.getByTestId('empty-data');
+    return this.page.locator(SEL.state.empty);
   }
   get filterButton(): Locator {
     return this.page.getByTestId('filter-button');
   }
   get loadMoreTrigger(): Locator {
-    return this.page.locator('[data-testid="infinite-scroll-trigger"]');
+    return this.page.getByTestId('infinite-scroll-trigger');
   }
 
   async clickNotification(index = 0): Promise<void> {
@@ -40,10 +41,10 @@ export class NotificationDetailModalPage extends BasePage {
   }
 
   get title(): Locator {
-    return this.page.getByRole('dialog').getByRole('heading');
+    return this.page.locator(SEL.modal.title);
   }
   get body(): Locator {
-    return this.page.getByRole('dialog').locator('[data-testid="notification-body"]');
+    return this.page.getByRole('dialog').getByTestId('notification-body');
   }
   get closeButton(): Locator {
     return this.page.getByRole('dialog').getByRole('button', { name: /close|tutup/i });

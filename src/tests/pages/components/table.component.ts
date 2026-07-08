@@ -1,10 +1,11 @@
 import { type Locator, type Page, expect } from '@playwright/test';
+import { SEL } from '../../data/selectors';
 
 export class TableComponent {
   readonly root: Locator;
 
   constructor(readonly page: Page, root?: Locator) {
-    this.root = root ?? page.locator('table');
+    this.root = root ?? page.getByRole('table');
   }
 
   get rows(): Locator {

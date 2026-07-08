@@ -1,5 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
+import { SEL } from '../../data/selectors';
 
 export class LoginPage extends BasePage {
   readonly url = '/auth/login';
@@ -9,11 +10,11 @@ export class LoginPage extends BasePage {
   }
 
   get emailInput(): Locator {
-    return this.page.getByRole('textbox', { name: 'Email' });
+    return this.page.locator(SEL.form.email);
   }
 
   get passwordInput(): Locator {
-    return this.page.getByLabel('Password');
+    return this.page.locator(SEL.form.password);
   }
 
   get loginButton(): Locator {
@@ -25,19 +26,19 @@ export class LoginPage extends BasePage {
   }
 
   get forgotPasswordLink(): Locator {
-    return this.page.getByText('Lupa Password');
+    return this.page.getByRole('link', { name: /lupa password|lupa kata sandi/i });
   }
 
   get registerLink(): Locator {
-    return this.page.getByText('Daftar');
+    return this.page.getByRole('link', { name: /daftar|register/i });
   }
 
   get showPasswordToggle(): Locator {
-    return this.page.locator('button[aria-label*="Password"]');
+    return this.page.getByRole('button', { name: /show|sembunyikan|tampilkan password/i });
   }
 
   get emailError(): Locator {
-    return this.page.locator('[data-testid="email-error"], [data-helper-text]').first();
+    return this.page.getByTestId('email-error').or(this.page.locator(SEL.state.error));
   }
 
   async fillEmail(email: string): Promise<void> {

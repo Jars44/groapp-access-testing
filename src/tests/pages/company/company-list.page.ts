@@ -1,6 +1,7 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
 import { TableComponent } from '../components/table.component';
+import { SEL } from '../../data/selectors';
 
 export class CompanyListPage extends BasePage {
   readonly url = '/companies';
@@ -12,10 +13,10 @@ export class CompanyListPage extends BasePage {
   }
 
   get createButton(): Locator {
-    return this.page.getByRole('button', { name: /tambah|buat|create/i });
+    return this.page.getByRole('button', { name: SEL.button.tambah });
   }
   get searchInput(): Locator {
-    return this.page.getByPlaceholder(/cari|search/i);
+    return this.page.locator(SEL.form.search);
   }
   get emptyState(): Locator {
     return this.page.getByTestId('empty-data');

@@ -16,11 +16,16 @@ export function generateRegisterPayload(overrides?: Partial<{
   agreeToTerms: boolean;
 } {
   const timestamp = Date.now();
+  // Name validator /^[A-Za-z., ]+$/ does not allow numbers. Convert timestamp to letters.
+  const nameLetters = String(timestamp)
+    .split('')
+    .map((d) => String.fromCharCode(97 + Number(d)))
+    .join('');
   return {
-    name: `Test User ${timestamp}`,
+    name: `Test User ${nameLetters}`,
     email: `test.${timestamp}@groapp.id`,
     countryCode: '+62',
-    phone: `8${String(timestamp).slice(0, 10)}`,
+    phone: `8${String(timestamp).slice(-10)}`,
     password: 'StrongP@ss1',
     confirmPassword: 'StrongP@ss1',
     agreeToTerms: true,

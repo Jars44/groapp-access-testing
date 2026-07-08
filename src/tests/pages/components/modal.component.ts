@@ -1,10 +1,11 @@
 import { type Locator, type Page, expect } from '@playwright/test';
+import { SEL } from '../../data/selectors';
 
 export class ModalComponent {
   readonly root: Locator;
 
   constructor(readonly page: Page) {
-    this.root = page.getByRole('dialog');
+    this.root = page.locator(SEL.modal.root);
   }
 
   get closeButton(): Locator {
@@ -12,7 +13,7 @@ export class ModalComponent {
   }
 
   get title(): Locator {
-    return this.root.getByRole('heading');
+    return this.root.locator(SEL.modal.title);
   }
 
   get confirmButton(): Locator {

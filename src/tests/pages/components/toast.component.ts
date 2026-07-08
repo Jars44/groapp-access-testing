@@ -1,14 +1,15 @@
 import { type Locator, type Page, expect } from '@playwright/test';
+import { SEL } from '../../data/selectors';
 
 export class ToastComponent {
   readonly root: Locator;
 
   constructor(readonly page: Page) {
-    this.root = page.getByRole('status');
+    this.root = page.locator(SEL.toast.root);
   }
 
   get message(): Locator {
-    return this.root.locator('p, [data-toast-message]');
+    return this.page.locator(SEL.toast.message);
   }
 
   get dismissButton(): Locator {

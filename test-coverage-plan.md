@@ -163,13 +163,13 @@ class BasePage {
 
 ```typescript
 // Urutan prioritas:
-1. page.getByTestId('element-id')        // data-testid attributes
-2. page.getByRole('button', { name: /simpan/i })  // Semantic role
-3. page.getByLabel('Email')               // Form label
-4. page.getByPlaceholder('Masukkan email') // Placeholder
-5. page.getByText('Simpan')               // Visible text
-6. page.locator('button[type="submit"]')  // CSS — opsi terakhir
-7. page.locator('//button')              // XPath — TIDAK BOLEH
+1. page.getByTestId('element-id')        // data-testid — paling stabil
+2. page.getByRole('button', { name: /simpan/i })  // Semantic role — aksesibel, resilient
+3. page.locator('input[name="email"]')   // name attr dari schema — stabil walau copy berubah
+4. page.getByLabel('Email')              // <label> association — rentan perubahan locale
+5. page.getByPlaceholder('Masukkan email') // Placeholder — paling rapuh
+6. page.locator('button[type="submit"]') // CSS — opsi terakhir
+7. page.locator('//button')             // XPath — TIDAK BOLEH
 ```
 
 ### 5.2 Pola Asersi
