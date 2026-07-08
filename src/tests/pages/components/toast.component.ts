@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect } from '@playwright/test';
-import { SEL } from '../../data/selectors';
+import { SEL } from '../../utils/selectors';
 
 export class ToastComponent {
   readonly root: Locator;

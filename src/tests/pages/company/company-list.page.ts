@@ -1,7 +1,7 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
 import { TableComponent } from '../components/table.component';
-import { SEL } from '../../data/selectors';
+import { SEL } from '../../utils/selectors';
 
 export class CompanyListPage extends BasePage {
   readonly url = '/companies';

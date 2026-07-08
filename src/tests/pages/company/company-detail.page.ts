@@ -1,6 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from '../base.page';
-import { SEL } from '../../data/selectors';
+import { SEL } from '../../utils/selectors';
 
 export class CompanyDetailPage extends BasePage {
   constructor(page: Page, companyId?: string) {

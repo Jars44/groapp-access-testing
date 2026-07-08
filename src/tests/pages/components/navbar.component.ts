@@ -1,5 +1,5 @@
 import { type Locator, type Page } from '@playwright/test';
-import { SEL } from '../../data/selectors';
+import { SEL } from '../../utils/selectors';
 
 export class NavbarComponent {
   readonly root: Locator;
