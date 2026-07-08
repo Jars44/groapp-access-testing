@@ -6,12 +6,13 @@
 
 All generated artifacts follow strict naming conventions for easy discovery:
 
-| Artifact           | Path              | Pattern                                   | Example                                                  | Lifecycle                                         |
-| ------------------ | ----------------- | ----------------------------------------- | -------------------------------------------------------- | ------------------------------------------------- |
-| **Test plan**      | `.agent/plans/`   | `test-plan-{feature}.md`                  | `test-plan-auth.md`                                      | Temporary — prompt user for cleanup after summary |
-| **Summary report** | `.agent/reports/` | `summary-{feature}-{YYYYMMDD}[-{seq}].md` | `summary-auth-20260708.md`, `summary-auth-20260708-2.md` | Permanent — kept for history                      |
-| **State**          | `.agent/`         | `state.json`                              | `state.json`                                             | Permanent — always current                        |
-| **Config**         | `.agent/`         | `settings.json`                           | `settings.json`                                          | Permanent                                         |
+| Artifact           | Path              | Pattern                                   | Example                                                     | Lifecycle                                         |
+| ------------------ | ----------------- | ----------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
+| **Test plan**      | `.agent/plans/`   | `test-plan-{feature}.md`                  | `test-plan-auth.md`                                         | Temporary — prompt user for cleanup after summary |
+| **TODOs**          | `.agent/plans/`   | `todos-{feature}.md`                      | `todos-auth.md`                                             | Temporary — tracks [ ]/[x] per TC                 |
+| **Summary report** | `.agent/reports/` | `summary-{feature}-{YYYYMMDD}[-{seq}].md` | `summary-auth-20260708.md`, `summary-auth-20260708-2.md`    | Permanent — kept for history                      |
+| **State**          | `.agent/`         | `state.json`                              | `state.json`                                                | Permanent — always current                        |
+| **Per-agent**      | `.agent/tasks/`   | `{agent}-{YYYYMMDD}-{seq}.json`           | `researcher-20260708-001.json`, `builder-20260708-001.json` | Output from each sub-agent run                    |
 
 **Why these paths:**
 

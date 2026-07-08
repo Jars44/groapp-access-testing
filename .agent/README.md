@@ -53,5 +53,17 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 | `.agent/reports/`      | **Permanent** summaries — `summary-{feature}-{YYYYMMDD}[-{seq}].md`             |
 | `.agent/templates/`    | Dispatch prompts + test-plan-template.md                                        |
 | `.agent/hooks/`        | pre-flight.sh, validate-state.sh                                                |
-| `.agent/memory/`       | Cross-session knowledge graph                                                   |
-| `.agent/tasks/`        | Active task tracking                                                            |
+| `.agent/memory/`       | Cross-session knowledge graph (entities + relations)                            |
+| `.agent/tasks/`        | Per-agent output files — `researcher-{ts}.json`, `builder-{ts}.json`, etc.      |
+
+## Directory Lifecycle
+
+| Directory         | When Populated                                 |
+| ----------------- | ---------------------------------------------- |
+| `.agent/plans/`   | Lead writes before dispatching                 |
+| `.agent/tasks/`   | Sub-agents write during pipeline execution     |
+| `.agent/reports/` | Lead generates after verification              |
+| `.agent/memory/`  | Cross-session knowledge (entities + relations) |
+| `.agent/hooks/`   | Pre/post validation (always present)           |
+
+Empty directories between sessions are expected — they are populated during active task execution.
