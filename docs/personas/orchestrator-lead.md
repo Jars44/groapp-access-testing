@@ -13,7 +13,7 @@ All generated artifacts follow strict naming conventions for easy discovery:
 
 | Artifact            | Path                      | Pattern                                   | Example                                                     | Lifecycle                                             |
 | ------------------- | ------------------------- | ----------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| **Test plan**       | `.agent/plans/`           | `test-plan-{feature}.md`                  | `test-plan-auth.md`                                         | Temporary — prompt user for cleanup after summary     |
+| **Test plan**       | `.agent/plans/`           | `implementation-plan-{feature}.md`        | `implementation-plan-auth.md`                               | Temporary — prompt user for cleanup after summary     |
 | **TODOs**           | `.agent/plans/todos/`     | `{tc-id}.md` per test case                | `tc-01.md`, `tc-02.md`, etc.                                | Temporary — tracks [ ]/[x] per TC, merged at teardown |
 | **Summary report**  | `.agent/reports/`         | `summary-{feature}-{YYYYMMDD}[-{seq}].md` | `summary-auth-20260708.md`, `summary-auth-20260708-2.md`    | Permanent — kept for history                          |
 | **State**           | `.agent/`                 | `state.json`                              | `state.json`                                                | Permanent — always current                            |
@@ -24,7 +24,7 @@ All generated artifacts follow strict naming conventions for easy discovery:
 
 - `.agent/plans/` — single place to find all active/in-progress plans
 - `.agent/reports/` — single place to find all historical summaries
-- Clear file names: `test-plan-{feature}.md` is immediately identifiable
+- Clear file names: `implementation-plan-{feature}.md` is immediately identifiable
 - Date-stamped summaries: `summary-auth-20260708.md` (run 1), `summary-auth-20260708-2.md` (run 2) — never overwrites
 
 **Sequence rule for summaries:**
@@ -53,13 +53,13 @@ When generating `summary-{feature}-{YYYYMMDD}.md`:
 
 **How:**
 
-| Phase     | Spec Update                                                          |
-| --------- | -------------------------------------------------------------------- |
-| Discovery | Lead writes initial spec in `.agent/plans/test-plan-{feature}.md`    |
-| Research  | Researchers add selector findings to spec                            |
-| Build     | Builder adds POM structure, test locations                           |
-| Verify    | Reflector annotates issues, QA adds test results                     |
-| Teardown  | Lead finalizes spec → moves to `.agent/reports/summary-{feature}.md` |
+| Phase     | Spec Update                                                                 |
+| --------- | --------------------------------------------------------------------------- |
+| Discovery | Lead writes initial spec in `.agent/plans/implementation-plan-{feature}.md` |
+| Research  | Researchers add selector findings to spec                                   |
+| Build     | Builder adds POM structure, test locations                                  |
+| Verify    | Reflector annotates issues, QA adds test results                            |
+| Teardown  | Lead finalizes spec → moves to `.agent/reports/summary-{feature}.md`        |
 
 ## Memory Writing (Parallel with Code Work)
 
@@ -102,7 +102,7 @@ Memory writes run parallel with sub-agents. Each agent owns specific entity file
 ```text
 BEFORE dispatching researchers, Lead MUST:
 
-1. Identify all test scenarios from test-plan-{feature}.md
+1. Identify all test scenarios from implementation-plan-{feature}.md
 2. Create per-TC todo files:
    .agent/plans/todos/tc-01.md
    .agent/plans/todos/tc-02.md
@@ -209,11 +209,11 @@ Before starting any task:
 - [ ] Read user story / PRD / AC — understand scope
 - [ ] Verify sourceDir exists with `ls {sourceDir}/src/features/`
 
-## Generating a Human-Verifiable test-plan.md
+## Generating a Human-Verifiable implementation-plan.md
 
-Write to `.agent/plans/test-plan-{feature}.md` using `.agent/templates/test-plan-template.md`.
+Write to `.agent/plans/implementation-plan-{feature}.md` using `.agent/templates/implementation-plan-template.md`.
 
-Every test-plan.md must include:
+Every implementation-plan.md must include:
 
 **Per test case (TC):**
 
@@ -245,7 +245,7 @@ Every test-plan.md must include:
 ```text
 PHASE 1 — Discovery & Planning (sequential — creates shared artifacts)
 ├── 1. Read user story / PRD / AC
-├── 2. Write .agent/plans/test-plan-{feature}.md using template
+├── 2. Write .agent/plans/implementation-plan-{feature}.md using template
 ├── 3. Identify all test scenarios → list TC-01 through TC-N
 └── 4. Create per-TC todo files with ownership assigned
 
@@ -257,7 +257,7 @@ PHASE 1 — Discovery & Planning (sequential — creates shared artifacts)
         │   └── Owns: todos/tc-01.md, todos/tc-02.md (route-related TCs)
         ├── RESEARCHER-COMPONENTS → .agent/tasks/researcher-components-{ts}.json
         │   └── Owns: todos/tc-03.md, todos/tc-04.md (component-related TCs)
-        ├── RESEARCHER-API → .agent/tasks/researcher-api-{ts}.json
+        ├── RESEARCHER-API → .agent/tasks/researcher-pom-patterns-{ts}.json
         │   └── Owns: todos/tc-05.md, todos/tc-06.md (API-related TCs)
         └── RESEARCHER-VALIDATORS → .agent/tasks/researcher-validators-{ts}.json
             └── Owns: todos/tc-07.md (validation TCs)
@@ -324,7 +324,7 @@ PHASE 5 — Teardown (sequential — single writer)
 1. READ PRD / feature spec
 2. ANALYZE requirements → identify all test scenarios (happy, error, edge)
 3. BREAKDOWN into atomic tasks with FEDO-style IDs
-4. WRITE .agent/plans/test-plan-{feature}.md using template
+4. WRITE .agent/plans/implementation-plan-{feature}.md using template
 5. DISPATCH sub-agents in parallel:
    ├── Researcher: explore codebase, find routes/components/APIs
    ├── Builder: implement POM files and spec files
@@ -340,17 +340,17 @@ PHASE 5 — Teardown (sequential — single writer)
 PHASE 1 — Discovery & Planning
 ├── 1. Read user story / PRD / AC
 ├── 2. Identify test scenarios (happy, error, edge)
-├── 3. Write .agent/plans/test-plan-{feature}.md using template
+├── 3. Write .agent/plans/implementation-plan-{feature}.md using template
 ├── 4. Set phase=discovery in .agent/state.json
 └── 5. Run validate-state.sh discovery → handoff to Researcher
 │
 PHASE 5 — Teardown (after QA Gatekeeper)
 ├── 1. Run validate-state.sh teardown
-├── 2. Verify all todos [x] in test-plan.md, reject partial checkoffs
+├── 2. Verify all todos [x] in implementation-plan.md, reject partial checkoffs
 ├── 3. If blocked: fix or re-dispatch (max 3 attempts)
 ├── 4. Generate .agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md (see below)
 ├── 5. Update .agent/state.json → final results with summary path
-└── 6. Ask user: ".agent/plans/test-plan-{feature}.md complete. Keep or delete?"
+└── 6. Ask user: ".agent/plans/implementation-plan-{feature}.md complete. Keep or delete?"
 ```
 
 ## Real-Time Todo Updates
@@ -396,14 +396,14 @@ No evidence = not done. `[x]` without evidence = reverted to `[ ]`.
 | No agent overwrites another's in-progress [/] row                                  | Prevents data loss            |
 | Researcher writes findings → Builder writes implementation → QA writes test result | Clean handoff chain           |
 
-## test-plan.md Lifecycle
+## implementation-plan.md Lifecycle
 
-| Stage       | State              | Action                                                 |
-| ----------- | ------------------ | ------------------------------------------------------ |
-| Create      | All [ ]            | Lead writes to `.agent/plans/test-plan-{feature}.md`   |
-| In progress | Mix of [ ] and [x] | Builder checks off with file:line evidence             |
-| Complete    | All [x]            | QA Gatekeeper or Lead verifies                         |
-| Cleanup     | User decides       | After summary generated, prompt user to keep or delete |
+| Stage       | State              | Action                                                         |
+| ----------- | ------------------ | -------------------------------------------------------------- |
+| Create      | All [ ]            | Lead writes to `.agent/plans/implementation-plan-{feature}.md` |
+| In progress | Mix of [ ] and [x] | Builder checks off with file:line evidence                     |
+| Complete    | All [x]            | QA Gatekeeper or Lead verifies                                 |
+| Cleanup     | User decides       | After summary generated, prompt user to keep or delete         |
 
 ## Implementation Summary Generation
 
@@ -414,7 +414,7 @@ At teardown, generate `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md` f
 
 ## File Locations
 
-- **Test plan:** `.agent/plans/test-plan-{feature}.md`
+- **Test plan:** `.agent/plans/implementation-plan-{feature}.md`
 - **Summary:** `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md`
 - **State:** `.agent/state.json`
 
@@ -487,31 +487,31 @@ At teardown, generate `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md` f
 
 ### Mode C (Maximum Parallelism) — Default
 
-| Phase          | Agent                         | Output                                                                   | Parallel With                 |
-| -------------- | ----------------------------- | ------------------------------------------------------------------------ | ----------------------------- |
-| Discovery      | Lead writes test-plan + todos | `.agent/plans/test-plan-{feature}.md`, `.agent/plans/todos-{feature}.md` | 4× Researchers                |
-| Research       | 4× Researchers                | `.agent/tasks/researcher-{domain}-{ts}.json`                             | Each other                    |
-| Aggregation    | Lead                          | Merged findings + updated todos                                          | —                             |
-| Implementation | Builder                       | POM + spec files + todos [x]                                             | Lead updates todos            |
-| Verification   | QA Gatekeeper                 | Test results + todos test_run field                                      | Lead drafts summary structure |
-| Teardown       | Lead                          | Final summary + state.json                                               | —                             |
+| Phase          | Agent                                   | Output                                                                             | Parallel With                 |
+| -------------- | --------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------- |
+| Discovery      | Lead writes implementation-plan + todos | `.agent/plans/implementation-plan-{feature}.md`, `.agent/plans/todos-{feature}.md` | 4× Researchers                |
+| Research       | 4× Researchers                          | `.agent/tasks/researcher-{domain}-{ts}.json`                                       | Each other                    |
+| Aggregation    | Lead                                    | Merged findings + updated todos                                                    | —                             |
+| Implementation | Builder                                 | POM + spec files + todos [x]                                                       | Lead updates todos            |
+| Verification   | QA Gatekeeper                           | Test results + todos test_run field                                                | Lead drafts summary structure |
+| Teardown       | Lead                                    | Final summary + state.json                                                         | —                             |
 
 ### Mode A (Parallel)
 
-| Step     | Agent      | Output                                                     |
-| -------- | ---------- | ---------------------------------------------------------- |
-| Analysis | Lead       | `.agent/plans/test-plan-{feature}.md` + state.json tasks   |
-| Research | Researcher | File:line table with source-verified selectors             |
-| Build    | Builder    | POM + spec files, test-plan.md [x] with file:line evidence |
-| Review   | Reviewer   | Quality gate results per file                              |
-| Verify   | Lead       | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md`   |
+| Step     | Agent      | Output                                                               |
+| -------- | ---------- | -------------------------------------------------------------------- |
+| Analysis | Lead       | `.agent/plans/implementation-plan-{feature}.md` + state.json tasks   |
+| Research | Researcher | File:line table with source-verified selectors                       |
+| Build    | Builder    | POM + spec files, implementation-plan.md [x] with file:line evidence |
+| Review   | Reviewer   | Quality gate results per file                                        |
+| Verify   | Lead       | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md`             |
 
 ### Mode B (Pipeline)
 
-| Phase          | Agent         | Output                                                   | Human-verifiable artifact   |
-| -------------- | ------------- | -------------------------------------------------------- | --------------------------- |
-| Discovery      | Lead          | `.agent/plans/test-plan-{feature}.md`                    | Checklist human can follow  |
-| Exploration    | Researcher    | File:line findings → state.json                          | Source paths human can open |
-| Implementation | Builder       | POM + spec files, test-plan.md [x] with file:line        | Code human can inspect      |
-| Verification   | QA Gatekeeper | Test results → state.json + audit                        | Test output + flakiness log |
-| Teardown       | Lead          | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md` | Full traceability report    |
+| Phase          | Agent         | Output                                                      | Human-verifiable artifact   |
+| -------------- | ------------- | ----------------------------------------------------------- | --------------------------- |
+| Discovery      | Lead          | `.agent/plans/implementation-plan-{feature}.md`             | Checklist human can follow  |
+| Exploration    | Researcher    | File:line findings → state.json                             | Source paths human can open |
+| Implementation | Builder       | POM + spec files, implementation-plan.md [x] with file:line | Code human can inspect      |
+| Verification   | QA Gatekeeper | Test results → state.json + audit                           | Test output + flakiness log |
+| Teardown       | Lead          | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md`    | Full traceability report    |

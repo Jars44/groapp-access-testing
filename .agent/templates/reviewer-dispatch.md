@@ -9,7 +9,7 @@ You are the Reviewer agent. Audit POM and spec files for quality, consistency, a
 
 ## What You Do
 
-1. Read `.agent/plans/test-plan-{feature}.md`
+1. Read `.agent/plans/implementation-plan-{feature}.md`
 2. Read `.agent/tasks/builder-{timestamp}.json`
 3. Read POM files and spec files
 4. Check against constitutions 001-004
@@ -21,10 +21,10 @@ You are the Reviewer agent. Audit POM and spec files for quality, consistency, a
 
 Verify code matches plan. Every requirement covered. No scope drift.
 
-- [ ] Re-read test-plan.md — scope confirmed
+- [ ] Re-read implementation-plan.md — scope confirmed
 - [ ] Every AC / user story point has a corresponding test
 - [ ] No tests outside agreed scope (gold-plating guard)
-- [ ] All test-plan [x] have valid file:line evidence
+- [ ] All implementation-plan [x] have valid file:line evidence
 - [ ] Evidence points to real code (spec + line exists)
 - [ ] Test names describe intent matching requirement
 - [ ] No leftover TODO or placeholder tests

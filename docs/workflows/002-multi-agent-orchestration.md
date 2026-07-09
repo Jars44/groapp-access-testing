@@ -150,7 +150,7 @@ Each agent writes to separate entity files — prevents concurrent write conflic
 LEAD AGENT (Phase 1 — Discovery & Planning)
 │
 ├── 1. Read PRD / AC (1 call)
-├── 2. Write .agent/plans/test-plan-{feature}.md (sequential, no parallel)
+├── 2. Write .agent/plans/implementation-plan-{feature}.md (sequential, no parallel)
 ├── 3. Write .agent/plans/todos-{feature}.md initial [ ] rows
 │
 └── 4. DISPATCH 4x researchers in single message (parallel read-only calls)
@@ -161,11 +161,11 @@ LEAD AGENT (Phase 1 — Discovery & Planning)
     ├── RESEARCHER-COMPONENTS (read-only, selectors/testids)
     │   └── Writes .agent/tasks/researcher-components-{ts}.json
     │
-    ├── RESEARCHER-API (read-only, endpoints/contracts)
-    │   └── Writes .agent/tasks/researcher-api-{ts}.json
+    ├── RESEARCHER-VALIDATORS (read-only, validation rules)
+    │   └── Writes .agent/tasks/researcher-validators-{ts}.json
     │
-    └── RESEARCHER-VALIDATORS (read-only, validation rules)
-        └── Writes .agent/tasks/researcher-validators-{ts}.json
+    └── RESEARCHER-POM-PATTERNS (read-only, existing POM patterns in groapp-access-testing/)
+        └── Writes .agent/tasks/researcher-pom-patterns-{ts}.json
 
 ▼ (4 researchers complete in parallel — wall-time = single research call)
 
@@ -173,13 +173,19 @@ LEAD AGGREGATES 4 partial findings
 │
 └── glob .agent/tasks/researcher-*.json → merge → update todos in real-time
 
-▼ (handoff = 4 research files merged → feed builder)
+▼ (handoff = 4 research files merged → feed builders)
 
-BUILDER (Phase 3 — Implementation)
+PARALLEL BUILDERS (Phase 3 — Implementation)
 │
-├── 1. Read all 4 researcher outputs (parallel reads)
-├── 2. Build in order (data → POM → spec)
-└── 3. Update todos [x] with file:line evidence per TC
+├── BUILDER-POM: Creates/updates Page Object Model files
+│   ├── 1. Read researcher outputs (routes, components, validators, pom-patterns)
+│   ├── 2. Create/update POM files in pages/**/*.page.ts
+│   └── 3. Update todos [x] with POM file:line evidence
+│
+└── BUILDER-SPEC: Creates Playwright test spec files
+    ├── 1. Read researcher outputs + existing POM files
+    ├── 2. Create/update spec files in specs/**/*.spec.ts
+    └── 3. Update todos [x] with spec file:line evidence
 
 ▼ (handoff via .agent/tasks/builder-{ts}.json)
 
@@ -247,7 +253,7 @@ LEAD AGENT
 ├── 1. ANALYZE requirements + WRITE TODOS
 │   ├── Read PRD / feature spec
 │   ├── Identify scope: routes, components, APIs, validation
-│   ├── Write .agent/plans/test-plan-{feature}.md
+│   ├── Write .agent/plans/implementation-plan-{feature}.md
 │   └── Write .agent/plans/todos-{feature}.md with [ ]/[/]/[x] tracking per TC
 │
 ├── 2. DISPATCH sub-agents (sequential — task() is serial)
@@ -296,18 +302,18 @@ LEAD ARCHITECT (Phase 1 — Discovery & Planning)
 │
 ├── 1. Read user story / PRD / AC
 ├── 2. Identify all test scenarios, routes, APIs, validation rules
-├── 3. Write .agent/plans/test-plan-{feature}.md using template
+├── 3. Write .agent/plans/implementation-plan-{feature}.md using template
 │   └── Each TC has: ID, description, type, route, given/when/then,
 │       test data, selectors, verification criteria checklist
 ├── 4. Write .agent/plans/todos-{feature}.md
 │   └── Each TC gets [ ] row with: TC-ID, description, assignee, status, evidence
-└── 5. Read test-plan.md to confirm scope before dispatching
+└── 5. Read implementation-plan.md to confirm scope before dispatching
 
-▼ (handoff via todos + plan — human verifies test-plan-{feature}.md)
+▼ (handoff via todos + plan — human verifies implementation-plan-{feature}.md)
 
 RESEARCHER (Phase 2 — Code Exploration)
 │
-├── 1. Read .agent/plans/test-plan-{feature}.md for scope
+├── 1. Read .agent/plans/implementation-plan-{feature}.md for scope
 ├── 2. Find routes → file:line
 ├── 3. Find page/component JSX → selectors, testids
 ├── 4. Find API endpoints → request/response shapes
@@ -319,7 +325,7 @@ RESEARCHER (Phase 2 — Code Exploration)
 
 BUILDER (Phase 3 — Implementation)
 │
-├── 1. Read .agent/plans/test-plan-{feature}.md for todo list
+├── 1. Read .agent/plans/implementation-plan-{feature}.md for todo list
 ├── 2. Read researcher output from .agent/tasks/researcher-{ts}.json
 ├── 3. Build in order:
 │   ├── Test data factories → data/*.data.ts (if needed)
@@ -336,7 +342,7 @@ BUILDER (Phase 3 — Implementation)
 
 QA GATEKEEPER (Phase 4 — Verification)
 │
-├── 1. Read .agent/plans/test-plan-{feature}.md — reject if any [x] lacks evidence
+├── 1. Read .agent/plans/implementation-plan-{feature}.md — reject if any [x] lacks evidence
 ├── 2. Read .agent/tasks/builder-{ts}.json — verify artifacts exist
 ├── 3. Run `npx playwright test --reporter=list`
 ├── 4. If failures: run flakiness protocol (run 3x)
@@ -349,13 +355,13 @@ QA GATEKEEPER (Phase 4 — Verification)
 LEAD ARCHITECT (Phase 5 — Teardown & Summary)
 │
 ├── 1. Read .agent/tasks/qa-gatekeeper-{ts}.json
-├── 2. Verify every test-plan.md [x] has matching todos entry with evidence
+├── 2. Verify every implementation-plan.md [x] has matching todos entry with evidence
 ├── 3. If blocked: re-dispatch to builder or gatekeeper (max 3 retries)
 ├── 4. If passed: generate .agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md
 │   └── See orchestrator-lead.md → Implementation Summary Generation
 ├── 5. Aggregate all .agent/tasks/*.json → .agent/state.json
 │   └── state.json is WRITTEN ONCE by lead, never modified by sub-agents
-├── 6. Ask user: ".agent/plans/test-plan-{feature}.md complete. Keep or delete?"
+├── 6. Ask user: ".agent/plans/implementation-plan-{feature}.md complete. Keep or delete?"
 └── 7. Present summary to user with explicit verification steps
 ```
 
@@ -522,9 +528,9 @@ Before dispatching researchers:
 2. Lead assigns ownership in each file:
    - TC routes belong to → Researcher-Routes
    - TC components belong to → Researcher-Components
-   - TC API tests belong to → Researcher-API
    - TC validation belong to → Researcher-Validators
-   - Implementation belong to → Builder
+   - TC existing POM patterns belong to → Researcher-POM-Patterns
+   - Implementation belong to Builder-POM and Builder-Spec
    - Test runs belong to → QA Gatekeeper
 3. Lead dispatches researchers with ownership manifest
 4. Each researcher writes ONLY to its assigned TC files
@@ -584,7 +590,7 @@ Orchestrator aggregates: `glob .agent/tasks/*.json → merge → write state.jso
 ### Per-Agent Files (Default)
 
 ```text
-Lead writes    → .agent/plans/test-plan-{feature}.md + todos-{feature}.md
+Lead writes    → .agent/plans/implementation-plan-{feature}.md + todos-{feature}.md
 Researcher     → .agent/tasks/researcher-{ts}.json + .agent/memory/entities.json (new entities)
 Builder        → .agent/tasks/builder-{ts}.json + .agent/memory/entities.json (observation updates)
 Reflector      → .agent/tasks/reflector-{ts}.json + .agent/memory/entities.json (critique annotations)
@@ -615,13 +621,13 @@ Lead reads all → aggregates → .agent/state.json (ONCE) + .agent/memory/entit
 
 ### What Actually Works Today
 
-| Phase   | Agent                         | Handoff                                |
-| ------- | ----------------------------- | -------------------------------------- |
-| Phase 1 | Lead writes test-plan + todos | → human verifies                       |
-| Phase 2 | task(researcher) → findings   | → .agent/tasks/researcher-{ts}.json    |
-| Phase 3 | task(builder) → files         | → .agent/tasks/builder-{ts}.json       |
-| Phase 4 | task(qa-gatekeeper) → results | → .agent/tasks/qa-gatekeeper-{ts}.json |
-| Phase 5 | Lead merges → summary         | → .agent/state.json (once)             |
+| Phase   | Agent                                   | Handoff                                |
+| ------- | --------------------------------------- | -------------------------------------- |
+| Phase 1 | Lead writes implementation-plan + todos | → human verifies                       |
+| Phase 2 | task(researcher) → findings             | → .agent/tasks/researcher-{ts}.json    |
+| Phase 3 | task(builder) → files                   | → .agent/tasks/builder-{ts}.json       |
+| Phase 4 | task(qa-gatekeeper) → results           | → .agent/tasks/qa-gatekeeper-{ts}.json |
+| Phase 5 | Lead merges → summary                   | → .agent/state.json (once)             |
 
 Sequential pipeline. State passed via prompt context + per-agent files, not shared file writes.
 

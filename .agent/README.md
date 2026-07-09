@@ -30,7 +30,7 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 5. EXECUTE task              — following docs/workflows/ SOP
 6. WRITE result              — update .agent/state.json
 7. GENERATE summary          — .agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md
-8. CLEANUP plan              — ask user before deleting .agent/plans/test-plan-{feature}.md
+8. CLEANUP plan              — ask user before deleting .agent/plans/implementation-plan-{feature}.md
 ```
 
 ## 3-Layer Context Architecture
@@ -43,18 +43,18 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 
 ## File Index
 
-| Location               | Purpose                                                                         |
-| ---------------------- | ------------------------------------------------------------------------------- |
-| `.agent/README.md`     | This file — entrypoint                                                          |
-| `.agent/mcp.json`      | Persona-scoped MCP tool schema                                                  |
-| `.agent/settings.json` | Runtime config, persona configs, retry/validation                               |
-| `.agent/state.json`    | Pipeline state machine (v2) with errors/retries                                 |
-| `.agent/plans/`        | **Temporary** test plans — `test-plan-{feature}.md` (prompt user before delete) |
-| `.agent/reports/`      | **Permanent** summaries — `summary-{feature}-{YYYYMMDD}[-{seq}].md`             |
-| `.agent/templates/`    | Dispatch prompts + test-plan-template.md                                        |
-| `.agent/hooks/`        | pre-flight.sh, validate-state.sh                                                |
-| `.agent/memory/`       | Cross-session knowledge graph — per-entity JSON files                           |
-| `.agent/tasks/`        | Per-agent output files — `researcher-{ts}.json`, `builder-{ts}.json`, etc.      |
+| Location               | Purpose                                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| `.agent/README.md`     | This file — entrypoint                                                                    |
+| `.agent/mcp.json`      | Persona-scoped MCP tool schema                                                            |
+| `.agent/settings.json` | Runtime config, persona configs, retry/validation                                         |
+| `.agent/state.json`    | Pipeline state machine (v2) with errors/retries                                           |
+| `.agent/plans/`        | **Temporary** test plans — `implementation-plan-{feature}.md` (prompt user before delete) |
+| `.agent/reports/`      | **Permanent** summaries — `summary-{feature}-{YYYYMMDD}[-{seq}].md`                       |
+| `.agent/templates/`    | Dispatch prompts + implementation-plan-template.md                                        |
+| `.agent/hooks/`        | pre-flight.sh, validate-state.sh                                                          |
+| `.agent/memory/`       | Cross-session knowledge graph — per-entity JSON files                                     |
+| `.agent/tasks/`        | Per-agent output files — `researcher-{ts}.json`, `builder-{ts}.json`, etc.                |
 
 ## Conflict Prevention
 

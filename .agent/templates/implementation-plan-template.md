@@ -1,5 +1,5 @@
 ---
-description: Template for test-plan-{feature}.md
+description: Template for implementation-plan-{feature}.md
 mode: template
 ---
 

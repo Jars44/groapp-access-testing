@@ -17,7 +17,7 @@ mode: subagent
 ## Pre-flight Checklist
 
 - [ ] Read `.agent/tasks/builder-{timestamp}.json` — understand what was built
-- [ ] Read `.agent/plans/test-plan-{feature}.md` — know expected scope
+- [ ] Read `.agent/plans/implementation-plan-{feature}.md` — know expected scope
 - [ ] Verify POM files exist on disk
 - [ ] Verify spec files exist on disk
 - [ ] Run `.agent/hooks/validate-state.sh reflection`

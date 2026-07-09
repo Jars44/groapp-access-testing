@@ -63,7 +63,7 @@ Plan (what to build) → Execute (build it) → [replan if step fails]
 **Evidence in this codebase:**
 
 - `docs/workflows/001-test-task-sop.md` — STEP 3 WRITE PLAN before STEP 4 CREATE POM
-- `.agent/plans/test-plan-{feature}.md` — written before builder dispatched
+- `.agent/plans/implementation-plan-{feature}.md` — written before builder dispatched
 
 ---
 
@@ -163,21 +163,21 @@ PARALLEL: QA GATEKEEPER + LEAD DRAFTS SUMMARY
 
 - `docs/personas/qa-gatekeeper.md` — blocks on stable failure, flaky test, missing evidence
 - SOP 002 — max 3 retries before escalation
-- `.agent/plans/test-plan-{feature}.md` — user prompted to keep or delete after summary
+- `.agent/plans/implementation-plan-{feature}.md` — user prompted to keep or delete after summary
 
 ---
 
 ## Pattern Gap Analysis
 
-| Pattern           | Status         | Evidence                         |
-| ----------------- | -------------- | -------------------------------- |
-| Reflection        | ✅ Implemented | `reflector.md`, `reviewer.md`    |
-| ReAct             | ✅ Implemented | `researcher.md`, `builder.md`    |
-| Plan-and-Execute  | ✅ Implemented | SOP 001, test-plan template      |
-| Tool Use          | ✅ Implemented | `mcp.json`, `settings.json`      |
-| Multi-Agent       | ✅ Implemented | SOP 002 Mode C                   |
-| Memory            | ✅ Implemented | `memory/schema.md`, skill        |
-| Human-in-the-Loop | ✅ Implemented | `qa-gatekeeper.md`, retry limits |
+| Pattern           | Status         | Evidence                              |
+| ----------------- | -------------- | ------------------------------------- |
+| Reflection        | ✅ Implemented | `reflector.md`, `reviewer.md`         |
+| ReAct             | ✅ Implemented | `researcher.md`, `builder.md`         |
+| Plan-and-Execute  | ✅ Implemented | SOP 001, implementation-plan template |
+| Tool Use          | ✅ Implemented | `mcp.json`, `settings.json`           |
+| Multi-Agent       | ✅ Implemented | SOP 002 Mode C                        |
+| Memory            | ✅ Implemented | `memory/schema.md`, skill             |
+| Human-in-the-Loop | ✅ Implemented | `qa-gatekeeper.md`, retry limits      |
 
 **All 7 patterns implemented.** No gaps.
 

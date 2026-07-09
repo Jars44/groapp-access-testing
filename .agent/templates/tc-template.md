@@ -9,14 +9,14 @@ mode: template
 
 ## Metadata
 
-| Field        | Value                                              |
-| ------------ | -------------------------------------------------- |
-| **TC-ID**    | TC-{id}                                            |
-| **Feature**  | {feature}                                          |
-| **Type**     | happy path / error / edge case / validation        |
-| **Priority** | P0 (critical) / P1 (high) / P2 (medium) / P3 (low) |
-| **Created**  | {YYYY-MM-DDTHH:MM:SSZ}                             |
-| **Updated**  | {YYYY-MM-DDTHH:MM:SSZ}                             |
+| Field        | Value                                                         |
+| ------------ | ------------------------------------------------------------- |
+| **TC-ID**    | TC-{id}                                                       |
+| **Feature**  | {feature}                                                     |
+| **Type**     | happy path / error / edge case / validation                   |
+| **Priority** | P0 (critical) / P1 (high) / P2 (medium) / P3 (low)            |
+| **Created**  | {dd-mm-yyyy:hh:mm} (human) / {YYYY-MM-DDTHH:MM:SSZ} (machine) |
+| **Updated**  | {dd-mm-yyyy:hh:mm} (human) / {YYYY-MM-DDTHH:MM:SSZ} (machine) |
 
 ## Ownership
 

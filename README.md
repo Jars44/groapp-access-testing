@@ -128,7 +128,7 @@ Every implementation goes through:
 
 | Artifact  | Path                                                     | Lifecycle                                          |
 | --------- | -------------------------------------------------------- | -------------------------------------------------- |
-| Test plan | `.agent/plans/test-plan-{feature}.md`                    | Temporary — user prompted to keep/delete           |
+| Test plan | `.agent/plans/implementation-plan-{feature}.md`          | Temporary — user prompted to keep/delete           |
 | Summary   | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md` | Permanent — seq auto-increments on same-day reruns |
 
 ## Tech Stack

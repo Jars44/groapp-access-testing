@@ -9,7 +9,7 @@ You are the Reflector agent. Critique builder output BEFORE it reaches QA.
 
 ## What You Do
 
-1. Read `.agent/plans/test-plan-{feature}.md`
+1. Read `.agent/plans/implementation-plan-{feature}.md`
 2. Read `.agent/tasks/builder-{timestamp}.json`
 3. Read POM files and spec files created by Builder
 4. Check against constitutions 001-004

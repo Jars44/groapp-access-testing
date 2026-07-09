@@ -55,7 +55,7 @@ project/
 │   ├── plans/                  ← Test plans + per-TC todos
 │   ├── tasks/                  ← Per-agent output files
 │   ├── reports/                ← Implementation summaries
-│   ├── templates/              ← Dispatch prompts + test-plan template
+│   ├── templates/              ← Dispatch prompts + implementation-plan template
 │   └── hooks/                  ← Pre/post validation scripts
 ├── docs/
 │   ├── constitution/           ← Non-negotiable rules (001-005)
@@ -80,17 +80,17 @@ project/
 
 ## Templates
 
-| Template            | File                                         | Purpose                                                |
-| ------------------- | -------------------------------------------- | ------------------------------------------------------ |
-| Per-TC Todo         | `.agent/templates/tc-template.md`            | One test case — ownership, status, selectors, evidence |
-| Test Plan           | `.agent/templates/test-plan-template.md`     | Feature-level plan with TC matrix                      |
-| Summary             | `.agent/templates/summary-template.md`       | Teardown report with pipeline log                      |
-| Lead Dispatch       | `.agent/templates/lead-dispatch.md`          | Orchestrator workflow                                  |
-| Researcher Dispatch | `.agent/templates/researcher-dispatch.md`    | Code exploration workflow                              |
-| Builder Dispatch    | `.agent/templates/builder-dispatch.md`       | POM/spec implementation                                |
-| Reflector Dispatch  | `.agent/templates/reflector-dispatch.md`     | Self-critique workflow                                 |
-| QA Dispatch         | `.agent/templates/qa-gatekeeper-dispatch.md` | Test execution workflow                                |
-| Reviewer Dispatch   | `.agent/templates/reviewer-dispatch.md`      | Code audit workflow                                    |
+| Template            | File                                               | Purpose                                                |
+| ------------------- | -------------------------------------------------- | ------------------------------------------------------ |
+| Per-TC Todo         | `.agent/templates/tc-template.md`                  | One test case — ownership, status, selectors, evidence |
+| Implementation Plan | `.agent/templates/implementation-plan-template.md` | Feature-level plan with TC matrix                      |
+| Summary             | `.agent/templates/summary-template.md`             | Teardown report with pipeline log                      |
+| Lead Dispatch       | `.agent/templates/lead-dispatch.md`                | Orchestrator workflow                                  |
+| Researcher Dispatch | `.agent/templates/researcher-dispatch.md`          | Code exploration workflow                              |
+| Builder Dispatch    | `.agent/templates/builder-dispatch.md`             | POM/spec implementation                                |
+| Reflector Dispatch  | `.agent/templates/reflector-dispatch.md`           | Self-critique workflow                                 |
+| QA Dispatch         | `.agent/templates/qa-gatekeeper-dispatch.md`       | Test execution workflow                                |
+| Reviewer Dispatch   | `.agent/templates/reviewer-dispatch.md`            | Code audit workflow                                    |
 
 ## Conflict Prevention
 

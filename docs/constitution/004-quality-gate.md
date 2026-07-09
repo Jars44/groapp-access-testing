@@ -8,10 +8,10 @@ Two-stage review. Stage 1 runs first — if it fails, Stage 2 is skipped. Blocki
 
 Verify code matches plan. Every requirement covered. No scope drift.
 
-- [ ] Re-read `.agent/plans/test-plan-{feature}.md` — scope confirmed
+- [ ] Re-read `.agent/plans/implementation-plan-{feature}.md` — scope confirmed
 - [ ] Every AC / user story point has a corresponding test
 - [ ] No tests outside agreed scope (gold-plating guard)
-- [ ] All test-plan.md `[ ]` marked `[x]` with file:line evidence
+- [ ] All implementation-plan.md `[ ]` marked `[x]` with file:line evidence
 - [ ] Evidence points to real code (spec file + line exists)
 - [ ] Test names describe intent matching requirement
 - [ ] No leftover TODO or placeholder tests

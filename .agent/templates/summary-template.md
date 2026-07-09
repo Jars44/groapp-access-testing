@@ -9,19 +9,19 @@ mode: template
 
 ## Metadata
 
-| Field                 | Value                        |
-| --------------------- | ---------------------------- |
-| **Feature**           | {feature name}               |
-| **Date**              | {YYYY-MM-DDTHH:MM:SSZ}       |
-| **Pipeline mode**     | Mode C (Maximum Parallelism) |
-| **Lead**              | {agent name}                 |
-| **Session ID**        | {session ID if applicable}   |
-| **Total TCs**         | {count}                      |
-| **Passed**            | {count}                      |
-| **Blocked**           | {count}                      |
-| **Skipped**           | {count}                      |
-| **Reflection cycles** | {count}                      |
-| **Total duration**    | {duration}                   |
+| Field                 | Value                                   |
+| --------------------- | --------------------------------------- |
+| **Feature**           | {feature name}                          |
+| **Date**              | {dd-mm-yyyy:hh:mm} (human) / {ISO-8601} |
+| **Pipeline mode**     | Mode C (Maximum Parallelism)            |
+| **Lead**              | {agent name}                            |
+| **Session ID**        | {session ID if applicable}              |
+| **Total TCs**         | {count}                                 |
+| **Passed**            | {count}                                 |
+| **Blocked**           | {count}                                 |
+| **Skipped**           | {count}                                 |
+| **Reflection cycles** | {count}                                 |
+| **Total duration**    | {duration}                              |
 
 ---
 
@@ -49,17 +49,19 @@ mode: template
 
 ## Pipeline Execution Log
 
-| Phase             | Agent                 | Start  | End    | Duration | Status        | Output                  |
-| ----------------- | --------------------- | ------ | ------ | -------- | ------------- | ----------------------- |
-| 1. Discovery      | Lead                  | {time} | {time} | {ms}     | complete      | test-plan, todos        |
-| 2a. Research      | Researcher-Routes     | {time} | {time} | {ms}     | complete      | researcher-{ts}.json    |
-| 2b. Research      | Researcher-Components | {time} | {time} | {ms}     | complete      | researcher-{ts}.json    |
-| 2c. Research      | Researcher-API        | {time} | {time} | {ms}     | complete      | researcher-{ts}.json    |
-| 2d. Research      | Researcher-Validators | {time} | {time} | {ms}     | complete      | researcher-{ts}.json    |
-| 3. Implementation | Builder               | {time} | {time} | {ms}     | complete      | builder-{ts}.json       |
-| 3b. Reflection    | Reflector             | {time} | {time} | {ms}     | {pass/revise} | reflector-{ts}.json     |
-| 4. Verification   | QA Gatekeeper         | {time} | {time} | {ms}     | {pass/block}  | qa-gatekeeper-{ts}.json |
-| 5. Teardown       | Lead                  | {time} | {time} | {ms}     | complete      | state.json, summary     |
+| Phase             | Agent                   | Start  | End    | Duration | Status        | Output                     |
+| ----------------- | ----------------------- | ------ | ------ | -------- | ------------- | -------------------------- |
+| 1. Discovery      | Lead                    | {time} | {time} | {ms}     | complete      | implementation-plan, todos |
+| 2a. Research      | Researcher-Routes       | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 2b. Research      | Researcher-Components   | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 2c. Research      | Researcher-Validators   | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 2d. Research      | Researcher-POM-Patterns | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 2e. HALT          | Lead → User             | {time} | {time} | {ms}     | approved      | —                          |
+| 3. Implementation | Builder-POM             | {time} | {time} | {ms}     | complete      | builder-pom-{ts}.json      |
+| 3. Implementation | Builder-Spec            | {time} | {time} | {ms}     | complete      | builder-spec-{ts}.json     |
+| 3b. Reflection    | Reflector               | {time} | {time} | {ms}     | {pass/revise} | reflector-{ts}.json        |
+| 4. Verification   | QA Gatekeeper           | {time} | {time} | {ms}     | {pass/block}  | qa-gatekeeper-{ts}.json    |
+| 5. Teardown       | Lead                    | {time} | {time} | {ms}     | complete      | state.json, summary        |
 
 ---
 
@@ -144,14 +146,14 @@ mode: template
 
 ## Artifacts
 
-| Artifact          | Path                                             | Purpose                            |
-| ----------------- | ------------------------------------------------ | ---------------------------------- |
-| Test plan         | `.agent/plans/test-plan-{feature}.md`            | Test scenarios and TC definitions  |
-| Todos             | `.agent/plans/todos/tc-*.md`                     | Per-TC status tracking             |
-| State             | `.agent/state.json`                              | Pipeline state machine             |
-| Report            | `.agent/reports/summary-{feature}-{YYYYMMDD}.md` | This file                          |
-| Per-agent outputs | `.agent/tasks/{agent}-{ts}.json`                 | Researcher, Builder, Reflector, QA |
-| Memory entities   | `.agent/memory/entities/{entity}.json`           | Cross-session knowledge            |
+| Artifact            | Path                                             | Purpose                            |
+| ------------------- | ------------------------------------------------ | ---------------------------------- |
+| Implementation plan | `.agent/plans/implementation-plan-{feature}.md`  | Test scenarios and TC definitions  |
+| Todos               | `.agent/plans/todos/tc-*.md`                     | Per-TC status tracking             |
+| State               | `.agent/state.json`                              | Pipeline state machine             |
+| Report              | `.agent/reports/summary-{feature}-{YYYYMMDD}.md` | This file                          |
+| Per-agent outputs   | `.agent/tasks/{agent}-{ts}.json`                 | Researcher, Builder, Reflector, QA |
+| Memory entities     | `.agent/memory/entities/{entity}.json`           | Cross-session knowledge            |
 
 ---
 

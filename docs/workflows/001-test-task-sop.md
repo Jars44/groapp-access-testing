@@ -21,7 +21,7 @@
 
 **STEP 3: WRITE test plan artifact** (UPDATED)
 
-- Create `test-plan-{feature}.md` in the working directory
+- Create `implementation-plan-{feature}.md` in the working directory
 - Document test scenarios (happy path, error, edge case)
 - Identify test data & environment requirements
 - Create a strict Markdown To-Do list `[ ]` for each test case
@@ -36,10 +36,10 @@
 
 **STEP 5: CREATE test spec**
 
-- Translate To-Do list from `test-plan.md` into `test.describe` blocks
+- Translate To-Do list from `implementation-plan.md` into `test.describe` blocks
 - Arrange → Act → Assert logic
 - Descriptive test names (should...)
-- Check off `[x]` in `test-plan-{feature}.md` after writing each test
+- Check off `[x]` in `implementation-plan-{feature}.md` after writing each test
 
 ## Phase 3b: Update Selector Cache (NEW)
 
@@ -54,7 +54,7 @@
 
 **Stage 1 — Spec Compliance (Blocking):**
 
-- Re-read test-plan.md — confirm scope
+- Re-read implementation-plan.md — confirm scope
 - Every AC has a test? Every test maps to an AC?
 - No tests outside scope? (gold-plating guard)
 - Check off each item in constitution 004 → Stage 1
@@ -84,5 +84,5 @@
 **STEP 9: UPDATE documentation and cleanup**
 
 - Update `.agent/state.json` with completed status and coverage notes
-- Delete the temporary `test-plan-{feature}.md` file
+- Delete the temporary `implementation-plan-{feature}.md` file
 - Generate a short markdown summary of the test coverage achieved

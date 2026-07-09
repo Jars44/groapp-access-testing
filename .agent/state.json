@@ -22,7 +22,7 @@
     "attempt": 0,
     "max_attempts": 3,
     "phases": {
-      "discovery": { "agents": ["lead", "researcher-routes", "researcher-components", "researcher-api", "researcher-validators"], "parallel": true },
+      "discovery": { "agents": ["lead", "researcher-routes", "researcher-components", "researcher-pom-patterns", "researcher-validators"], "parallel": true },
       "implementation": { "agents": ["builder", "lead"], "parallel": false, "depends_on": "discovery" },
       "reflection": { "agents": ["reflector"], "parallel": false, "depends_on": "implementation", "max_cycles": 3 },
       "verification": { "agents": ["qa-gatekeeper", "lead"], "parallel": true, "depends_on": "reflection" },
@@ -38,7 +38,7 @@
     "files": []
   },
   "artifacts": {
-    "test_plan": null,
+    "implementation_plan": null,
     "research_findings": [],
     "pom_files": [],
     "spec_files": [],
@@ -67,7 +67,7 @@
     "strategy": "per-entity-files",
     "ownership": {
       "lead": ["relation_creation", "schema_validation"],
-      "researcher": ["component-selector", "route", "api-endpoint"],
+      "researcher": ["component-selector", "route", "pom-pattern", "validation-rule"],
       "builder": ["observation_updates"],
       "reflector": ["critique_annotations"],
       "qa-gatekeeper": ["test_result_annotations"],
@@ -190,15 +190,16 @@
       "E014": "per_agent_output_missing"
     },
     "handoff_protocol": {
-      "lead_to_researcher": { "required": ["pipeline.phase", "artifacts.test_plan"], "phase": "discovery" },
-      "researcher_to_builder": { "required": ["artifacts.research_findings"], "phase": "exploration" },
-      "builder_to_reflector": { "required": ["artifacts.pom_files", "artifacts.spec_files"], "phase": "implementation" },
+      "lead_to_researchers": { "required": ["pipeline.phase", "artifacts.implementation_plan"], "phase": "discovery" },
+      "researchers_to_builders": { "required": ["artifacts.research_findings"], "phase": "exploration" },
+      "halt_to_user": { "required": ["artifacts.implementation_plan", "todos.count"], "phase": "planning_complete" },
+      "builders_to_reflector": { "required": ["artifacts.pom_files", "artifacts.spec_files"], "phase": "implementation" },
       "reflector_to_gatekeeper": { "required": ["reflection_cycle.verdict"], "verdict": "pass", "phase": "reflection" },
       "gatekeeper_to_lead": { "required": ["artifacts.reports"], "phase": "verification" }
     },
     "parallel_phases": {
       "discovery": {
-        "agents": ["lead", "researcher-routes", "researcher-components", "researcher-api", "researcher-validators"],
+        "agents": ["lead", "researcher-routes", "researcher-components", "researcher-pom-patterns", "researcher-validators"],
         "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
       },
       "implementation": {

@@ -40,14 +40,6 @@ Write findings to `.agent/tasks/researcher-{YYYYMMDD}-{seq}.json`:
       "confidence": "verified"
     }
   ],
-  "apis": [
-    {
-      "endpoint": "POST /media/v1/media",
-      "requestShape": "{ workspaceId, file }",
-      "responseShape": "{ mediaId, url }",
-      "file": "src/features/media/infrastructure/api/...:line"
-    }
-  ],
   "validators": [
     {
       "field": "name",

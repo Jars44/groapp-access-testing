@@ -19,7 +19,7 @@ mode: subagent
 ## Pre-flight Checklist
 
 - [ ] Read `.agent/tasks/builder-{timestamp}.json` — confirm artifacts exist
-- [ ] Read `.agent/plans/test-plan-{feature}.md` — understand scope
+- [ ] Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 - [ ] Verify test files exist on disk from state.json artifacts
 - [ ] Run `.agent/hooks/pre-flight.sh` — verify environment
 

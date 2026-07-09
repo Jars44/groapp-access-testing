@@ -5,7 +5,7 @@
     "AGENTS.md",
     "CLAUDE.md",
     ".agent/templates/tc-template.md",
-    ".agent/templates/test-plan-template.md",
+    ".agent/templates/implementation-plan-template.md",
     ".agent/templates/summary-template.md",
     ".agent/templates/*-dispatch.md",
     "docs/constitution/001-pom-architecture.md",
@@ -53,7 +53,7 @@
       }
     },
     "researcher": {
-      "description": "Read-only codebase explorer for routes, components, APIs, validators",
+      "description": "Read-only UI/UX code explorer for routes, components, selectors, validation rules",
       "mode": "subagent",
       "prompt": "{file:.opencode/agents/researcher.md}",
       "permission": {
@@ -130,12 +130,12 @@
       "agent": "lead"
     },
     "plan-feature": {
-      "template": "Create a test plan for feature {feature}. Read docs/workflows/001-test-task-sop.md, then read the app source at ../groapp-access/src/features/{feature}/ and existing tests. Write .agent/plans/test-plan-{feature}.md and per-TC todo files .agent/plans/todos/tc-*.md with ownership assigned.",
+      "template": "Create a test plan for feature {feature}. Read docs/workflows/001-test-task-sop.md, then read the app source at ../groapp-access/src/features/{feature}/ and existing tests. Write .agent/plans/implementation-plan-{feature}.md and per-TC todo files .agent/plans/todos/tc-*.md with ownership assigned.",
       "description": "Create test plan for a feature",
       "agent": "lead"
     },
     "dispatch-researchers": {
-      "template": "Dispatch the 4 researcher sub-agents (routes, components, api, validators) to explore feature {feature}. Provide the test plan path .agent/plans/test-plan-{feature}.md and assigned per-TC todo files.",
+      "template": "Dispatch the 4 researcher sub-agents (routes, components, validators, pom-patterns) to explore feature {feature}. Provide the implementation plan path .agent/plans/implementation-plan-{feature}.md and assigned per-TC todo files.",
       "description": "Dispatch parallel researchers for a feature",
       "agent": "lead"
     }

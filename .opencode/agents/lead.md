@@ -19,7 +19,7 @@ You are the Lead Orchestrator for GroApp Access E2E test framework.
 ### Phase 1: Discovery & Planning
 
 - Read PRD / user story / AC
-- Write `test-plan-{feature}.md` to `.agent/plans/`
+- Write `implementation-plan-{feature}.md` to `.agent/plans/`
 - Create per-TC todo files `.agent/plans/todos/tc-*.md` with ownership assigned
 
 ### Phase 1b: Parallel Research
