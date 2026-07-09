@@ -1,183 +1,62 @@
 {
-  "version": "2.1.0",
-  "description": "Pipeline state machine — Media feature",
+  "version": "2.2.0",
+  "description": "Pipeline state machine — Mode C multi-agent orchestration. Tracks phases, tasks, memory, reflection, and artifact paths across all agents.",
   "metadata": {
     "project": "groapp-access-testing",
-    "started_at": "2026-07-08T00:00:00Z",
-    "completed_at": "2026-07-08T00:00:00Z",
-    "last_updated": "2026-07-08T00:00:00Z"
+    "started_at": null,
+    "completed_at": null,
+    "last_updated": null,
+    "sourceDir": "../groapp-access",
+    "config_files": {
+      "opencode": "opencode.json",
+      "claude": ".claude/settings.json",
+      "antigravity": "antigravity.json",
+      "agents": ".opencode/agents/",
+      "templates_dir": ".agent/templates/"
+    }
   },
   "pipeline": {
-    "mode": "pipeline",
-    "phase": "done",
-    "status": "completed",
-    "attempt": 1,
-    "max_attempts": 3
+    "mode": "mode-c",
+    "phase": "idle",
+    "status": "idle",
+    "attempt": 0,
+    "max_attempts": 3,
+    "phases": {
+      "discovery": { "agents": ["lead", "researcher-routes", "researcher-components", "researcher-api", "researcher-validators"], "parallel": true },
+      "implementation": { "agents": ["builder", "lead"], "parallel": false, "depends_on": "discovery" },
+      "reflection": { "agents": ["reflector"], "parallel": false, "depends_on": "implementation", "max_cycles": 3 },
+      "verification": { "agents": ["qa-gatekeeper", "lead"], "parallel": true, "depends_on": "reflection" },
+      "teardown": { "agents": ["lead"], "parallel": false, "depends_on": "verification" }
+    }
   },
   "errors": [],
-  "tasks": [
-    {
-      "id": "TC-MD-01",
-      "description": "Upload valid image file",
-      "scenario_type": "happy path",
-      "route": "/company/profile",
-      "test_data_ref": "src/tests/utils/file-helper.ts:createTestImage",
-      "selectors": ["mediaPage.fileInput", "mediaPage.progressBar", "mediaPage.previewDialog", "mediaPage.toast.root"],
-      "expected": "File uploaded, preview or success toast visible",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 20,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 46,
-        "test_run_result": "not_run",
-        "verification_notes": "TypeScript clean; runtime depends on app + auth"
-      }
-    },
-    {
-      "id": "TC-MD-02",
-      "description": "Upload invalid file type",
-      "scenario_type": "error",
-      "route": "/company/profile",
-      "test_data_ref": "src/tests/utils/file-helper.ts:createInvalidTypeFile",
-      "selectors": ["mediaPage.fileInput", "mediaPage.fileError", "mediaPage.toast.root"],
-      "expected": "Error 'Tipe file tidak didukung'",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 38,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 64,
-        "test_run_result": "not_run",
-        "verification_notes": ""
-      }
-    },
-    {
-      "id": "TC-MD-03",
-      "description": "Upload oversized file",
-      "scenario_type": "error",
-      "route": "/company/profile",
-      "test_data_ref": "src/tests/utils/file-helper.ts:createLargeFile",
-      "selectors": ["mediaPage.fileInput", "mediaPage.fileError"],
-      "expected": "Error 'Ukuran file melebihi batas maksimal'",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 56,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 46,
-        "test_run_result": "not_run",
-        "verification_notes": ""
-      }
-    },
-    {
-      "id": "TC-MD-04",
-      "description": "Multipart form-data upload",
-      "scenario_type": "validation",
-      "route": "/company/profile",
-      "test_data_ref": "src/tests/utils/file-helper.ts:createTestImage",
-      "selectors": ["mediaPage.fileInput"],
-      "expected": "POST request with Content-Type multipart/form-data",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 70,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 46,
-        "test_run_result": "not_run",
-        "verification_notes": ""
-      }
-    },
-    {
-      "id": "TC-MD-05",
-      "description": "Display uploaded media",
-      "scenario_type": "happy path",
-      "route": "/profile",
-      "test_data_ref": "src/tests/data/media.data.ts",
-      "selectors": ["mediaPage.profilePhoto"],
-      "expected": "Profile photo img with real src",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 85,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 86,
-        "test_run_result": "not_run",
-        "verification_notes": ""
-      }
-    },
-    {
-      "id": "TC-MD-06",
-      "description": "Delete uploaded media",
-      "scenario_type": "happy path",
-      "route": "/profile",
-      "test_data_ref": "src/tests/data/media.data.ts",
-      "selectors": ["mediaPage.profilePhoto", "mediaPage.deleteMediaButton", "mediaPage.modal.confirmButton"],
-      "expected": "DELETE request sent, photo removed or toast shown",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 100,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 96,
-        "test_run_result": "not_run",
-        "verification_notes": ""
-      }
-    },
-    {
-      "id": "TC-MD-07",
-      "description": "Delete non-existent media",
-      "scenario_type": "error",
-      "route": "/profile",
-      "test_data_ref": "src/tests/data/media.data.ts",
-      "selectors": ["mediaPage.profilePhoto", "mediaPage.mediaError", "mediaPage.emptyState"],
-      "expected": "Error 'Media tidak ditemukan' or empty state",
-      "status": "passed",
-      "evidence": {
-        "spec_file": "src/tests/specs/media/media-operations.spec.ts",
-        "spec_line": 134,
-        "pom_file": "src/tests/pages/media/media.page.ts",
-        "pom_line": 106,
-        "test_run_result": "not_run",
-        "verification_notes": "Skips when media exists; needs API mock for full coverage"
-      }
-    }
-  ],
+  "tasks": [],
+  "todos": {
+    "dir": ".agent/plans/todos/",
+    "template": ".agent/templates/tc-template.md",
+    "count": 0,
+    "files": []
+  },
   "artifacts": {
-    "test_plan": ".agent/plans/test-plan-media.md",
-    "research_findings": [
-      "FileUploader has ZERO data-testid — use role=button aria-label, input[type=file], ul[aria-label]",
-      "Company profile page uses FileUploader at line 931 — logo upload",
-      "Profile edit photo uses hidden input[type=file] at line 115 — photo modal",
-      "Media API: POST/GET/DELETE /media/v1/media",
-      "CRITICAL: profile.page.ts POM has WRONG testids (profile-name vs access_profile_profile_name)",
-      "Media DTOs: MediaUploadResponseDto (mediaId), MediaDetailResponseDto (url)"
-    ],
-    "pom_files": ["src/tests/pages/media/media.page.ts"],
-    "spec_files": ["src/tests/specs/media/media-operations.spec.ts"],
-    "data_factories": ["src/tests/data/media.data.ts"],
+    "test_plan": null,
+    "research_findings": [],
+    "pom_files": [],
+    "spec_files": [],
+    "data_factories": [],
     "fixtures": [],
-    "reports": [".agent/reports/summary-media-20260708.md"],
-    "summary": ".agent/reports/summary-media-20260708.md"
+    "reports": [],
+    "summary": null,
+    "per_agent_outputs": []
   },
   "summary": {
-    "generated_at": "2026-07-08T00:00:00Z",
-    "total_todos": 7,
-    "passed": 7,
+    "generated_at": null,
+    "total_todos": 0,
+    "passed": 0,
     "blocked": 0,
     "skipped": 0,
-    "gaps": [
-      "FileUploader has no data-testid — must use aria-role selectors",
-      "TC-MD-07 skips when media exists; needs API mocking for full coverage",
-      "Auth fixture not implemented; tests assume login",
-      "Runtime execution not verified — app not running during build"
-    ],
-    "summary_path": ".agent/reports/summary-media-20260708.md"
-  },
-  "validation": {
-    "last_preflight": "2026-07-08T00:00:00Z",
-    "last_handoff_validation": "2026-07-08T00:00:00Z",
-    "preflight_ok": true
+    "gaps": [],
+    "summary_path": "",
+    "template": ".agent/templates/summary-template.md"
   },
   "memory_state": {
     "entities_dir": ".agent/memory/entities/",
@@ -185,27 +64,115 @@
     "entities_count": 0,
     "relations_count": 0,
     "last_persisted": null,
-    "pending_writes": [],
-    "strategy": "per-entity-files"
-  },
-  "conflict_prevention": {
-    "todos_strategy": "per-tc-files",
-    "memory_strategy": "per-entity-files",
-    "lock_files": ".agent/plans/todos/.locks/",
-    "merge_points": ["research_aggregation", "teardown"],
-    "ownership_enforced": true
+    "strategy": "per-entity-files",
+    "ownership": {
+      "lead": ["relation_creation", "schema_validation"],
+      "researcher": ["component-selector", "route", "api-endpoint"],
+      "builder": ["observation_updates"],
+      "reflector": ["critique_annotations"],
+      "qa-gatekeeper": ["test_result_annotations"],
+      "reviewer": ["audit_findings"]
+    }
   },
   "reflection_cycle": {
     "enabled": true,
     "max_cycles": 3,
     "current_cycle": 0,
     "verdict": "not_started",
-    "reflector_task_file": null
+    "reflector_task_file": null,
+    "cycles": []
+  },
+  "conflict_prevention": {
+    "todos_strategy": "per-tc-files",
+    "memory_strategy": "per-entity-files",
+    "merge_points": ["research_aggregation", "teardown"],
+    "ownership_enforced": true,
+    "single_writers": {
+      "state.json": "lead",
+      "summary": "lead",
+      "relations.json": "lead"
+    },
+    "per_agent_writers": {
+      "plans/todos/": "assigned agent per TC",
+      "memory/entities/": "creator + annotators",
+      "tasks/": "one agent per file"
+    }
+  },
+  "discovery_map": {
+    "non_agent_dirs": {
+      ".agent/plans/": "Temporary test plans + per-TC todos",
+      ".agent/reports/": "Permanent summaries",
+      ".agent/templates/": "Dispatch prompts + templates",
+      ".agent/hooks/": "Pre/post validation scripts"
+    },
+    "skills": [
+      "skills/memory-management/SKILL.md",
+      "skills/dispatching-e2e-tests/SKILL.md",
+      "skills/auditing-selector-quality/SKILL.md"
+    ],
+    "configs": [
+      "opencode.json",
+      ".claude/settings.json",
+      "antigravity.json",
+      "AGENTS.md",
+      "CLAUDE.md"
+    ]
+  },
+  "validation": {
+    "last_preflight": null,
+    "last_handoff_validation": null,
+    "preflight_ok": false
   },
   "schema": {
     "version": "2.2.0",
-    "tasks": [],
-    "errors": [],
+    "tasks": [
+      {
+        "id": "TC-001",
+        "description": "short description",
+        "scenario_type": "happy path | error | edge case | validation",
+        "priority": "P0 | P1 | P2 | P3",
+        "route": "target URL",
+        "test_data_ref": "factory function or constant path",
+        "selectors": ["list of selectors used"],
+        "expected": "expected outcome for human to verify",
+        "status": "not_started | in_progress | implemented | passed | blocked | skipped",
+        "tc_file": ".agent/plans/todos/tc-{id}.md",
+        "evidence": {
+          "spec_file": "path to spec file",
+          "spec_line": "line number of test",
+          "pom_file": "path to POM file",
+          "pom_line": "line number of selector/action",
+          "data_file": "path to data factory",
+          "test_run_result": "pass | fail | flaky | not_run",
+          "verification_notes": "human-readable notes for reviewer"
+        },
+        "owner": {
+          "discovery": "researcher-{domain}",
+          "implementation": "builder",
+          "reflection": "reflector",
+          "verification": "qa-gatekeeper"
+        },
+        "status_history": [
+          {
+            "timestamp": "ISO 8601",
+            "agent": "agent name",
+            "status": "[ ] | [/] | [x] | [-]",
+            "notes": "what changed"
+          }
+        ]
+      }
+    ],
+    "errors": [
+      {
+        "phase": "string",
+        "agent": "string",
+        "code": "string — error taxonomy",
+        "message": "string",
+        "evidence": "string — file:line or test output",
+        "recovery": "retry | skip | block",
+        "timestamp": "ISO 8601"
+      }
+    ],
     "error_taxonomy": {
       "E001": "state_unreadable",
       "E002": "handoff_invalid",
@@ -218,7 +185,9 @@
       "E009": "tool_restricted",
       "E010": "pipeline_blocked",
       "E011": "memory_write_conflict",
-      "E012": "reflection_max_cycles_exceeded"
+      "E012": "reflection_max_cycles_exceeded",
+      "E013": "todo_evidence_missing",
+      "E014": "per_agent_output_missing"
     },
     "handoff_protocol": {
       "lead_to_researcher": { "required": ["pipeline.phase", "artifacts.test_plan"], "phase": "discovery" },
@@ -230,27 +199,20 @@
     "parallel_phases": {
       "discovery": {
         "agents": ["lead", "researcher-routes", "researcher-components", "researcher-api", "researcher-validators"],
-        "writes": [".agent/plans/todos-{feature}.md", ".agent/memory/entities.json"]
+        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
       },
       "implementation": {
         "agents": ["builder", "lead"],
-        "writes": [".agent/plans/todos-{feature}.md", ".agent/memory/entities.json"]
+        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
       },
       "verification": {
         "agents": ["qa-gatekeeper", "lead", "reflector"],
-        "writes": [".agent/plans/todos-{feature}.md", ".agent/memory/entities.json", ".agent/reports/summary-{feature}.md"]
+        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json", ".agent/reports/summary-{feature}.md"]
       },
       "teardown": {
         "agents": ["lead"],
-        "writes": [".agent/state.json", ".agent/memory/entities.json", ".agent/reports/summary-{feature}.md"]
+        "writes": [".agent/state.json", ".agent/memory/entities/relations.json", ".agent/reports/summary-{feature}.md"]
       }
-    },
-    "memory_ownership": {
-      "lead": ["relation_creation", "schema_validation"],
-      "researcher": ["component-selector", "route", "api-endpoint"],
-      "builder": ["observation_updates"],
-      "reflector": ["critique_annotations"],
-      "qa-gatekeeper": ["test_result_annotations"]
     }
   }
 }

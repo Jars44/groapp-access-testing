@@ -1,8 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "version": "2.0.0",
-  "project": "groapp-access-testing",
-  "description": "Playwright E2E test framework for GroApp Access with multi-agent orchestration",
   "instructions": [
     ".agent/README.md",
     "AGENTS.md",
