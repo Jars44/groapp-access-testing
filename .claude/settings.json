@@ -3,6 +3,9 @@
     "AGENTS.md",
     "CLAUDE.md",
     ".agent/README.md",
+    ".agent/templates/tc-template.md",
+    ".agent/templates/test-plan-template.md",
+    ".agent/templates/summary-template.md",
     "docs/constitution/001-pom-architecture.md",
     "docs/constitution/002-coding-standards.md",
     "docs/constitution/003-anti-hallucination.md",
@@ -16,6 +19,7 @@
     "docs/personas/builder.md",
     "docs/personas/reflector.md",
     "docs/personas/qa-gatekeeper.md",
+    "docs/personas/reviewer.md",
     "skills/memory-management/SKILL.md"
   ]
 }

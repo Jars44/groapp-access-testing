@@ -78,6 +78,20 @@ project/
 | Reflector         | `docs/personas/reflector.md`         | Self-critique before QA         |
 | QA Gatekeeper     | `docs/personas/qa-gatekeeper.md`     | Test execution, flakiness check |
 
+## Templates
+
+| Template            | File                                         | Purpose                                                |
+| ------------------- | -------------------------------------------- | ------------------------------------------------------ |
+| Per-TC Todo         | `.agent/templates/tc-template.md`            | One test case — ownership, status, selectors, evidence |
+| Test Plan           | `.agent/templates/test-plan-template.md`     | Feature-level plan with TC matrix                      |
+| Summary             | `.agent/templates/summary-template.md`       | Teardown report with pipeline log                      |
+| Lead Dispatch       | `.agent/templates/lead-dispatch.md`          | Orchestrator workflow                                  |
+| Researcher Dispatch | `.agent/templates/researcher-dispatch.md`    | Code exploration workflow                              |
+| Builder Dispatch    | `.agent/templates/builder-dispatch.md`       | POM/spec implementation                                |
+| Reflector Dispatch  | `.agent/templates/reflector-dispatch.md`     | Self-critique workflow                                 |
+| QA Dispatch         | `.agent/templates/qa-gatekeeper-dispatch.md` | Test execution workflow                                |
+| Reviewer Dispatch   | `.agent/templates/reviewer-dispatch.md`      | Code audit workflow                                    |
+
 ## Conflict Prevention
 
 | File                                   | Strategy             | Why                                     |

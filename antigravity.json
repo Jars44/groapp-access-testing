@@ -3,16 +3,39 @@
   "version": "2.0.0",
   "project": "groapp-access-testing",
   "description": "Playwright E2E test framework with multi-agent orchestration",
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".agent/README.md",
+    ".agent/templates/tc-template.md",
+    ".agent/templates/test-plan-template.md",
+    ".agent/templates/summary-template.md",
+    ".agent/templates/*-dispatch.md",
+    "docs/workflows/002-multi-agent-orchestration.md",
+    "docs/personas/orchestrator-lead.md",
+    "docs/personas/researcher.md",
+    "docs/personas/builder.md",
+    "docs/personas/reflector.md",
+    "docs/personas/qa-gatekeeper.md",
+    "docs/personas/reviewer.md",
+    "skills/memory-management/SKILL.md"
+  ],
   "goals": [
     {
       "name": "test-feature",
-      "description": "Create and run tests for a feature",
+      "description": "Create and run tests for a feature using Mode C parallelism",
+      "template": ".agent/templates/test-plan-template.md",
       "steps": [
         "Read AGENTS.md",
-        "Read test-plan-{feature}.md",
-        "Dispatch researcher agents",
-        "Build POM + specs",
-        "Run QA gatekeeper"
+        "Read .agent/templates/tc-template.md for per-TC todo format",
+        "Read .agent/templates/test-plan-template.md",
+        "Create .agent/plans/test-plan-{feature}.md",
+        "Create per-TC todos .agent/plans/todos/tc-*.md with ownership",
+        "Dispatch researcher agents (routes, components, api, validators)",
+        "Build POM + specs using .agent/templates/builder-dispatch.md",
+        "Reflect using .agent/templates/reflector-dispatch.md",
+        "Run QA gatekeeper using .agent/templates/qa-gatekeeper-dispatch.md",
+        "Generate summary using .agent/templates/summary-template.md"
       ]
     },
     {
@@ -29,28 +52,39 @@
   "agents": {
     "lead": {
       "role": "orchestrator",
-      "prompt": "You are the Lead Orchestrator. Coordinate multi-agent test workflow.",
+      "prompt": "You are the Lead Orchestrator. Coordinate multi-agent test workflow. Read .agent/templates/lead-dispatch.md for workflow.",
+      "template": ".agent/templates/lead-dispatch.md",
       "tools": ["read", "write", "edit", "glob", "grep", "bash", "task"]
     },
     "researcher": {
       "role": "explorer",
-      "prompt": "You are the Researcher. Explore codebase for routes, components, APIs.",
+      "prompt": "You are the Researcher. Explore codebase for routes, components, APIs. Read .agent/templates/researcher-dispatch.md.",
+      "template": ".agent/templates/researcher-dispatch.md",
       "tools": ["read", "glob", "grep"]
     },
     "builder": {
       "role": "implementor",
-      "prompt": "You are the Builder. Implement POM files and spec files.",
+      "prompt": "You are the Builder. Implement POM files and spec files. Read .agent/templates/builder-dispatch.md.",
+      "template": ".agent/templates/builder-dispatch.md",
       "tools": ["read", "write", "edit", "glob", "grep", "bash"]
     },
     "reflector": {
       "role": "reviewer",
-      "prompt": "You are the Reflector. Critique builder output against constitution.",
+      "prompt": "You are the Reflector. Critique builder output against constitution. Read .agent/templates/reflector-dispatch.md.",
+      "template": ".agent/templates/reflector-dispatch.md",
       "tools": ["read", "glob", "grep"]
     },
     "qa-gatekeeper": {
       "role": "tester",
-      "prompt": "You are the QA Gatekeeper. Run Playwright tests.",
+      "prompt": "You are the QA Gatekeeper. Run Playwright tests. Read .agent/templates/qa-gatekeeper-dispatch.md.",
+      "template": ".agent/templates/qa-gatekeeper-dispatch.md",
       "tools": ["read", "glob", "grep", "bash"]
+    },
+    "reviewer": {
+      "role": "auditor",
+      "prompt": "You are the Reviewer. Audit POM and spec files for quality. Read .agent/templates/reviewer-dispatch.md.",
+      "template": ".agent/templates/reviewer-dispatch.md",
+      "tools": ["read", "glob", "grep"]
     }
   }
 }
