@@ -1,105 +1,148 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "default_agent": "orchestrator",
+  "version": "2.0.0",
+  "project": "groapp-access-testing",
+  "description": "Playwright E2E test framework for GroApp Access with multi-agent orchestration",
   "instructions": [
+    ".agent/README.md",
     "AGENTS.md",
     "CLAUDE.md",
-    ".agent/README.md",
-    "docs/workflows/001-test-task-sop.md",
-    "docs/workflows/002-multi-agent-orchestration.md",
-    "docs/workflows/003-bugfix-sop.md",
-    "docs/constitution/004-quality-gate.md"
+    "docs/constitution/*.md",
+    "docs/workflows/*.md",
+    "docs/personas/*.md"
   ],
-  "references": {
-    "constitution": {
-      "path": "docs/constitution",
-      "description": "Non-negotiables, POM architecture, anti-hallucination, quality gate"
-    },
-    "workflows": {
-      "path": "docs/workflows",
-      "description": "SOPs for test tasks, multi-agent orchestration, bugfix"
-    },
-    "personas": {
-      "path": "docs/personas",
-      "description": "Agent persona definitions: orchestrator, researcher, builder, reviewer, qa-gatekeeper"
-    },
-    "skills-ref": {
-      "path": "skills",
-      "description": "E2E test dispatching and selector quality skills"
-    }
-  },
+  "default_agent": "build",
   "agent": {
-    "researcher": {
-      "description": "Read-only code explorer. Finds routes, components, selectors, API endpoints. Never modifies code.",
-      "mode": "subagent",
-      "permission": {
-        "read": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "bash": "allow",
-        "edit": "deny",
-        "write": "deny",
-        "task": "deny",
-        "todowrite": "deny",
-        "memory": "deny"
-      }
-    },
-    "builder": {
-      "description": "Implements POM files and spec files. Creates/edits test code only.",
-      "mode": "subagent",
+    "lead": {
+      "description": "Orchestrates multi-agent workflow: plans, delegates, summarizes",
+      "mode": "primary",
+      "prompt": "{file:.opencode/agents/lead.md}",
       "permission": {
         "read": "allow",
         "edit": "allow",
-        "write": "allow",
-        "grep": "allow",
         "glob": "allow",
-        "bash": "allow",
-        "todowrite": "deny",
-        "task": "deny"
+        "grep": "allow",
+        "bash": {
+          "*": "ask",
+          "git status*": "allow",
+          "git log*": "allow",
+          "ls *": "allow",
+          "npx playwright test*": "allow"
+        },
+        "task": {
+          "*": "deny",
+          "researcher": "allow",
+          "builder": "allow",
+          "reflector": "allow",
+          "qa-gatekeeper": "allow"
+        },
+        "todowrite": "allow"
       }
     },
-    "reviewer": {
-      "description": "Audits POM and spec files for quality and spec compliance. Read-only gate.",
+    "researcher": {
+      "description": "Read-only codebase explorer for routes, components, APIs, validators",
       "mode": "subagent",
+      "prompt": "{file:.opencode/agents/researcher.md}",
       "permission": {
         "read": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "bash": "allow",
         "edit": "deny",
-        "write": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "bash": {
+          "ls *": "allow",
+          "git diff*": "allow",
+          "git log*": "allow"
+        },
+        "task": "deny",
+        "todowrite": "deny"
+      }
+    },
+    "builder": {
+      "description": "Implements POM files, spec files, and test data factories",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/agents/builder.md}",
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "glob": "allow",
+        "grep": "allow",
+        "bash": {
+          "ls *": "allow",
+          "npm *": "allow",
+          "npx *": "allow"
+        },
+        "task": "deny",
+        "todowrite": "allow"
+      }
+    },
+    "reflector": {
+      "description": "Self-critique agent: reviews builder output before QA",
+      "mode": "subagent",
+      "prompt": "{file:.opencode/agents/reflector.md}",
+      "permission": {
+        "read": "allow",
+        "edit": "deny",
+        "glob": "allow",
+        "grep": "allow",
+        "bash": "deny",
         "task": "deny",
         "todowrite": "deny"
       }
     },
     "qa-gatekeeper": {
-      "description": "Runs tests, generates structured evidence, produces pass/fail summary. Read-only outside test execution.",
+      "description": "Runs Playwright tests and decides pass/block verdict",
       "mode": "subagent",
+      "prompt": "{file:.opencode/agents/qa-gatekeeper.md}",
       "permission": {
         "read": "allow",
-        "grep": "allow",
+        "edit": {
+          ".agent/tasks/*": "allow",
+          "*": "deny"
+        },
         "glob": "allow",
-        "bash": "allow",
-        "edit": "deny",
-        "write": "deny",
+        "grep": "allow",
+        "bash": {
+          "npx playwright test*": "allow",
+          "ls *": "allow"
+        },
         "task": "deny",
         "todowrite": "deny"
       }
-    },
-    "orchestrator": {
-      "description": "Lead architect. Plans, dispatches sub-agents, tracks progress, generates summaries.",
-      "mode": "primary",
-      "permission": {
-        "read": "allow",
-        "edit": "allow",
-        "write": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "bash": "allow",
-        "task": "allow",
-        "todowrite": "allow",
-        "memory": "allow"
-      }
     }
+  },
+  "command": {
+    "test-feature": {
+      "template": "Run Playwright tests for a specific feature. Read the feature's spec files from src/tests/specs/{feature}/ and run npx playwright test --grep {feature} --reporter=list. Report pass/fail counts and any errors.",
+      "description": "Run tests for a specific feature",
+      "agent": "lead"
+    },
+    "plan-feature": {
+      "template": "Create a test plan for feature {feature}. Read docs/workflows/001-test-task-sop.md, then read the app source at ../groapp-access/src/features/{feature}/ and existing tests. Write .agent/plans/test-plan-{feature}.md and per-TC todo files .agent/plans/todos/tc-*.md with ownership assigned.",
+      "description": "Create test plan for a feature",
+      "agent": "lead"
+    },
+    "dispatch-researchers": {
+      "template": "Dispatch the 4 researcher sub-agents (routes, components, api, validators) to explore feature {feature}. Provide the test plan path .agent/plans/test-plan-{feature}.md and assigned per-TC todo files.",
+      "description": "Dispatch parallel researchers for a feature",
+      "agent": "lead"
+    }
+  },
+  "permission": {
+    "edit": "ask",
+    "bash": "ask"
+  },
+  "mcp": {
+    "memory": {
+      "type": "local",
+      "enabled": true
+    }
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "test-results/**",
+      "playwright-report/**"
+    ]
   }
 }

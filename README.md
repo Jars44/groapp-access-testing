@@ -83,12 +83,12 @@ src/tests/data/
 
 ## Config
 
-| Variable                   | Default               | Purpose                                               |
-| -------------------------- | --------------------- | ----------------------------------------------------- |
-| `GROAPP_ACCESS_SOURCE_DIR` | `../groapp-access`    | Path to app source (used for `webServer.command`)     |
-| `TEST_USER_EMAIL`          | `REDACTED_EMAIL` | Auth credentials                                      |
-| `TEST_USER_PASSWORD`       | `REDACTED_PASSWORD`          | Auth credentials                                      |
-| `CI`                       | —                     | Enables retries, single worker, disables server reuse |
+| Variable                   | Default             | Purpose                                               |
+| -------------------------- | ------------------- | ----------------------------------------------------- |
+| `GROAPP_ACCESS_SOURCE_DIR` | `../groapp-access`  | Path to app source (used for `webServer.command`)     |
+| `TEST_USER_EMAIL`          | `REDACTED_EMAIL`    | Auth credentials                                      |
+| `TEST_USER_PASSWORD`       | `REDACTED_PASSWORD` | Auth credentials                                      |
+| `CI`                       | —                   | Enables retries, single worker, disables server reuse |
 
 Set via `.env` or environment variables.
 

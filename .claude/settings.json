@@ -7,8 +7,15 @@
     "docs/constitution/002-coding-standards.md",
     "docs/constitution/003-anti-hallucination.md",
     "docs/constitution/004-quality-gate.md",
+    "docs/constitution/005-design-patterns.md",
     "docs/workflows/001-test-task-sop.md",
     "docs/workflows/002-multi-agent-orchestration.md",
-    "docs/workflows/003-bugfix-sop.md"
+    "docs/workflows/003-bugfix-sop.md",
+    "docs/personas/orchestrator-lead.md",
+    "docs/personas/researcher.md",
+    "docs/personas/builder.md",
+    "docs/personas/reflector.md",
+    "docs/personas/qa-gatekeeper.md",
+    "skills/memory-management/SKILL.md"
   ]
 }

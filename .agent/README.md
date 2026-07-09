@@ -35,11 +35,11 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 
 ## 3-Layer Context Architecture
 
-| Layer         | Scope         | Files                                                                             |
-| ------------- | ------------- | --------------------------------------------------------------------------------- |
-| 1 — Always    | Every session | `AGENTS.md`, `CLAUDE.md`, this file                                               |
-| 2 — On-demand | Task match    | `skills/*/SKILL.md`, `docs/constitution/*`, `docs/workflows/*`, `docs/personas/*` |
-| 3 — Tools     | Tool access   | `docs/reference/*`, `.agent/templates/*`, `.agent/mcp.json`                       |
+| Layer         | Scope         | Files                                                                                                                  |
+| ------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 1 — Always    | Every session | `AGENTS.md`, `CLAUDE.md`, this file                                                                                    |
+| 2 — On-demand | Task match    | `skills/*/SKILL.md`, `skills/memory-management/SKILL.md`, `docs/constitution/*`, `docs/workflows/*`, `docs/personas/*` |
+| 3 — Tools     | Tool access   | `docs/reference/*`, `.agent/templates/*`, `.agent/mcp.json`                                                            |
 
 ## File Index
 
@@ -53,8 +53,20 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 | `.agent/reports/`      | **Permanent** summaries — `summary-{feature}-{YYYYMMDD}[-{seq}].md`             |
 | `.agent/templates/`    | Dispatch prompts + test-plan-template.md                                        |
 | `.agent/hooks/`        | pre-flight.sh, validate-state.sh                                                |
-| `.agent/memory/`       | Cross-session knowledge graph (entities + relations)                            |
+| `.agent/memory/`       | Cross-session knowledge graph — per-entity JSON files                           |
 | `.agent/tasks/`        | Per-agent output files — `researcher-{ts}.json`, `builder-{ts}.json`, etc.      |
+
+## Conflict Prevention
+
+| File Pattern                     | Strategy             | Writers                           |
+| -------------------------------- | -------------------- | --------------------------------- |
+| `.agent/state.json`              | Single writer (Lead) | Lead only                         |
+| `.agent/plans/todos/tc-*.md`     | Per-TC files         | One agent per TC file             |
+| `.agent/memory/entities/*.json`  | Per-entity files     | One creator + assigned annotators |
+| `.agent/tasks/{agent}-{ts}.json` | One file per agent   | One agent per file                |
+| `.agent/reports/summary-*.md`    | Single writer (Lead) | Lead only                         |
+
+**No concurrent writes to same file.** Per-TC and per-entity splitting prevents last-writer-wins data loss.
 
 ## Directory Lifecycle
 
@@ -67,3 +79,57 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 | `.agent/hooks/`   | Pre/post validation (always present)           |
 
 Empty directories between sessions are expected — they are populated during active task execution.
+
+## Parallel Execution Model
+
+This codebase implements **Mode C: Maximum Parallelism** — the optimal mode for reducing wall-clock time.
+
+### What Runs in Parallel
+
+| Phase          | Parallel Tasks                                                       |
+| -------------- | -------------------------------------------------------------------- |
+| Discovery      | Lead writes todos + 4× Researcher sub-agents                         |
+| Implementation | Builder writes code + Lead updates todos + Memory writes             |
+| Verification   | QA Gatekeeper runs tests + Lead drafts summary + Reflector critiques |
+| Teardown       | Lead writes final state + persists memory relations (sequential)     |
+
+### What Stays Sequential
+
+| Task                            | Why                           |
+| ------------------------------- | ----------------------------- |
+| Builder before Researcher       | Needs findings                |
+| Reflector before Builder revise | Needs output to critique      |
+| state.json merge                | Written once, end of pipeline |
+
+### Real-Time Documentation
+
+Documentation (todos, state snapshots, memory) updates in REAL-TIME during execution, NOT batched at end.
+
+```text
+Discovery:  Lead writes todos/tc-*.md [ ] → Researchers flip to [/] → Researchers flip to [x] with evidence
+Build:      Builder writes [x] with file:line per TC → Memory observations updated
+Verify:     QA adds test_run:pass/fail → Memory test results updated
+Teardown:   Lead writes final state → Memory relations created
+```
+
+### Memory Writes (Parallel with Sub-Agents)
+
+Memory writes run parallel with sub-agents. Each agent owns its domain:
+
+| Agent         | Memory Domain                              | File Pattern                            |
+| ------------- | ------------------------------------------ | --------------------------------------- |
+| Researcher    | Component selectors, routes, API endpoints | `.agent/memory/entities/{entity}.json`  |
+| Builder       | Implementation observations                | `.agent/memory/entities/{entity}.json`  |
+| Reflector     | Critique annotations                       | `.agent/memory/entities/{entity}.json`  |
+| QA Gatekeeper | Test results                               | `.agent/memory/entities/{entity}.json`  |
+| Lead          | Relations + final persistence              | `.agent/memory/entities/relations.json` |
+
+### State Writes
+
+| State                                  | When                           | Who                           |
+| -------------------------------------- | ------------------------------ | ----------------------------- |
+| `.agent/state.json`                    | ONCE at teardown               | Lead only                     |
+| `.agent/state/pipeline-{ts}.json`      | Snapshot during implementation | Lead only (optional)          |
+| `.agent/tasks/{agent}-{ts}.json`       | Per agent run                  | Each agent                    |
+| `.agent/memory/entities/{entity}.json` | Real-time per phase            | Creator + assigned annotators |
+| `.agent/plans/todos/tc-{id}.md`        | Real-time per phase            | Assigned agent per TC         |

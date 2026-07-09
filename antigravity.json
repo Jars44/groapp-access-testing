@@ -1,0 +1,56 @@
+{
+  "$schema": "https://antigravity.dev/schema.json",
+  "version": "2.0.0",
+  "project": "groapp-access-testing",
+  "description": "Playwright E2E test framework with multi-agent orchestration",
+  "goals": [
+    {
+      "name": "test-feature",
+      "description": "Create and run tests for a feature",
+      "steps": [
+        "Read AGENTS.md",
+        "Read test-plan-{feature}.md",
+        "Dispatch researcher agents",
+        "Build POM + specs",
+        "Run QA gatekeeper"
+      ]
+    },
+    {
+      "name": "debug-failure",
+      "description": "Debug a failing test",
+      "steps": [
+        "Read AGENTS.md",
+        "Read test failure output",
+        "Diagnose root cause",
+        "Fix and re-run"
+      ]
+    }
+  ],
+  "agents": {
+    "lead": {
+      "role": "orchestrator",
+      "prompt": "You are the Lead Orchestrator. Coordinate multi-agent test workflow.",
+      "tools": ["read", "write", "edit", "glob", "grep", "bash", "task"]
+    },
+    "researcher": {
+      "role": "explorer",
+      "prompt": "You are the Researcher. Explore codebase for routes, components, APIs.",
+      "tools": ["read", "glob", "grep"]
+    },
+    "builder": {
+      "role": "implementor",
+      "prompt": "You are the Builder. Implement POM files and spec files.",
+      "tools": ["read", "write", "edit", "glob", "grep", "bash"]
+    },
+    "reflector": {
+      "role": "reviewer",
+      "prompt": "You are the Reflector. Critique builder output against constitution.",
+      "tools": ["read", "glob", "grep"]
+    },
+    "qa-gatekeeper": {
+      "role": "tester",
+      "prompt": "You are the QA Gatekeeper. Run Playwright tests.",
+      "tools": ["read", "glob", "grep", "bash"]
+    }
+  }
+}
