@@ -76,10 +76,15 @@
   },
   "reflection_cycle": {
     "enabled": true,
-    "max_cycles": 3,
-    "current_cycle": 0,
-    "verdict": "not_started",
-    "reflector_task_file": null,
+    "max_full_cycles": 3,
+    "current_full_cycle": 0,
+    "sub_cycles": ["pom", "spec"],
+    "current_sub_cycle": null,
+    "overall_verdict": "not_started",
+    "reflector_task_files": {
+      "pom": null,
+      "spec": null
+    },
     "cycles": []
   },
   "conflict_prevention": {
@@ -194,7 +199,8 @@
       "researchers_to_builders": { "required": ["artifacts.research_findings"], "phase": "exploration" },
       "halt_to_user": { "required": ["artifacts.implementation_plan", "todos.count"], "phase": "planning_complete" },
       "builders_to_reflector": { "required": ["artifacts.pom_files", "artifacts.spec_files"], "phase": "implementation" },
-      "reflector_to_gatekeeper": { "required": ["reflection_cycle.verdict"], "verdict": "pass", "phase": "reflection" },
+      "reflector_pom_to_spec": { "required": ["reflection_cycle.pom_verdict"], "verdict": "pass", "phase": "reflection_pom" },
+      "reflector_to_gatekeeper": { "required": ["reflection_cycle.overall_verdict"], "verdict": "pass", "phase": "reflection" },
       "gatekeeper_to_lead": { "required": ["artifacts.reports"], "phase": "verification" }
     },
     "parallel_phases": {
@@ -203,15 +209,29 @@
         "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
       },
       "implementation": {
-        "agents": ["builder", "lead"],
-        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
+        "agents": ["builder-pom", "builder-spec", "lead"],
+        "parallel": true,
+        "writes": ["src/tests/pages/**/*.page.ts", "src/tests/components/**/*.component.ts", "src/tests/specs/**/*.spec.ts", ".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
+      },
+      "reflection_pom": {
+        "agents": ["reflector-pom"],
+        "parallel": false,
+        "writes": [".agent/tasks/reflector-{ts}.json", ".agent/memory/entities/*.json"]
+      },
+      "reflection_spec": {
+        "agents": ["reflector-spec"],
+        "parallel": false,
+        "depends_on": "reflection_pom",
+        "writes": [".agent/tasks/reflector-{ts}.json", ".agent/memory/entities/*.json"]
       },
       "verification": {
-        "agents": ["qa-gatekeeper", "lead", "reflector"],
-        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json", ".agent/reports/summary-{feature}.md"]
+        "agents": ["qa-gatekeeper", "lead", "reflector-pom", "reflector-spec"],
+        "parallel": true,
+        "writes": [".agent/tasks/qa-gatekeeper-{ts}.json", ".agent/reports/summary-{feature}.md", ".agent/memory/entities/*.json"]
       },
       "teardown": {
         "agents": ["lead"],
+        "parallel": false,
         "writes": [".agent/state.json", ".agent/memory/entities/relations.json", ".agent/reports/summary-{feature}.md"]
       }
     }

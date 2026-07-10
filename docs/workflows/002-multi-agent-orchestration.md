@@ -216,6 +216,31 @@ LEAD (Phase 5 — Teardown)
 └── 7. Cleanup plan prompt to user
 ```
 
+### Reflection Sub-Cycles (Builder-Aware)
+
+> Reflector runs in 2 sub-cycles: POM first, then Specs. Each sub-cycle can request revision before the next.
+
+```text
+PHASE 4 — Reflection (2 sub-cycles, max 3 full cycles)
+│
+├── CYCLE 1: Reflector-POM
+│   ├── Reads POM files from Builder-POM
+│   ├── Checks: selector priority (testid > role > label > css)
+│   ├── Checks: extends BasePage, readonly selectors, no assertions
+│   ├── If revise → Lead sends findings to Builder-POM → fixes → re-dispatch Reflector-POM
+│   └── If pass → proceed to Reflector-Spec
+│
+├── CYCLE 1: Reflector-Spec (parallel-ready, waits for Reflector-POM pass)
+│   ├── Reads spec files from Builder-Spec
+│   ├── Checks: no hardcoded timeouts, Arrange→Act→Assert, every test has assertion
+│   ├── If revise → Lead sends findings to Builder-Spec → fixes → re-dispatch Reflector-Spec
+│   └── If pass → proceed to QA Gatekeeper
+│
+└── (max 3 full cycles total. Exceeded → BLOCK)
+```
+
+**Why split:** POM and Specs are built by different sub-agents. Reflecting them together wastes context — split lets each builder revise independently.
+
 ### Real-Time Todo Update Rules
 
 1. **Lead writes initial rows** with [ ] status BEFORE dispatching
@@ -237,11 +262,24 @@ LEAD (Phase 5 — Teardown)
 
 ### What Stays Sequential (Cannot Parallelize)
 
-- **Builder before researcher output** — needs routes/selectors/APIs
-- **QA before builder artifacts** — needs POM/spec files to test
-- **Final state.json before QA results** — aggregates QA output
-- **Final summary before test counts** — needs QA results
-- **Cleanup before summary** — needs summary as reference
+| Constraint                               | Why                                             |
+| ---------------------------------------- | ----------------------------------------------- |
+| Builder before researcher output         | Needs routes/selectors/validators from research |
+| QA before builder artifacts              | Needs POM/spec files to test                    |
+| Reflector-Spec before Reflector-POM pass | Spec depends on POM quality                     |
+| Final state.json before QA results       | Aggregates QA output                            |
+| Final summary before test counts         | Needs QA results                                |
+| Cleanup before summary                   | Needs summary as reference                      |
+
+### What Can Now Run in Parallel
+
+| Phase                         | Parallel With | Why Safe                                |
+| ----------------------------- | ------------- | --------------------------------------- |
+| Builder-POM + Builder-Spec    | Each other    | Different files, same repo              |
+| Lead drafts summary structure | Builders      | Different files (summary-draft vs code) |
+| Memory writes                 | Any agent     | Per-entity files, no conflict           |
+| Reflector-POM                 | Builder-Spec  | POM and spec are separate codebases     |
+| Reflector-Spec                | QA Gatekeeper | Different work: critique vs test run    |
 
 ---
 

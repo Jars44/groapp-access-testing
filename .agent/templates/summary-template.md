@@ -59,23 +59,53 @@ mode: template
 | 2e. HALT          | Lead → User             | {time} | {time} | {ms}     | approved      | —                          |
 | 3. Implementation | Builder-POM             | {time} | {time} | {ms}     | complete      | builder-pom-{ts}.json      |
 | 3. Implementation | Builder-Spec            | {time} | {time} | {ms}     | complete      | builder-spec-{ts}.json     |
-| 3b. Reflection    | Reflector               | {time} | {time} | {ms}     | {pass/revise} | reflector-{ts}.json        |
+| 3b. Reflection    | Reflector-POM           | {time} | {time} | {ms}     | {pass/revise} | reflector-pom-{ts}.json    |
+| 3c. Reflection    | Reflector-Spec          | {time} | {time} | {ms}     | {pass/revise} | reflector-spec-{ts}.json   |
 | 4. Verification   | QA Gatekeeper           | {time} | {time} | {ms}     | {pass/block}  | qa-gatekeeper-{ts}.json    |
 | 5. Teardown       | Lead                    | {time} | {time} | {ms}     | complete      | state.json, summary        |
 
 ---
 
-## Reflection Results
+## Parallel Execution Summary
 
-| Cycle | Findings | Errors  | Warnings | Info    | Verdict       |
-| ----- | -------- | ------- | -------- | ------- | ------------- |
-| 1     | {count}  | {count} | {count}  | {count} | {pass/revise} |
-| 2     | {count}  | {count} | {count}  | {count} | {pass/revise} |
-| 3     | {count}  | {count} | {count}  | {count} | {pass/revise} |
+| Phase             | Parallel Agents                          | Independent Work                             | Conflict-Free?          |
+| ----------------- | ---------------------------------------- | -------------------------------------------- | ----------------------- |
+| 1b. Research      | 4× researchers                           | Routes, components, validators, POM-patterns | ✓ Separate TC files     |
+| 2. Aggregation    | Lead + Early summary draft               | Merge findings + draft skeleton              | ✓ Different files       |
+| 3. Implementation | Builder-POM + Builder-Spec               | POM files + Spec files                       | ✓ Different directories |
+| 3b. Memory writes | Builders + Reflector                     | Append observations + annotations            | ✓ Per-entity files      |
+| 4. Verification   | QA-Gatekeeper + Lead summary + Reflector | Run tests + fill summary + critique          | ✓ Different files       |
+| 5. Teardown       | Lead only                                | Single writer                                | ✓ No conflicts          |
+
+**Builder dependency note:** Builder-POM needs researcher output. Builder-Spec can run parallel because implementation-plan documents all selectors upfront. Target directories (`pages/**` vs `specs/**`) are non-overlapping.
+
+---
+
+## Reflection Sub-Cycles
+
+| Cycle | Sub-Cycle | Target              | Findings | Errors  | Warnings | Verdict       |
+| ----- | --------- | ------------------- | -------- | ------- | -------- | ------------- |
+| 1     | POM       | Builder-POM output  | {count}  | {count} | {count}  | {pass/revise} |
+| 1     | Spec      | Builder-Spec output | {count}  | {count} | {count}  | {pass/revise} |
+| 2     | POM       | Builder-POM fixes   | {count}  | {count} | {count}  | {pass/revise} |
+| 2     | Spec      | Builder-Spec fixes  | {count}  | {count} | {count}  | {pass/revise} |
+| 3     | POM       | Builder-POM fixes   | {count}  | {count} | {count}  | {pass/revise} |
+| 3     | Spec      | Builder-Spec fixes  | {count}  | {count} | {count}  | {pass/revise} |
 
 **Max cycles reached:** {yes/no}
 
 ---
+
+## New Parallelization Opportunities (Post-Implementation)
+
+| Opportunity                   | Current State                 | Potential                    |
+| ----------------------------- | ----------------------------- | ---------------------------- |
+| Data factories + Builder-POM  | Sequential                    | Parallel — different files   |
+| Component POMs + Page POMs    | Sequential within Builder-POM | Parallel — different files   |
+| TC evidence + Memory writes   | Sequential                    | Parallel — different files   |
+| QA run + QA report generation | Sequential                    | Parallel — different outputs |
+
+These require per-TC ownership split within Builder agents. Consider for future optimization.
 
 ## Test Run Results
 

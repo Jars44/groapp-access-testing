@@ -267,19 +267,20 @@ PHASE 1 — Discovery & Planning (sequential — creates shared artifacts)
         │   └── Creates: .agent/memory/entities/{route-entity}.json
         ├── Researcher-Components: flips [ ] → [/] → [x] on tc-03.md, tc-04.md
         │   └── Creates: .agent/memory/entities/{component-entity}.json
-        ├── Researcher-API: flips [ ] → [/] → [x] on tc-05.md, tc-06.md
-        │   └── Creates: .agent/memory/entities/{api-entity}.json
-        └── Researcher-Validators: flips [ ] → [/] → [x] on tc-07.md
+        ├── Researcher-POM-Patterns: flips [ ] → [/] → [x] on tc-05.md
+        │   └── Creates: .agent/memory/entities/{pom-patterns-entity}.json
+        └── Researcher-Validators: flips [ ] → [/] → [x] on tc-06.md, tc-07.md
             └── Creates: .agent/memory/entities/{validator-entity}.json
 
 ▼ (4 researchers complete — wall-time = single call)
 
-PHASE 2 — Research Aggregation (sequential — Lead merges)
+PHASE 2 — Research Aggregation + Early Documentation (PARALLEL)
 ├── 5. glob .agent/tasks/researcher-*.json → merge findings
 ├── 6. glob .agent/plans/todos/tc-*.md → verify all [x] have evidence
-└── 7. If any [x] lacks evidence → re-dispatch researcher (max 3 retries)
+├── 7. If any [x] lacks evidence → re-dispatch researcher (max 3 retries)
+└── PARALLEL: Lead drafts .agent/reports/summary-{feature}.md skeleton with placeholders
 
-▼ (handoff = 4 research files merged + all TC todos [x])
+▼ (handoff = 4 research files merged + all TC todos [x] + summary skeleton)
 
 PHASE 3 — Implementation
 ├── 8. task(builder) with all 4 researcher outputs
@@ -295,27 +296,54 @@ PHASE 3 — Implementation
         │   └── Reflection cycle ≤3 max
         └── If pass → append critique annotations to .agent/memory/entities/{entity}.json
 
-▼ (handoff via .agent/tasks/builder-{ts}.json + reflector verdict)
+▼ (handoff = 4 research files merged + all TC todos [x] + summary skeleton)
 
-PHASE 4 — Verification (PARALLEL)
-├── 9. task(qa-gatekeeper) runs tests
-│   ├── Gatekeeper: writes .agent/tasks/qa-gatekeeper-{ts}.json
-│   ├── Gatekeeper: appends test_run to todos/tc-XX.md per TC
-│   │   └── Writes ONLY to test_run field, never overwrites evidence
-│   └── Gatekeeper: appends test_results to .agent/memory/entities/{entity}.json
+PHASE 3 — Parallel Implementation
+├── 8. Dispatch 2 builders SIMULTANEOUSLY:
+│   ├── task(builder-pom) → creates POM files → .agent/tasks/builder-pom-{ts}.json
+│   │   └── Updates todos/tc-XX.md [x] with POM file:line evidence
+│   └── task(builder-spec) → creates spec files → .agent/tasks/builder-spec-{ts}.json
+│       └── Updates todos/tc-XX.md [x] with spec file:line evidence
 │
-└── 10. Lead: DRAFT summary structure to .agent/reports/summary-{feature}.md
+│   ⚠️ Builder-POM needs researcher output. Builder-Spec can run in parallel
+│   because implementation-plan documents all selectors upfront. Target
+│   different codebases (pages/ vs specs/) → no file conflicts.
+│
+└── PARALLEL: Builders append observations to .agent/memory/entities/{entity}.json
+
+▼ (handoff via .agent/tasks/builder-pom-{ts}.json + builder-spec-{ts}.json)
+
+PHASE 4 — Verification + Parallel Reflection Sub-Cycles (PARALLEL)
+│
+├── 9. REFLECTOR-POM (runs first, sequential within reflection)
+│   ├── Reads POM files from Builder-POM
+│   ├── Checks: selector priority, BasePage, readonly, no assertions
+│   ├── If revise → Builder-POM fixes → re-dispatch Reflector-POM (cycle ≤3)
+│   └── If pass → proceed to Reflector-Spec
+│
+├── 10. REFLECTOR-SPEC (parallel-ready, waits for Reflector-POM pass)
+│   ├── Reads spec files from Builder-Spec
+│   ├── Checks: no hardcoded timeouts, Arrange→Act→Assert, assertions
+│   ├── If revise → Builder-Spec fixes → re-dispatch Reflector-Spec (cycle ≤3)
+│   └── If pass → append critique annotations to memory entities
+│
+├── 11. QA-GATEKEEPER (runs independently, parallel-ready at any point)
+│   ├── Runs npx playwright test --grep "{feature}" --reporter=list
+│   ├── Writes .agent/tasks/qa-gatekeeper-{ts}.json
+│   └── Appends test_run results to memory entities
+│
+└── 12. Lead: DRAFT summary with placeholders → .agent/reports/summary-{feature}.md
     └── Placeholders for pass/fail counts (filled after QA results)
 
-▼ (QA results + draft structure + reflector verdict ready)
+▼ (QA results + reflector verdict + summary skeleton ready)
 
 PHASE 5 — Teardown (sequential — single writer)
-├── 11. Finalize summary with actual test counts
-├── 12. Merge all todos/tc-*.md → .agent/reports/summary-{feature}.md
-├── 13. Write .agent/state.json ONCE (aggregated result)
-├── 14. Write .agent/memory/entities/relations.json (Lead only)
-├── 15. Run validate-state.sh teardown
-└── 16. Ask user: ".agent/plans/todos/ complete. Keep or delete?"
+├── 13. Finalize summary with actual test counts
+├── 14. Merge all todos/tc-*.md → .agent/reports/summary-{feature}.md
+├── 15. Write .agent/state.json ONCE (aggregated result)
+├── 16. Write .agent/memory/entities/relations.json (Lead only)
+├── 17. Run validate-state.sh teardown
+└── 18. Ask user: ".agent/plans/todos/ complete. Keep or delete?"
 ```
 
 ### Mode A — Parallel Dispatch (Legacy)

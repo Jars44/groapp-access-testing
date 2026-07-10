@@ -28,13 +28,13 @@
 
 ## Phase 3: Implement (POM & Specs)
 
-**STEP 4: CREATE/UPDATE POM files**
+**STEP 4: CREATE/UPDATE POM files** (parallel with STEP 5)
 
 - BasePage → Component POMs → Feature Page Objects
 - All selectors = class properties (no hardcoded strings in tests)
 - Action methods return UI states (no assertions in POM)
 
-**STEP 5: CREATE test spec**
+**STEP 5: CREATE test spec** (parallel with STEP 4)
 
 - Translate To-Do list from `implementation-plan.md` into `test.describe` blocks
 - Arrange → Act → Assert logic
