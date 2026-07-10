@@ -32,7 +32,7 @@ fi
 echo "OK  npm $(npm -v)"
 
 # Playwright (container-aware)
-if [ -n "$DISTROBOX_ENTER_PATH" ]; then
+if [ -n "${DISTROBOX_ENTER_PATH:-}" ]; then
   if ! npx playwright --version &>/dev/null; then
     echo "E004: playwright_missing — @playwright/test not installed"
     exit 1

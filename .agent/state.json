@@ -235,7 +235,7 @@
       "triage_to_mode_c": { "required": ["triage.level"], "level": "standard", "phase": "triage" },
       "triage_to_epic": { "required": ["triage.level"], "level": "epic", "phase": "triage", "action": "defer" },
       "lead_to_researchers": { "required": ["pipeline.phase", "triage.level"], "phase": "research" },
-      "researchers_to_builders": { "required": ["artifacts.research_findings"], "phase": "exploration" },
+      "researchers_to_builders": { "required": ["artifacts.research_findings"], "phase": "human_gate" },
       "halt_to_user": { "required": ["artifacts.implementation_plan", "todos.count"], "phase": "planning_complete" },
       "builders_to_reflector": { "required": ["artifacts.pom_files", "artifacts.spec_files"], "phase": "implementation" },
       "reflector_pom_to_spec": { "required": ["reflection_cycle.pom_verdict"], "verdict": "pass", "phase": "reflection_pom" },

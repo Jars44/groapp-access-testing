@@ -426,7 +426,7 @@ PHASE 1 — Discovery & Planning
 ├── 1. Read user story / PRD / AC
 ├── 2. Identify test scenarios (happy, error, edge)
 ├── 3. Write .agent/plans/implementation-plan-{feature}.md using template
-├── 4. Set phase=discovery in .agent/state.json
+├── 4. Set phase=research in .agent/state.json
 └── 5. Run validate-state.sh discovery → handoff to Researcher
 │
 PHASE 5 — Teardown (after QA Gatekeeper)

@@ -48,7 +48,7 @@ Every user request MUST be classified before any other work.
 ## 4. Level 1 — Hotfix
 
 **Trigger:** < 3 TCs, single file target, isolated fix.
-**Skip phases:** discovery, planning, human gate, reflection (POM + Spec).
+**Skip phases:** research, planning, human gate, reflection (POM + Spec).
 **Required phases:** triage → implementation → verification → teardown.
 
 ```text

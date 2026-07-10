@@ -59,7 +59,12 @@
       "prompt": "{file:.opencode/agents/researcher.md}",
       "permission": {
         "read": "allow",
-        "edit": "deny",
+        "edit": {
+          ".agent/tasks/researcher-*": "allow",
+          ".agent/plans/todos/tc-*": "allow",
+          ".agent/memory/entities/*.json": "allow",
+          "*": "deny"
+        },
         "glob": "allow",
         "grep": "allow",
         "bash": {
@@ -68,7 +73,7 @@
           "git log*": "allow"
         },
         "task": "deny",
-        "todowrite": "deny"
+        "todowrite": "allow"
       }
     },
     "builder": {

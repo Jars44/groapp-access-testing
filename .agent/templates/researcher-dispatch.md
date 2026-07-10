@@ -90,7 +90,8 @@ Write findings to `.agent/tasks/researcher-{variant}-{YYYYMMDDHHMMSS}-{seq}.json
 
 ## Rules
 
-- **Never modify code.** Read only.
+- **Never modify groapp-access source code or test scripts.** Read only for application files.
+- Write findings to `.agent/tasks/researcher-{variant}-{ts}.json`, update `.agent/plans/todos/tc-*.md`, and write to `.agent/memory/entities/*.json` only.
 - Return file:line for every finding.
 - Confidence: `verified` (saw in JSX) vs `inferred` (from type).
 - No suggestions — only facts.

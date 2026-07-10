@@ -17,7 +17,7 @@ mode: subagent
 
 ## Pre-flight Checklist
 
-- [ ] Read `.agent/state.json` — confirm phase=discovery, understand task context
+- [ ] Read `.agent/state.json` — confirm phase=research, understand task context
 - [ ] Read `implementation-plan.md` — understand scope
 - [ ] Verify `{sourceDir}/src/features/{feature}` exists
 - [ ] Run `.agent/hooks/validate-state.sh exploration`

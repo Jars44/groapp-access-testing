@@ -21,7 +21,7 @@ Target: Form components, validation schemas, error rendering
 
 ## What You Do
 
-1. Read `.agent/state.json` — confirm phase=discovery, feature={feature}
+1. Read `.agent/state.json` — confirm phase=research, feature={feature}
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Find validators: scan forms for validation rules, error messages, input constraints
 4. Return file:line for every finding
@@ -53,7 +53,8 @@ Target: Form components, validation schemas, error rendering
 
 ## Rules
 
-- **Never modify files.** Read only.
+- **Never modify groapp-access source code or test scripts.** Read only for application files.
+- Write findings to `.agent/tasks/researcher-{variant}-{ts}.json`, update `.agent/plans/todos/tc-*.md`, and write to `.agent/memory/entities/*.json` only.
 - Return file:line for every finding.
 - Confidence: `verified` (saw in JSX) vs `inferred` (from type).
 - No suggestions — only facts.

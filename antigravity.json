@@ -52,16 +52,16 @@
       "description": "Level 2: Full Mode C pipeline",
       "template": ".agent/templates/lead-dispatch.md",
       "steps": [
-        "Phase 1: Discovery & Planning",
-        "Phase 1b: 4 parallel researchers (A/B/C/D)",
-        "Phase 2: Research aggregation + human gate",
-        "Phase 3: 2 parallel builders (POM + Specs)",
-        "Phase 4: Reflection (POM -> Spec) + QA parallel",
-        "Phase 5: Teardown"
+        "Phase 1: Parallel Research (4 researchers CONCURRENTLY)",
+        "Phase 2: Planning (after research complete)",
+        "Phase 3: Human Gate (halt for approval)",
+        "Phase 4: Implementation (POM first, Spec second — SEQUENTIAL)",
+        "Phase 5: Verification + Reflection (POM -> Spec -> QA — SEQUENTIAL)",
+        "Phase 6: Teardown"
       ]
     },
     {
-      "name": "research-a",
+      "name": "researcher-a",
       "description": "Routes and navigation discovery",
       "template": ".opencode/commands/researcher-a.md",
       "steps": [
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "name": "research-b",
+      "name": "researcher-b",
       "description": "Components and selectors discovery",
       "template": ".opencode/commands/researcher-b.md",
       "steps": [
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "name": "research-c",
+      "name": "researcher-c",
       "description": "Validators and error states discovery",
       "template": ".opencode/commands/researcher-c.md",
       "steps": [
@@ -94,7 +94,7 @@
       ]
     },
     {
-      "name": "research-d",
+      "name": "researcher-d",
       "description": "Existing POM patterns discovery",
       "template": ".opencode/commands/researcher-d.md",
       "steps": [
@@ -105,7 +105,7 @@
       ]
     },
     {
-      "name": "build-pom",
+      "name": "builder-pom",
       "description": "Create/update POM files",
       "template": ".opencode/commands/builder-pom.md",
       "steps": [
@@ -117,7 +117,7 @@
       ]
     },
     {
-      "name": "build-spec",
+      "name": "builder-spec",
       "description": "Create/update Playwright test specs",
       "template": ".opencode/commands/builder-spec.md",
       "steps": [
@@ -129,7 +129,7 @@
       ]
     },
     {
-      "name": "reflect-pom",
+      "name": "reflector-pom",
       "description": "Critique POM structure",
       "template": ".opencode/commands/reflector-pom.md",
       "steps": [
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "name": "reflect-spec",
+      "name": "reflector-spec",
       "description": "Critique spec quality",
       "template": ".opencode/commands/reflector-spec.md",
       "steps": [
@@ -151,7 +151,7 @@
       ]
     },
     {
-      "name": "qa",
+      "name": "qa-gatekeeper",
       "description": "Run tests, decide pass/block verdict",
       "template": ".opencode/commands/qa-gatekeeper.md",
       "steps": [
@@ -183,7 +183,7 @@
       "role": "explorer",
       "prompt": "You are the Researcher. Explore codebase for UI elements, routes, selectors, validators. Read .agent/templates/researcher-dispatch.md.",
       "template": ".agent/templates/researcher-dispatch.md",
-      "tools": ["read", "glob", "grep"]
+      "tools": ["read", "write", "edit", "glob", "grep"]
     },
     "builder": {
       "role": "implementor",

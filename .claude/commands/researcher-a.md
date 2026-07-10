@@ -17,7 +17,7 @@ Source: `../groapp-access/src/features/{feature}/presentation/routes/`
 
 ## Steps
 
-1. Read `.agent/state.json` — confirm phase=discovery, feature={feature}
+1. Read `.agent/state.json` — confirm phase=research, feature={feature}
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Find routes: scan `routes.tsx`, `app-routes.ts`, route definitions
 4. Trace navigation: link components, redirect chains, guards
@@ -50,7 +50,8 @@ Source: `../groapp-access/src/features/{feature}/presentation/routes/`
 
 ## Rules
 
-- **Never modify files.** Read only.
+- **Never modify groapp-access source code or test scripts.** Read only for application files.
+- Write findings to `.agent/tasks/researcher-{variant}-{ts}.json`, update `.agent/plans/todos/tc-*.md`, and write to `.agent/memory/entities/*.json` only.
 - Return file:line for every finding.
 - Confidence: `verified` (saw in routes file) vs `inferred` (from comment).
 - No suggestions — only facts.

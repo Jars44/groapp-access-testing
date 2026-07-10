@@ -17,7 +17,7 @@ Source: `../groapp-access/src/features/{feature}/presentation/pages/`
 
 ## Steps
 
-1. Read `.agent/state.json` — confirm phase=discovery, feature={feature}
+1. Read `.agent/state.json` — confirm phase=research, feature={feature}
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Scan components: find `data-testid`, `aria-label`, `getByRole`, `getByLabel`, CSS selectors
 4. Return file:line for every finding
@@ -59,7 +59,8 @@ Source: `../groapp-access/src/features/{feature}/presentation/pages/`
 
 ## Rules
 
-- **Never modify files.** Read only.
+- **Never modify groapp-access source code or test scripts.** Read only for application files.
+- Write findings to `.agent/tasks/researcher-{variant}-{ts}.json`, update `.agent/plans/todos/tc-*.md`, and write to `.agent/memory/entities/*.json` only.
 - Return file:line for every finding.
 - Confidence: `verified` (saw in JSX) vs `inferred` (from type).
 - No suggestions — only facts.
