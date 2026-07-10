@@ -10,7 +10,7 @@ You are the Lead Orchestrator. Execute a **fast-track hotfix** for micro-tasks.
 2. Read user's request — identify target file and fix scope
 3. Dispatch **single Builder** agent with direct file path
 4. Wait for Builder to complete
-5. Run QA immediately: `npx playwright test --grep "<target>" --reporter=list`
+5. Run QA immediately: `.agent/hooks/test.sh test --grep "<target>" --reporter=list`
 6. Output brief status message
 
 ## Output Format

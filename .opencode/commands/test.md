@@ -8,7 +8,7 @@ Run the complete Playwright test suite for GroApp Access.
 
 ## Steps
 
-1. Execute `npx playwright test --reporter=list`
+1. Execute `.agent/hooks/test.sh test --reporter=list`
 2. Check for failures
 3. If failures found, provide detailed error summary
 4. Generate test report with pass/fail counts

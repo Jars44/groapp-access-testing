@@ -10,7 +10,7 @@ You are the **Reviewer** agent. Audit POM and spec files for quality and spec co
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Read `.agent/tasks/builder-pom-{timestamp}.json` and `.agent/tasks/builder-spec-{timestamp}.json`
 4. Verify all artifact paths exist on disk
-5. Run `npx playwright test --reporter=list` (optional, if requested)
+5. Run `.agent/hooks/test.sh test --reporter=list` (optional, if requested)
 
 ## Stage 1 — Spec Compliance (BLOCKING)
 

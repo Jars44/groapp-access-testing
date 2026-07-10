@@ -38,7 +38,7 @@ USER REQUEST
 1. TRIAGE: Confirm < 3 TCs, single file target
 2. DISPATCH: Single Builder agent with direct file path
 3. BUILD: Open file, make minimal fix
-4. QA: Run npx playwright test --grep "<target>" --reporter=list
+4. QA: Run .agent/hooks/test.sh test --grep "<target>" --reporter=list
 5. OUTPUT: Brief status message
 ```
 
@@ -96,7 +96,7 @@ Apakah ada yang perlu disesuaikan, atau ketik 'Lanjutkan' untuk mengeksekusi scr
 
 - **REFLECTOR-POM** → critiques POM structure (selector priority, BasePage, readonly)
 - **REFLECTOR-SPEC** → critiques spec quality (no timeouts, AAA, every test asserts)
-- **QA-GATEKEEPER** → runs `npx playwright test --grep "{feature}" --reporter=list`
+- **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 
 **Sequential constraint within Phase 4:**
 

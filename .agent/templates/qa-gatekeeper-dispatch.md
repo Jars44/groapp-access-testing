@@ -11,7 +11,7 @@ You are the QA Gatekeeper. Run tests, apply flakiness protocol, decide verdict.
 
 1. Read `.agent/tasks/builder-{timestamp}.json` to find specs
 2. Verify test files exist on disk
-3. Run `npx playwright test --reporter=list`
+3. Run `.agent/hooks/test.sh test --reporter=list`
 4. If failures → run 2 more times (flakiness protocol)
 5. Write results to `.agent/tasks/qa-gatekeeper-{timestamp}.json`
 

@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:debug": "playwright test --debug",
-    "test:headed": "playwright test --headed",
-    "test:list": "playwright test --reporter=list",
-    "test:chromium": "playwright test --project=chromium",
+    "test": ".agent/hooks/test.sh test",
+    "test:ui": ".agent/hooks/test.sh test --ui",
+    "test:debug": ".agent/hooks/test.sh test --debug",
+    "test:headed": ".agent/hooks/test.sh test --headed",
+    "test:list": ".agent/hooks/test.sh test --reporter=list",
+    "test:chromium": ".agent/hooks/test.sh test --project=chromium",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],

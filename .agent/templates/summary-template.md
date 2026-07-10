@@ -191,7 +191,7 @@ These require per-TC ownership split within Builder agents. Consider for future 
 
 1. Start app: `cd ../groapp-access && npm run dev`
 2. Ensure test user has: {permissions}
-3. Run: `npx playwright test --grep "{feature}" --reporter=list`
+3. Run: `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 4. Verify no `page.waitForTimeout()` in spec
 5. Verify all selectors use POM getters only
 6. Check console for errors

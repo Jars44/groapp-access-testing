@@ -12,7 +12,7 @@ mode: subagent
 | Tool                            | Access                                                                      |
 | ------------------------------- | --------------------------------------------------------------------------- |
 | read, glob, grep                | Full                                                                        |
-| bash (npx playwright test only) | Execute                                                                     |
+| bash (.agent/hooks/test.sh test only) | Execute                                                                     |
 | write                           | Only to `.agent/tasks/qa-gatekeeper-{timestamp}.json`                       |
 | **Restricted**                  | write to `.agent/state.json`, `.agent/plans/`, code edits, memory\_\*, task |
 
@@ -25,7 +25,7 @@ mode: subagent
 
 ## What You Do
 
-1. Run `npx playwright test --reporter=list`
+1. Run `.agent/hooks/test.sh test --reporter=list`
 2. If failures → run 2 more times (flakiness protocol)
 3. Verify artifacts exist (POM, spec, data files)
 4. Verify todos [x] have file:line evidence

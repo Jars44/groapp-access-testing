@@ -75,7 +75,7 @@ Lead dispatches 4 researchers in parallel during Phase 1:
 1. TRIAGE: Confirm < 3 TCs, single file target
 2. DISPATCH: Single Builder agent with direct file path
 3. BUILD: Open file, make minimal fix
-4. QA: Run npx playwright test --grep "<target>" --reporter=list
+4. QA: Run .agent/hooks/test.sh test --grep "<target>" --reporter=list
 5. OUTPUT: Brief status message to user
    Example: "Fixed selector in login.spec.ts:42. QA: 1/1 pass."
 ```

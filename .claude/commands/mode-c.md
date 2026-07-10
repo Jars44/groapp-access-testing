@@ -60,7 +60,7 @@ Dispatch 3 agents **SIMULTANEOUSLY**:
 
 - **REFLECTOR-POM** → critiques POM structure
 - **REFLECTOR-SPEC** → critiques spec quality
-- **QA-GATEKEEPER** → runs `npx playwright test --grep "{feature}" --reporter=list`
+- **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 
 Sequential constraint:
 

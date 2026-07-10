@@ -46,7 +46,7 @@
 **STEP 5b: UPDATE selector cache if POM changed**
 
 - If POM added/updated selectors, update `.agent/selector-cache.json`
-- Run `npx playwright test --grep "smoke"` to validate cached selectors
+- Run `.agent/hooks/test.sh test --grep "smoke"` to validate cached selectors
 
 ## Phase 4: Review & Verify
 
@@ -69,13 +69,13 @@
 
 **STEP 7: RUN AND VERIFY**
 
-- `npx playwright test --grep "test name" --reporter=list`
+- `.agent/hooks/test.sh test --grep "test name" --reporter=list`
 - Fix failures: selector issues, timing, test data
 - Check flakiness: run 3x
 
 **STEP 8: QUALITY GATE**
 
-- `npx playwright test` — all pass
+- `.agent/hooks/test.sh test` — all pass
 - POM strictly follows architectural separation
 - No hardcoded timeouts (`page.waitForTimeout`)
 

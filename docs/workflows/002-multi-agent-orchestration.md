@@ -164,22 +164,22 @@ Each agent writes to separate entity files — prevents concurrent write conflic
 LEAD AGENT (Phase 1 — Discovery & Planning)
 │
 ├── 1. Read PRD / AC (1 call)
-├── 2. Write .agent/plans/implementation-plan-{feature}.md (sequential, no parallel)
-├── 3. Write .agent/plans/todos-{feature}.md initial [ ] rows
-│
-└── 4. DISPATCH 4x researchers in single message (parallel read-only calls)
-    │
-    ├── RESEARCHER-A (components) (read-only, selectors/testids)
-    │   └── Writes .agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json
-    │
-    ├── RESEARCHER-B (routes) (read-only, file:line tables)
-    │   └── Writes .agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json
-    │
-    ├── RESEARCHER-C (validators) (read-only, validation rules)
-    │   └── Writes .agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json
-    │
-    └── RESEARCHER-D (pom-patterns) (read-only, existing POM patterns in groapp-access-testing/)
-        └── Writes .agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json
+├── 2. DISPATCH 4x researchers in single message (parallel read-only calls)
+│      │
+│      ├── RESEARCHER-A (components) (read-only, selectors/testids)
+│      │   └── Writes .agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json
+│      │
+│      ├── RESEARCHER-B (routes) (read-only, file:line tables)
+│      │   └── Writes .agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json
+│      │
+│      ├── RESEARCHER-C (validators) (read-only, validation rules)
+│      │   └── Writes .agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json
+│      │
+│      └── RESEARCHER-D (pom-patterns) (read-only, existing POM patterns in groapp-access-testing/)
+│        └── Writes .agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json
+├── 3. Write .agent/plans/implementation-plan-{feature}.md (sequential, no parallel)
+└── 4. Write .agent/plans/todos-{feature}.md initial [ ] rows
+
 
 ▼ (4 researchers complete in parallel — wall-time = single research call)
 
@@ -210,7 +210,7 @@ PARALLEL Phase 4 (Verification + Documentation + Memory)
 │   ├── Checks against constitution 001-004
 │   └── Writes .agent/tasks/reflector-{ts}.json
 │
-├── QA GATEKEEPER runs npx playwright test
+├── QA GATEKEEPER runs .agent/hooks/test.sh test
 │   ├── Writes .agent/tasks/qa-gatekeeper-{ts}.json
 │   └── Updates todos with test_run:pass/fail
 │
@@ -335,7 +335,7 @@ LEAD AGENT
 │       └── Report Stage 1 pass + Stage 2 findings
 │
 ├── 3. VERIFY
-│   ├── Run tests: npx playwright test --reporter=list
+│   ├── Run tests: .agent/hooks/test.sh test --reporter=list
 │   ├── Fix any failures
 │   └── Run quality gate (constitution 004)
 │
@@ -396,7 +396,7 @@ QA GATEKEEPER (Phase 4 — Verification)
 │
 ├── 1. Read .agent/plans/implementation-plan-{feature}.md — reject if any [x] lacks evidence
 ├── 2. Read .agent/tasks/builder-{ts}.json — verify artifacts exist
-├── 3. Run `npx playwright test --reporter=list`
+├── 3. Run `.agent/hooks/test.sh test --reporter=list`
 ├── 4. If failures: run flakiness protocol (run 3x)
 ├── 5. Write .agent/tasks/qa-gatekeeper-{timestamp}.json with results
 ├── 6. PASS → generate summary

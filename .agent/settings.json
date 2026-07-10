@@ -34,7 +34,7 @@
       "timeout": 300000,
       "restrictedTools": ["write", "edit", "firecrawl_*", "task", "todowrite"],
       "restrictedPaths": ["node_modules/**", ".git/**"],
-      "runScripts": ["npx playwright test"]
+      "runScripts": [".agent/hooks/test.sh test"]
     }
   },
   "retry": {

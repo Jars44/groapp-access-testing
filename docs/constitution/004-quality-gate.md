@@ -22,7 +22,7 @@ Verify code matches plan. Every requirement covered. No scope drift.
 
 ### Test Changes
 
-- [ ] `npx playwright test --reporter=list` — all pass
+- [ ] `.agent/hooks/test.sh test --reporter=list` — all pass
 - [ ] No new flaky tests (run 3x)
 - [ ] POM structure follows constitution 001
 - [ ] No hardcoded timeouts (`page.waitFor(ms)`)

@@ -43,7 +43,7 @@
         "Confirm triage: level = hotfix",
         "Dispatch single Builder agent",
         "Build: minimal fix",
-        "QA: npx playwright test --grep target",
+        "QA: .agent/hooks/test.sh test --grep target",
         "Output brief status message"
       ]
     },
@@ -155,7 +155,7 @@
       "description": "Run tests, decide pass/block verdict",
       "template": ".opencode/commands/qa-gatekeeper.md",
       "steps": [
-        "Run npx playwright test --grep {feature}",
+        "Run .agent/hooks/test.sh test --grep {feature}",
         "Apply flakiness protocol (3 runs if needed)",
         "Verdict: pass | block",
         "Append test_run results to memory entities"

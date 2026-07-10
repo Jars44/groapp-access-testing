@@ -283,7 +283,7 @@ USER REQUEST
 1. TRIAGE: Confirm < 3 TCs, single file target
 2. DISPATCH: Single Builder agent with direct file path
 3. BUILD: Open file, make minimal fix
-4. QA: Run npx playwright test --grep "<target>" --reporter=list
+4. QA: Run .agent/hooks/test.sh test --grep "<target>" --reporter=list
 5. OUTPUT: Brief status message
    Example: "Fixed selector in login.spec.ts:42. QA: 1/1 pass."
 ```
@@ -386,7 +386,7 @@ PHASE 4 — Verification + Parallel Reflection Sub-Cycles (PARALLEL)
 │   └── If pass → append critique annotations to memory entities
 │
 ├── 11. QA-GATEKEEPER (runs independently, parallel-ready at any point)
-│   ├── Runs npx playwright test --grep "{feature}" --reporter=list
+│   ├── Runs .agent/hooks/test.sh test --grep "{feature}" --reporter=list
 │   ├── Writes .agent/tasks/qa-gatekeeper-{ts}.json
 │   └── Appends test_run results to memory entities
 │

@@ -23,6 +23,15 @@ Mandatory before any code:
 
 No `// ... rest`, no `/* TODO */`, no `...`, no ellipsis. Every file = complete. Never "similarly for other files."
 
+## Distrobox Container Rule
+
+Playwright + browsers live inside `playwright-box` distrobox container. Always run tests through the wrapper:
+- `.agent/hooks/test.sh` — wraps `npx playwright` via `distrobox enter playwright-box --`
+- Already inside container (`DISTROBOX_ENTER_PATH` set)? Runs directly.
+- `.agent/hooks/test.sh` passes all args through. Use it instead of `npx playwright test`.
+
+Before running tests, check deps are ready: `distrobox list | grep playwright-box`. If container exists, wrapper handles exec.
+
 ## Conflict Resolution
 
 `AGENTS.md` > this file for project rules. This file > `AGENTS.md` for AI behavioral rules.

@@ -12,7 +12,7 @@ You are the **QA Gatekeeper** agent. Run tests, apply flakiness protocol, decide
 1. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 2. Read `.agent/tasks/builder-pom-{timestamp}.json` and `.agent/tasks/builder-spec-{timestamp}.json`
 3. Verify test files exist on disk
-4. Run `npx playwright test --grep "{feature}" --reporter=list`
+4. Run `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 5. If failures → run 2 more times (flakiness protocol)
 6. Write results to `.agent/tasks/qa-gatekeeper-{YYYYMMDDHHMMSS}-{seq}.json`
 

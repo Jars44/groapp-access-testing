@@ -6,7 +6,7 @@
 
 ```text
 1. REPRODUCE
-   ├── Run failing test: npx playwright test --grep "test name"
+   ├── Run failing test: .agent/hooks/test.sh test --grep "test name"
    └── Capture error output, screenshot, trace
 
 2. DIAGNOSE

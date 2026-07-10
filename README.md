@@ -11,7 +11,7 @@ cd groapp-access-testing
 cp .env.example .env        # edit credentials
 npm install
 npx playwright install --with-deps
-npx playwright test --reporter=list
+.agent/hooks/test.sh test --reporter=list
 ```
 
 **Workspace layout (sibling repos):**
@@ -34,7 +34,7 @@ parent/
 | `npm run test:chromium` | Chromium only (fastest)                |
 | `npm run typecheck`     | TypeScript check (no emit)             |
 
-Run a single test: `npx playwright test --grep "test name" --reporter=list`
+Run a single test: `.agent/hooks/test.sh test --grep "test name" --reporter=list`
 
 ## Test Architecture
 
@@ -154,5 +154,5 @@ npm test
 npm run test:headed -- --grep "register"
 
 # Debug a specific test
-npx playwright test --grep "register" --debug
+.agent/hooks/test.sh test --grep "register" --debug
 ```

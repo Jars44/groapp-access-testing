@@ -9,9 +9,9 @@ description: Use when running, debugging, or writing Playwright E2E tests for th
 
 | Command                                                  | Purpose                     |
 | -------------------------------------------------------- | --------------------------- |
-| `npx playwright test`                                    | Full suite                  |
-| `npx playwright test --grep "test name" --reporter=list` | Single test                 |
-| `npx playwright test --reporter=list`                    | Full suite with list output |
+| `.agent/hooks/test.sh test`                                    | Full suite                  |
+| `.agent/hooks/test.sh test --grep "test name" --reporter=list` | Single test                 |
+| `.agent/hooks/test.sh test --reporter=list`                    | Full suite with list output |
 
 ## Test Architecture
 
