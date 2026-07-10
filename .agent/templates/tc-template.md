@@ -9,24 +9,28 @@ mode: template
 
 ## Metadata
 
-| Field        | Value                                                         |
-| ------------ | ------------------------------------------------------------- |
-| **TC-ID**    | TC-{id}                                                       |
-| **Feature**  | {feature}                                                     |
-| **Type**     | happy path / error / edge case / validation                   |
-| **Priority** | P0 (critical) / P1 (high) / P2 (medium) / P3 (low)            |
-| **Created**  | {dd-mm-yyyy:hh:mm} (human) / {YYYY-MM-DDTHH:MM:SSZ} (machine) |
-| **Updated**  | {dd-mm-yyyy:hh:mm} (human) / {YYYY-MM-DDTHH:MM:SSZ} (machine) |
+| Field        | Value                                                   |
+| ------------ | ------------------------------------------------------- |
+| **TC-ID**    | TC-{id}                                                 |
+| **Feature**  | {feature}                                               |
+| **Type**     | happy path / error / edge case / validation             |
+| **Priority** | P0 (critical) / P1 (high) / P2 (medium) / P3 (low)      |
+| **Created**  | {dd-mm-yyyy:hh:mm} (human) / {YYYYMMDDHHMMSS} (machine) |
+| **Updated**  | {dd-mm-yyyy:hh:mm} (human) / {YYYYMMDDHHMMSS} (machine) |
 
 ## Ownership
 
-| Agent                   | Role               | File                            |
-| ----------------------- | ------------------ | ------------------------------- |
-| {Researcher-Routes}     | Route discovery    | `.agent/plans/todos/tc-{id}.md` |
-| {Researcher-Components} | Selector discovery | `.agent/plans/todos/tc-{id}.md` |
-| {Builder}               | Implementation     | `.agent/plans/todos/tc-{id}.md` |
-| {Reflector}             | Critique           | —                               |
-| {QA-Gatekeeper}         | Test execution     | —                               |
+| Agent            | Role                 | File                            |
+| ---------------- | -------------------- | ------------------------------- |
+| {Researcher-A}   | Selector discovery   | `.agent/plans/todos/tc-{id}.md` |
+| {Researcher-B}   | Route discovery      | `.agent/plans/todos/tc-{id}.md` |
+| {Researcher-C}   | Validation discovery | `.agent/plans/todos/tc-{id}.md` |
+| {Researcher-D}   | Pattern discovery    | `.agent/plans/todos/tc-{id}.md` |
+| {Builder-POM}    | POM implementation   | `.agent/plans/todos/tc-{id}.md` |
+| {Builder-Spec}   | Spec implementation  | `.agent/plans/todos/tc-{id}.md` |
+| {Reflector-POM}  | POM critique         | —                               |
+| {Reflector-Spec} | Spec critique        | —                               |
+| {QA-Gatekeeper}  | Test execution       | —                               |
 
 ## Status History
 

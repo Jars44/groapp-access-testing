@@ -11,6 +11,20 @@ Use when task involves:
 - Large batch of POM + spec files
 - Complex end-to-end flow needing persona isolation
 
+> **Prerequisite:** Phase 0 Triage (SOP 000) MUST run first. If user request is Level 1 (Hotfix) or Level 3 (Epic), do NOT use this SOP. Route to appropriate workflow.
+
+## Phase 0: Triage (SOP 000)
+
+Before executing this SOP, classify the request:
+
+| Level | Name     | TC Count | Workflow                                       |
+| ----- | -------- | -------- | ---------------------------------------------- |
+| 1     | Hotfix   | < 3      | Skip this SOP. Fast-track: Builder → QA → done |
+| 2     | Standard | 3-50     | **Use this SOP (Mode C)**                      |
+| 3     | Epic     | > 50     | Deferred. Ask user to scope down               |
+
+**Read `docs/workflows/000-triage.md` for full triage logic.**
+
 ---
 
 ## Mode C: Maximum Parallelism (Optimal)
@@ -155,17 +169,17 @@ LEAD AGENT (Phase 1 — Discovery & Planning)
 │
 └── 4. DISPATCH 4x researchers in single message (parallel read-only calls)
     │
-    ├── RESEARCHER-ROUTES (read-only, file:line tables)
-    │   └── Writes .agent/tasks/researcher-routes-{ts}.json
+    ├── RESEARCHER-A (components) (read-only, selectors/testids)
+    │   └── Writes .agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json
     │
-    ├── RESEARCHER-COMPONENTS (read-only, selectors/testids)
-    │   └── Writes .agent/tasks/researcher-components-{ts}.json
+    ├── RESEARCHER-B (routes) (read-only, file:line tables)
+    │   └── Writes .agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json
     │
-    ├── RESEARCHER-VALIDATORS (read-only, validation rules)
-    │   └── Writes .agent/tasks/researcher-validators-{ts}.json
+    ├── RESEARCHER-C (validators) (read-only, validation rules)
+    │   └── Writes .agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json
     │
-    └── RESEARCHER-POM-PATTERNS (read-only, existing POM patterns in groapp-access-testing/)
-        └── Writes .agent/tasks/researcher-pom-patterns-{ts}.json
+    └── RESEARCHER-D (pom-patterns) (read-only, existing POM patterns in groapp-access-testing/)
+        └── Writes .agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json
 
 ▼ (4 researchers complete in parallel — wall-time = single research call)
 

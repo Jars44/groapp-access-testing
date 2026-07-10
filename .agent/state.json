@@ -1,6 +1,6 @@
 {
-  "version": "2.2.0",
-  "description": "Pipeline state machine — Mode C multi-agent orchestration. Tracks phases, tasks, memory, reflection, and artifact paths across all agents.",
+  "version": "2.3.0",
+  "description": "Pipeline state machine — Mode C multi-agent orchestration with Phase 0 Triage. Tracks phases, tasks, memory, reflection, and artifact paths across all agents.",
   "metadata": {
     "project": "groapp-access-testing",
     "started_at": null,
@@ -15,6 +15,13 @@
       "templates_dir": ".agent/templates/"
     }
   },
+  "triage": {
+    "level": null,
+    "level_name": null,
+    "tc_estimate": null,
+    "routed_to": null,
+    "timestamp": null
+  },
   "pipeline": {
     "mode": "mode-c",
     "phase": "idle",
@@ -22,10 +29,14 @@
     "attempt": 0,
     "max_attempts": 3,
     "phases": {
-      "discovery": { "agents": ["lead", "researcher-routes", "researcher-components", "researcher-pom-patterns", "researcher-validators"], "parallel": true },
-      "implementation": { "agents": ["builder", "lead"], "parallel": false, "depends_on": "discovery" },
-      "reflection": { "agents": ["reflector"], "parallel": false, "depends_on": "implementation", "max_cycles": 3 },
-      "verification": { "agents": ["qa-gatekeeper", "lead"], "parallel": true, "depends_on": "reflection" },
+      "triage": { "agent": "lead", "parallel": false },
+      "discovery": { "agents": ["lead", "researcher-A", "researcher-B", "researcher-C", "researcher-D"], "parallel": true },
+      "planning": { "agents": ["lead"], "parallel": false, "depends_on": "discovery" },
+      "human_gate": { "agents": ["lead", "user"], "parallel": false, "depends_on": "planning" },
+      "implementation": { "agents": ["builder-pom", "builder-spec", "lead"], "parallel": true, "depends_on": "human_gate" },
+      "reflection_pom": { "agents": ["reflector-pom"], "parallel": false, "depends_on": "implementation" },
+      "reflection_spec": { "agents": ["reflector-spec"], "parallel": false, "depends_on": "reflection_pom" },
+      "verification": { "agents": ["qa-gatekeeper", "lead"], "parallel": true, "depends_on": "reflection_spec" },
       "teardown": { "agents": ["lead"], "parallel": false, "depends_on": "verification" }
     }
   },
@@ -67,9 +78,14 @@
     "strategy": "per-entity-files",
     "ownership": {
       "lead": ["relation_creation", "schema_validation"],
-      "researcher": ["component-selector", "route", "pom-pattern", "validation-rule"],
-      "builder": ["observation_updates"],
-      "reflector": ["critique_annotations"],
+      "researcher-A": ["component-selector"],
+      "researcher-B": ["route"],
+      "researcher-C": ["validation-rule"],
+      "researcher-D": ["pom-pattern"],
+      "builder-pom": ["observation_updates"],
+      "builder-spec": ["observation_updates"],
+      "reflector-pom": ["critique_annotations"],
+      "reflector-spec": ["critique_annotations"],
       "qa-gatekeeper": ["test_result_annotations"],
       "reviewer": ["audit_findings"]
     }
@@ -81,6 +97,8 @@
     "sub_cycles": ["pom", "spec"],
     "current_sub_cycle": null,
     "overall_verdict": "not_started",
+    "pom_verdict": null,
+    "spec_verdict": null,
     "reflector_task_files": {
       "pom": null,
       "spec": null
@@ -129,7 +147,14 @@
     "preflight_ok": false
   },
   "schema": {
-    "version": "2.2.0",
+    "version": "2.3.0",
+    "triage": {
+      "level": "hotfix | standard | epic",
+      "level_name": "string",
+      "tc_estimate": "number",
+      "routed_to": "string — workflow name",
+      "timestamp": "ISO 8601"
+    },
     "tasks": [
       {
         "id": "TC-001",
@@ -152,9 +177,9 @@
           "verification_notes": "human-readable notes for reviewer"
         },
         "owner": {
-          "discovery": "researcher-{domain}",
-          "implementation": "builder",
-          "reflection": "reflector",
+          "discovery": "researcher-{A|B|C|D}",
+          "implementation": "builder-pom | builder-spec",
+          "reflection": "reflector-pom | reflector-spec",
           "verification": "qa-gatekeeper"
         },
         "status_history": [
@@ -192,9 +217,14 @@
       "E011": "memory_write_conflict",
       "E012": "reflection_max_cycles_exceeded",
       "E013": "todo_evidence_missing",
-      "E014": "per_agent_output_missing"
+      "E014": "per_agent_output_missing",
+      "E015": "triage_level_ambiguous",
+      "E016": "hotfix_scope_exceeded"
     },
     "handoff_protocol": {
+      "triage_to_hotfix": { "required": ["triage.level"], "level": "hotfix", "phase": "triage" },
+      "triage_to_mode_c": { "required": ["triage.level"], "level": "standard", "phase": "triage" },
+      "triage_to_epic": { "required": ["triage.level"], "level": "epic", "phase": "triage", "action": "defer" },
       "lead_to_researchers": { "required": ["pipeline.phase", "artifacts.implementation_plan"], "phase": "discovery" },
       "researchers_to_builders": { "required": ["artifacts.research_findings"], "phase": "exploration" },
       "halt_to_user": { "required": ["artifacts.implementation_plan", "todos.count"], "phase": "planning_complete" },
@@ -203,19 +233,43 @@
       "reflector_to_gatekeeper": { "required": ["reflection_cycle.overall_verdict"], "verdict": "pass", "phase": "reflection" },
       "gatekeeper_to_lead": { "required": ["artifacts.reports"], "phase": "verification" }
     },
+    "timestamps": {
+      "human_readable": "dd-mm-yyyy:hh:mm",
+      "machine_filenames": "YYYYMMDDHHMMSS",
+      "json_metadata": "ISO 8601"
+    },
     "parallel_phases": {
+      "triage": {
+        "agents": ["lead"],
+        "parallel": false,
+        "writes": [".agent/state.json"]
+      },
       "discovery": {
-        "agents": ["lead", "researcher-routes", "researcher-components", "researcher-pom-patterns", "researcher-validators"],
-        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
+        "agents": ["lead", "researcher-A", "researcher-B", "researcher-C", "researcher-D"],
+        "parallel": true,
+        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json", ".agent/tasks/researcher-{variant}-{YYYYMMDDHHMMSS}-{seq}.json"]
+      },
+      "planning": {
+        "agents": ["lead"],
+        "parallel": false,
+        "depends_on": "discovery",
+        "writes": [".agent/plans/implementation-plan-{feature}.md", ".agent/plans/todos/tc-*.md"]
+      },
+      "human_gate": {
+        "agents": ["lead", "user"],
+        "parallel": false,
+        "depends_on": "planning",
+        "writes": []
       },
       "implementation": {
         "agents": ["builder-pom", "builder-spec", "lead"],
         "parallel": true,
-        "writes": ["src/tests/pages/**/*.page.ts", "src/tests/components/**/*.component.ts", "src/tests/specs/**/*.spec.ts", ".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json"]
+        "writes": ["src/tests/pages/**/*.page.ts", "src/tests/components/**/*.component.ts", "src/tests/specs/**/*.spec.ts", ".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json", ".agent/tasks/builder-{pom|spec}-{YYYYMMDDHHMMSS}-{seq}.json"]
       },
       "reflection_pom": {
         "agents": ["reflector-pom"],
         "parallel": false,
+        "depends_on": "implementation",
         "writes": [".agent/tasks/reflector-{ts}.json", ".agent/memory/entities/*.json"]
       },
       "reflection_spec": {
@@ -225,15 +279,23 @@
         "writes": [".agent/tasks/reflector-{ts}.json", ".agent/memory/entities/*.json"]
       },
       "verification": {
-        "agents": ["qa-gatekeeper", "lead", "reflector-pom", "reflector-spec"],
+        "agents": ["qa-gatekeeper", "lead"],
         "parallel": true,
+        "depends_on": "reflection_spec",
         "writes": [".agent/tasks/qa-gatekeeper-{ts}.json", ".agent/reports/summary-{feature}.md", ".agent/memory/entities/*.json"]
       },
       "teardown": {
         "agents": ["lead"],
         "parallel": false,
+        "depends_on": "verification",
         "writes": [".agent/state.json", ".agent/memory/entities/relations.json", ".agent/reports/summary-{feature}.md"]
       }
+    },
+    "hotfix": {
+      "skip_phases": ["discovery", "planning", "human_gate", "reflection_pom", "reflection_spec"],
+      "required_phases": ["triage", "implementation", "verification", "teardown"],
+      "max_tcs": 3,
+      "output_format": "brief_status_message"
     }
   }
 }

@@ -13,6 +13,7 @@
     "docs/constitution/003-anti-hallucination.md",
     "docs/constitution/004-quality-gate.md",
     "docs/constitution/005-design-patterns.md",
+    "docs/workflows/000-triage.md",
     "docs/workflows/001-test-task-sop.md",
     "docs/workflows/002-multi-agent-orchestration.md",
     "docs/workflows/003-bugfix-sop.md",

@@ -11,14 +11,14 @@ mode: primary
 
 All generated artifacts follow strict naming conventions for easy discovery:
 
-| Artifact            | Path                      | Pattern                                   | Example                                                     | Lifecycle                                             |
-| ------------------- | ------------------------- | ----------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------- |
-| **Test plan**       | `.agent/plans/`           | `implementation-plan-{feature}.md`        | `implementation-plan-auth.md`                               | Temporary — prompt user for cleanup after summary     |
-| **TODOs**           | `.agent/plans/todos/`     | `{tc-id}.md` per test case                | `tc-01.md`, `tc-02.md`, etc.                                | Temporary — tracks [ ]/[x] per TC, merged at teardown |
-| **Summary report**  | `.agent/reports/`         | `summary-{feature}-{YYYYMMDD}[-{seq}].md` | `summary-auth-20260708.md`, `summary-auth-20260708-2.md`    | Permanent — kept for history                          |
-| **State**           | `.agent/`                 | `state.json`                              | `state.json`                                                | Permanent — always current                            |
-| **Per-agent**       | `.agent/tasks/`           | `{agent}-{YYYYMMDD}-{seq}.json`           | `researcher-20260708-001.json`, `builder-20260708-001.json` | Output from each sub-agent run                        |
-| **Memory entities** | `.agent/memory/entities/` | `{entity-name}.json`                      | `FileUploader.json`, `media-api.json`, `relations.json`     | Permanent — cross-session knowledge graph             |
+| Artifact            | Path                      | Pattern                                   | Example                                                  | Lifecycle                                             |
+| ------------------- | ------------------------- | ----------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------- |
+| **Test plan**       | `.agent/plans/`           | `implementation-plan-{feature}.md`        | `implementation-plan-auth.md`                            | Temporary — prompt user for cleanup after summary     |
+| **TODOs**           | `.agent/plans/todos/`     | `{tc-id}.md` per test case                | `tc-01.md`, `tc-02.md`, etc.                             | Temporary — tracks [ ]/[x] per TC, merged at teardown |
+| **Summary report**  | `.agent/reports/`         | `summary-{feature}-{YYYYMMDD}[-{seq}].md` | `summary-auth-20260708.md`, `summary-auth-20260708-2.md` | Permanent — kept for history                          |
+| **State**           | `.agent/`                 | `state.json`                              | `state.json`                                             | Permanent — always current                            |
+| **Per-agent**       | `.agent/tasks/`           | `{agent}-{YYYYMMDDHHMMSS}-{seq}.json`     | `researcher-routes-20260709143052-001.json`              | Output from each sub-agent run                        |
+| **Memory entities** | `.agent/memory/entities/` | `{entity-name}.json`                      | `FileUploader.json`, `media-api.json`, `relations.json`  | Permanent — cross-session knowledge graph             |
 
 **Why these paths:**
 
@@ -238,7 +238,65 @@ Every implementation-plan.md must include:
 
 ## Workflow
 
-### Mode C — Maximum Parallelism (Default)
+### Phase 0: Triage & Dynamic Routing (MANDATORY FIRST STEP)
+
+> Before executing ANY code or dispatching sub-agents, classify the user's request.
+
+```text
+USER REQUEST
+│
+├── Analyze:
+│   ├── Single file target? (one .spec.ts or one POM file)
+│   ├── TC count estimate: < 3 | 3-50 | > 50?
+│   └── Scope: isolated fix | feature | module overhaul?
+│
+├── LEVEL 1 — Hotfix (< 3 TCs, single file)
+│   → Fast-track: single Builder → QA → done. Skip planning docs.
+│
+├── LEVEL 2 — Standard Feature (3-50 TCs)
+│   → Mode C pipeline: 4 researchers → 2 builders → reflection → QA → teardown
+│
+└── LEVEL 3 — Epic (> 50 TCs) [DEFERRED]
+    → Not implemented yet. Ask user to scope down to L2 batches.
+```
+
+**Decision heuristics:**
+
+| User Says                    | Likely Level    | Action                 |
+| ---------------------------- | --------------- | ---------------------- |
+| "fix selector X in file Y"   | Hotfix          | Direct Builder         |
+| "update login button"        | Hotfix          | Direct Builder         |
+| "refactor POM for X"         | Hotfix          | Direct Builder         |
+| "create tests for [feature]" | Standard        | Mode C pipeline        |
+| "test the [page/component]"  | Standard        | Mode C pipeline        |
+| "all tests for [module]"     | Epic (deferred) | Ask user to scope down |
+
+**Rules:**
+
+- TRIAGE is NON-NEGOTIABLE. Never skip to Mode C without classifying.
+- If ambiguous → default to Level 2 (Standard). Overhead is acceptable.
+- Level 3 always deferred. Never attempt chunking until explicitly requested.
+
+### Hotfix Workflow (Level 1)
+
+```text
+1. TRIAGE: Confirm < 3 TCs, single file target
+2. DISPATCH: Single Builder agent with direct file path
+3. BUILD: Open file, make minimal fix
+4. QA: Run npx playwright test --grep "<target>" --reporter=list
+5. OUTPUT: Brief status message
+   Example: "Fixed selector in login.spec.ts:42. QA: 1/1 pass."
+```
+
+**Rules:**
+
+- NO implementation-plan.md
+- NO per-TC todo files
+- NO mandatory halt
+- Still run QA Gatekeeper before reporting done
+- Still append to `.agent/state.json` errors if test fails
+
+### Mode C — Maximum Parallelism (Default, Level 2)
 
 > **Primary mode.** Parallelize researcher sub-agents. Documentation runs alongside code work.
 
@@ -253,24 +311,24 @@ PHASE 1 — Discovery & Planning (sequential — creates shared artifacts)
     ├── Lead: writes initial [ ] status to .agent/plans/todos/tc-01.md through tc-N.md
     │
     └── DISPATCH 4× researchers in single message:
-        ├── RESEARCHER-ROUTES → .agent/tasks/researcher-routes-{ts}.json
-        │   └── Owns: todos/tc-01.md, todos/tc-02.md (route-related TCs)
-        ├── RESEARCHER-COMPONENTS → .agent/tasks/researcher-components-{ts}.json
+        ├── RESEARCHER-A (Selectors/UI) → .agent/tasks/researcher-components-{ts}.json
         │   └── Owns: todos/tc-03.md, todos/tc-04.md (component-related TCs)
-        ├── RESEARCHER-API → .agent/tasks/researcher-pom-patterns-{ts}.json
-        │   └── Owns: todos/tc-05.md, todos/tc-06.md (API-related TCs)
-        └── RESEARCHER-VALIDATORS → .agent/tasks/researcher-validators-{ts}.json
-            └── Owns: todos/tc-07.md (validation TCs)
+        ├── RESEARCHER-B (Routes) → .agent/tasks/researcher-routes-{ts}.json
+        │   └── Owns: todos/tc-01.md, todos/tc-02.md (route-related TCs)
+        ├── RESEARCHER-C (Validators) → .agent/tasks/researcher-validators-{ts}.json
+        │   └── Owns: todos/tc-05.md, todos/tc-06.md (validation TCs)
+        └── RESEARCHER-D (POM Patterns) → .agent/tasks/researcher-pom-patterns-{ts}.json
+            └── Owns: todos/tc-07.md, todos/tc-08.md (POM pattern TCs)
 
         PARALLEL: Researchers write to their assigned TC files + create memory entities
-        ├── Researcher-Routes: flips [ ] → [/] → [x] on tc-01.md, tc-02.md
+        ├── Researcher-B (Routes): flips [ ] → [/] → [x] on tc-01.md, tc-02.md
         │   └── Creates: .agent/memory/entities/{route-entity}.json
-        ├── Researcher-Components: flips [ ] → [/] → [x] on tc-03.md, tc-04.md
+        ├── Researcher-A (Selectors/UI): flips [ ] → [/] → [x] on tc-03.md, tc-04.md
         │   └── Creates: .agent/memory/entities/{component-entity}.json
-        ├── Researcher-POM-Patterns: flips [ ] → [/] → [x] on tc-05.md
-        │   └── Creates: .agent/memory/entities/{pom-patterns-entity}.json
-        └── Researcher-Validators: flips [ ] → [/] → [x] on tc-06.md, tc-07.md
-            └── Creates: .agent/memory/entities/{validator-entity}.json
+        ├── Researcher-C (Validators): flips [ ] → [/] → [x] on tc-05.md, tc-06.md
+        │   └── Creates: .agent/memory/entities/{validator-entity}.json
+        └── Researcher-D (POM Patterns): flips [ ] → [/] → [x] on tc-07.md, tc-08.md
+            └── Creates: .agent/memory/entities/{pom-patterns-entity}.json
 
 ▼ (4 researchers complete — wall-time = single call)
 
