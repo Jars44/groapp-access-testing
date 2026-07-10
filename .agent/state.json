@@ -121,6 +121,15 @@
       "tasks/": "one agent per file"
     }
   },
+  "commands": {
+    "orchestrator": ["triage", "hotfix", "mode-c"],
+    "researcher": ["researcher-a", "researcher-b", "researcher-c", "researcher-d"],
+    "builder": ["builder-pom", "builder-spec"],
+    "reflector": ["reflector-pom", "reflector-spec"],
+    "qa": ["qa-gatekeeper"],
+    "review": ["review"],
+    "total": 13
+  },
   "discovery_map": {
     "non_agent_dirs": {
       ".agent/plans/": "Temporary test plans + per-TC todos",

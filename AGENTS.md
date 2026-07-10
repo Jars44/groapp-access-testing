@@ -92,6 +92,24 @@ project/
 | QA Dispatch         | `.agent/templates/qa-gatekeeper-dispatch.md`       | Test execution workflow                                |
 | Reviewer Dispatch   | `.agent/templates/reviewer-dispatch.md`            | Code audit workflow                                    |
 
+## Commands
+
+| Command           | Agent                   | Purpose                                              |
+| ----------------- | ----------------------- | ---------------------------------------------------- |
+| `/triage`         | Lead                    | Phase 0: classify request → hotfix/mode-c/epic       |
+| `/hotfix`         | Lead → Builder          | Level 1: fast-track single file fix (< 3 TCs)        |
+| `/mode-c`         | Lead (orchestrator)     | Level 2: full Mode C pipeline (3-50 TCs)             |
+| `/researcher-a`   | researcher-components   | Components & selectors discovery                     |
+| `/researcher-b`   | researcher-routes       | Routes & navigation discovery                        |
+| `/researcher-c`   | researcher-validators   | Validators & error states discovery                  |
+| `/researcher-d`   | researcher-pom-patterns | POM patterns discovery in test framework             |
+| `/builder-pom`    | builder-pom             | Create/update Page Object Model files                |
+| `/builder-spec`   | builder-spec            | Create/update Playwright test specs                  |
+| `/reflector-pom`  | reflector-pom           | Critique POM structure (selector priority, BasePage) |
+| `/reflector-spec` | reflector-spec          | Critique spec quality (no timeouts, AAA pattern)     |
+| `/qa-gatekeeper`  | qa-gatekeeper           | Run tests, apply flakiness protocol, verdict         |
+| `/review`         | reviewer                | Full audit (Stage 1 compliance + Stage 2 quality)    |
+
 ## Conflict Prevention
 
 | File                                   | Strategy             | Why                                     |

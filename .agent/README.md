@@ -43,18 +43,38 @@ Default `sourceDir = ../groapp-access` (relative). Override via:
 
 ## File Index
 
-| Location               | Purpose                                                                                   |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| `.agent/README.md`     | This file — entrypoint                                                                    |
-| `.agent/mcp.json`      | Persona-scoped MCP tool schema                                                            |
-| `.agent/settings.json` | Runtime config, persona configs, retry/validation                                         |
-| `.agent/state.json`    | Pipeline state machine (v2) with errors/retries                                           |
-| `.agent/plans/`        | **Temporary** test plans — `implementation-plan-{feature}.md` (prompt user before delete) |
-| `.agent/reports/`      | **Permanent** summaries — `summary-{feature}-{YYYYMMDD}[-{seq}].md`                       |
-| `.agent/templates/`    | Dispatch prompts + implementation-plan-template.md                                        |
-| `.agent/hooks/`        | pre-flight.sh, validate-state.sh                                                          |
-| `.agent/memory/`       | Cross-session knowledge graph — per-entity JSON files                                     |
-| `.agent/tasks/`        | Per-agent output files — `researcher-{ts}.json`, `builder-{ts}.json`, etc.                |
+| Location               | Purpose                                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `.agent/README.md`     | This file — entrypoint                                                                                          |
+| `.agent/mcp.json`      | Persona-scoped MCP tool schema                                                                                  |
+| `.agent/settings.json` | Runtime config, persona configs, retry/validation                                                               |
+| `.agent/state.json`    | Pipeline state machine (v2) with errors/retries                                                                 |
+| `.agent/plans/`        | **Temporary** test plans — `implementation-plan-{feature}.md` (prompt user before delete)                       |
+| `.agent/reports/`      | **Permanent** summaries — `summary-{feature}-{YYYYMMDD}[-{seq}].md`                                             |
+| `.agent/templates/`    | Dispatch prompts + implementation-plan-template.md                                                              |
+| `.agent/hooks/`        | pre-flight.sh, validate-state.sh                                                                                |
+| `.agent/memory/`       | Cross-session knowledge graph — per-entity JSON files                                                           |
+| `.agent/tasks/`        | Per-agent output files — `researcher-{variant}-{YYYYMMDDHHMMSS}-{seq}.json`, `builder-{pom                      | spec}-{ts}.json`, etc. |
+| `.opencode/commands/`  | OpenCode slash commands — 13 commands for triage, hotfix, mode-c, researchers, builders, reflectors, QA, review |
+| `.claude/commands/`    | Claude Code slash commands — 13 commands mirroring OpenCode set                                                 |
+
+## Commands
+
+| Command           | Purpose                                        |
+| ----------------- | ---------------------------------------------- |
+| `/triage`         | Phase 0: classify request → hotfix/mode-c/epic |
+| `/hotfix`         | Level 1: fast-track single file fix            |
+| `/mode-c`         | Level 2: full Mode C pipeline                  |
+| `/researcher-a`   | Components & selectors                         |
+| `/researcher-b`   | Routes & navigation                            |
+| `/researcher-c`   | Validators & error states                      |
+| `/researcher-d`   | POM patterns                                   |
+| `/builder-pom`    | Create/update POM files                        |
+| `/builder-spec`   | Create/update test specs                       |
+| `/reflector-pom`  | Critique POM structure                         |
+| `/reflector-spec` | Critique spec quality                          |
+| `/qa-gatekeeper`  | Run tests, verdict                             |
+| `/review`         | Full audit (Stage 1 + Stage 2)                 |
 
 ## Conflict Prevention
 

@@ -11,6 +11,7 @@
     ".agent/templates/implementation-plan-template.md",
     ".agent/templates/summary-template.md",
     ".agent/templates/*-dispatch.md",
+    "docs/workflows/000-triage.md",
     "docs/workflows/002-multi-agent-orchestration.md",
     "docs/personas/orchestrator-lead.md",
     "docs/personas/researcher.md",
@@ -22,30 +23,152 @@
   ],
   "goals": [
     {
-      "name": "test-feature",
-      "description": "Create and run tests for a feature using Mode C parallelism",
-      "template": ".agent/templates/implementation-plan-template.md",
+      "name": "triage",
+      "description": "Phase 0: Classify request, route to hotfix/mode-c/epic",
+      "template": ".agent/templates/lead-dispatch.md",
       "steps": [
-        "Read AGENTS.md",
-        "Read .agent/templates/tc-template.md for per-TC todo format",
-        "Read .agent/templates/implementation-plan-template.md",
-        "Create .agent/plans/implementation-plan-{feature}.md",
-        "Create per-TC todos .agent/plans/todos/tc-*.md with ownership",
-        "Dispatch researcher agents (routes, components, validators, pom-patterns)",
-        "Build POM + specs using .agent/templates/builder-dispatch.md",
-        "Reflect using .agent/templates/reflector-dispatch.md",
-        "Run QA gatekeeper using .agent/templates/qa-gatekeeper-dispatch.md",
-        "Generate summary using .agent/templates/summary-template.md"
+        "Read docs/workflows/000-triage.md",
+        "Read .agent/state.json",
+        "Analyze request: single file? TC count? scope?",
+        "Classify: Hotfix | Standard | Epic",
+        "Update state.json triage section",
+        "Tell user which command to run next"
       ]
     },
     {
-      "name": "debug-failure",
-      "description": "Debug a failing test",
+      "name": "hotfix",
+      "description": "Level 1: Fast-track single file fix",
+      "template": ".opencode/commands/hotfix.md",
       "steps": [
-        "Read AGENTS.md",
-        "Read test failure output",
-        "Diagnose root cause",
-        "Fix and re-run"
+        "Confirm triage: level = hotfix",
+        "Dispatch single Builder agent",
+        "Build: minimal fix",
+        "QA: npx playwright test --grep target",
+        "Output brief status message"
+      ]
+    },
+    {
+      "name": "mode-c",
+      "description": "Level 2: Full Mode C pipeline",
+      "template": ".agent/templates/lead-dispatch.md",
+      "steps": [
+        "Phase 1: Discovery & Planning",
+        "Phase 1b: 4 parallel researchers (A/B/C/D)",
+        "Phase 2: Research aggregation + human gate",
+        "Phase 3: 2 parallel builders (POM + Specs)",
+        "Phase 4: Reflection (POM -> Spec) + QA parallel",
+        "Phase 5: Teardown"
+      ]
+    },
+    {
+      "name": "research-a",
+      "description": "Components and selectors discovery",
+      "template": ".opencode/commands/researcher-a.md",
+      "steps": [
+        "Read implementation-plan.md",
+        "Scan components for selectors, testids, aria-labels",
+        "Return file:line for every finding",
+        "Update TC todo files with evidence"
+      ]
+    },
+    {
+      "name": "research-b",
+      "description": "Routes and navigation discovery",
+      "template": ".opencode/commands/researcher-b.md",
+      "steps": [
+        "Read implementation-plan.md",
+        "Scan routes, navigation, guards",
+        "Return file:line for every finding",
+        "Update TC todo files with evidence"
+      ]
+    },
+    {
+      "name": "research-c",
+      "description": "Validators and error states discovery",
+      "template": ".opencode/commands/researcher-c.md",
+      "steps": [
+        "Read implementation-plan.md",
+        "Scan forms for validation rules, error messages",
+        "Return file:line for every finding",
+        "Update TC todo files with evidence"
+      ]
+    },
+    {
+      "name": "research-d",
+      "description": "Existing POM patterns discovery",
+      "template": ".opencode/commands/researcher-d.md",
+      "steps": [
+        "Read implementation-plan.md",
+        "Scan test framework for POM patterns, BasePage, naming conventions",
+        "Return file:line for every finding",
+        "Update TC todo files with evidence"
+      ]
+    },
+    {
+      "name": "build-pom",
+      "description": "Create/update POM files",
+      "template": ".opencode/commands/builder-pom.md",
+      "steps": [
+        "Read researcher outputs",
+        "Create/update POM files",
+        "Every selector = readonly class property",
+        "Extends BasePage",
+        "Update TC todos with POM file:line evidence"
+      ]
+    },
+    {
+      "name": "build-spec",
+      "description": "Create/update Playwright test specs",
+      "template": ".opencode/commands/builder-spec.md",
+      "steps": [
+        "Read POM files from builder-pom",
+        "Create/update spec files",
+        "Arrange -> Act -> Assert",
+        "Use POM selectors only",
+        "Update TC todos with spec file:line evidence"
+      ]
+    },
+    {
+      "name": "reflect-pom",
+      "description": "Critique POM structure",
+      "template": ".opencode/commands/reflector-pom.md",
+      "steps": [
+        "Read builder-pom output",
+        "Check: selector priority, BasePage, readonly, no assertions",
+        "Verdict: pass | revise",
+        "Append critique annotations to memory entities"
+      ]
+    },
+    {
+      "name": "reflect-spec",
+      "description": "Critique spec quality",
+      "template": ".opencode/commands/reflector-spec.md",
+      "steps": [
+        "Read builder-spec output",
+        "Check: no timeouts, AAA, every test asserts",
+        "Verdict: pass | revise",
+        "Append critique annotations to memory entities"
+      ]
+    },
+    {
+      "name": "qa",
+      "description": "Run tests, decide pass/block verdict",
+      "template": ".opencode/commands/qa-gatekeeper.md",
+      "steps": [
+        "Run npx playwright test --grep {feature}",
+        "Apply flakiness protocol (3 runs if needed)",
+        "Verdict: pass | block",
+        "Append test_run results to memory entities"
+      ]
+    },
+    {
+      "name": "review",
+      "description": "Full audit (Stage 1 compliance + Stage 2 quality)",
+      "template": ".opencode/commands/review.md",
+      "steps": [
+        "Stage 1: Spec compliance (BLOCKING)",
+        "Stage 2: Code quality (NON-BLOCKING)",
+        "Verdict: pass | block"
       ]
     }
   ],
@@ -58,7 +181,7 @@
     },
     "researcher": {
       "role": "explorer",
-      "prompt": "You are the Researcher. Explore codebase for routes, components, APIs. Read .agent/templates/researcher-dispatch.md.",
+      "prompt": "You are the Researcher. Explore codebase for UI elements, routes, selectors, validators. Read .agent/templates/researcher-dispatch.md.",
       "template": ".agent/templates/researcher-dispatch.md",
       "tools": ["read", "glob", "grep"]
     },

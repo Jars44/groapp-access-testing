@@ -125,20 +125,70 @@
     }
   },
   "command": {
-    "test-feature": {
-      "template": "Run Playwright tests for a specific feature. Read the feature's spec files from src/tests/specs/{feature}/ and run npx playwright test --grep {feature} --reporter=list. Report pass/fail counts and any errors.",
-      "description": "Run tests for a specific feature",
-      "agent": "lead"
+    "triage": {
+      "description": "Phase 0: Classify request, route to hotfix/mode-c/epic",
+      "agent": "lead",
+      "template": ".opencode/commands/triage.md"
     },
-    "plan-feature": {
-      "template": "Create a test plan for feature {feature}. Read docs/workflows/001-test-task-sop.md, then read the app source at ../groapp-access/src/features/{feature}/ and existing tests. Write .agent/plans/implementation-plan-{feature}.md and per-TC todo files .agent/plans/todos/tc-*.md with ownership assigned.",
-      "description": "Create test plan for a feature",
-      "agent": "lead"
+    "hotfix": {
+      "description": "Level 1: Fast-track single file fix (< 3 TCs)",
+      "agent": "lead",
+      "template": ".opencode/commands/hotfix.md"
     },
-    "dispatch-researchers": {
-      "template": "Dispatch the 4 researcher sub-agents (routes, components, validators, pom-patterns) to explore feature {feature}. Provide the implementation plan path .agent/plans/implementation-plan-{feature}.md and assigned per-TC todo files.",
-      "description": "Dispatch parallel researchers for a feature",
-      "agent": "lead"
+    "mode-c": {
+      "description": "Level 2: Full Mode C pipeline (3-50 TCs)",
+      "agent": "lead",
+      "template": ".opencode/commands/mode-c.md"
+    },
+    "researcher-a": {
+      "description": "Researcher A: Components & selectors discovery",
+      "agent": "researcher",
+      "template": ".opencode/commands/researcher-a.md"
+    },
+    "researcher-b": {
+      "description": "Researcher B: Routes & navigation discovery",
+      "agent": "researcher",
+      "template": ".opencode/commands/researcher-b.md"
+    },
+    "researcher-c": {
+      "description": "Researcher C: Validators & error states discovery",
+      "agent": "researcher",
+      "template": ".opencode/commands/researcher-c.md"
+    },
+    "researcher-d": {
+      "description": "Researcher D: Existing POM patterns discovery",
+      "agent": "researcher",
+      "template": ".opencode/commands/researcher-d.md"
+    },
+    "builder-pom": {
+      "description": "Builder POM: Create/update Page Object Model files",
+      "agent": "builder",
+      "template": ".opencode/commands/builder-pom.md"
+    },
+    "builder-spec": {
+      "description": "Builder Specs: Create/update Playwright test specs",
+      "agent": "builder",
+      "template": ".opencode/commands/builder-spec.md"
+    },
+    "reflector-pom": {
+      "description": "Reflector POM: Critique POM structure",
+      "agent": "reflector",
+      "template": ".opencode/commands/reflector-pom.md"
+    },
+    "reflector-spec": {
+      "description": "Reflector Spec: Critique spec quality",
+      "agent": "reflector",
+      "template": ".opencode/commands/reflector-spec.md"
+    },
+    "qa-gatekeeper": {
+      "description": "QA Gatekeeper: Run tests, decide pass/block verdict",
+      "agent": "qa-gatekeeper",
+      "template": ".opencode/commands/qa-gatekeeper.md"
+    },
+    "review": {
+      "description": "Reviewer: Full audit (Stage 1 compliance + Stage 2 quality)",
+      "agent": "reviewer",
+      "template": ".opencode/commands/review.md"
     }
   },
   "permission": {
