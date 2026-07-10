@@ -77,7 +77,7 @@ Every user request MUST be classified before any other work.
 
 **Research before planning.** Learn codebase before writing plan.
 
-Dispatch 4 researchers SYNCHRONOUSLY (task() is serial):
+Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls. They run in parallel within that message — wall-time = single longest call. Each call is independent (different domain, different output file), so there are no race conditions. Do NOT dispatch them one at a time across multiple messages.
 
 | Letter | Agent                   | Domain                     | Output File                                           |
 | ------ | ----------------------- | -------------------------- | ----------------------------------------------------- |
@@ -107,12 +107,14 @@ Wait for user "Lanjutkan" before proceeding.
 
 **Do NOT proceed to Phase 4 without user approval.**
 
-### Phase 4: Parallel Implementation (after approval)
+### Phase 4: Implementation (SEQUENTIAL — POM first, Spec second)
 
-- **BUILDER-POM**: POMs → `src/tests/pages/`, `src/tests/components/`
-- **BUILDER-SPEC**: Specs → `src/tests/specs/`, data → `src/tests/data/`
+1. **BUILDER-POM**: POMs → `src/tests/pages/`, `src/tests/components/`
+2. **BUILDER-SPEC**: Specs → `src/tests/specs/`, data → `src/tests/data/` (after POM files exist)
 
-### Phase 5: Parallel Verification + Reflection
+⚠️ **Race condition:** Builder-Spec reads POM files from Builder-POM. Do NOT dispatch both at once.
+
+### Phase 5: Verification + Reflection (SEQUENTIAL sub-phases)
 
 ```text
 1. REFLECTOR-POM: critique POM structure → pass/revise

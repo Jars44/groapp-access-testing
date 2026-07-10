@@ -34,7 +34,7 @@ Override source path via `GROAPP_ACCESS_SOURCE_DIR` env var.
 
 ## Researcher Variants (Parallel Dispatch)
 
-Lead dispatches 4 specialized researchers in parallel. Each owns different scope:
+Lead dispatches 4 specialized researchers CONCURRENTLY in a single message with 4 separate `task()` calls (one per variant). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file), so there are no race conditions between calls.
 
 | Letter | Agent Variant           | Domain                                                                              | Outputs                            |
 | ------ | ----------------------- | ----------------------------------------------------------------------------------- | ---------------------------------- |

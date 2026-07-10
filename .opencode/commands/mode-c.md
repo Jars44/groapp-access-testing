@@ -24,7 +24,7 @@ You are the Lead QA Architect. Execute the **full Mode C pipeline** for standard
 
 **Research before planning.** Learn codebase before writing plan.
 
-Dispatch 4 researchers **SYNCHRONOUSLY** (task() is serial):
+Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls (one per variant). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file, different TC ownership) — no race conditions.
 
 | Letter | Agent                   | Domain                          | Output File                                           |
 | ------ | ----------------------- | ------------------------------- | ----------------------------------------------------- |
@@ -51,28 +51,27 @@ Apakah ada yang perlu disesuaikan, atau ketik 'Lanjutkan' untuk mengeksekusi scr
 
 **Do NOT proceed to Phase 4 until user approves.**
 
-### Phase 4: Parallel Implementation (after approval)
+### Phase 4: Implementation (SEQUENTIAL — POM first, then Spec)
 
-Dispatch 2 builders:
+1. **Builder-POM** → `src/tests/pages/**`, `src/tests/components/**` (dispatch first, wait for completion)
+2. **Builder-Spec** → `src/tests/specs/**`, `src/tests/data/**` (dispatch after POM files exist)
 
-- **BUILDER-POM** → `src/tests/pages/**`, `src/tests/components/**`
-- **BUILDER-SPEC** → `src/tests/specs/**`, `src/tests/data/**`
+⚠️ **Race condition:** Builder-Spec reads POM files from Builder-POM. Do NOT dispatch both at once.
 
-Lead updates todos in real-time: [ ] → [/] → [x] with file:line evidence
+### Phase 5: Verification + Reflection (SEQUENTIAL sub-phases)
 
-### Phase 5: Parallel Verification + Reflection Sub-Cycles
+Dispatch 3 agents ONE AT A TIME in this order:
 
-Dispatch 3 agents:
-
-- **REFLECTOR-POM** → critiques POM structure
-- **REFLECTOR-SPEC** → critiques spec quality
-- **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
+1. **REFLECTOR-POM** → critiques POM structure (wait for verdict)
+2. **REFLECTOR-SPEC** → critiques spec quality (wait for verdict)
+3. **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 
 Sequential constraint:
 
 1. Reflector-POM first → if revise → Builder-POM fixes → re-dispatch
 2. Reflector-Spec after POM pass → if revise → Builder-Spec fixes → re-dispatch
-3. Max 3 full cycles before BLOCK
+3. QA-Gatekeeper after both pass
+4. Max 3 full cycles before BLOCK
 
 ### Phase 6: Teardown
 

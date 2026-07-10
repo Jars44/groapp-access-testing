@@ -356,22 +356,21 @@ PHASE 3 — Implementation
 
 ▼ (handoff = 4 research files merged + all TC todos [x] + summary skeleton)
 
-PHASE 3 — Parallel Implementation
-├── 8. Dispatch 2 builders SIMULTANEOUSLY:
+PHASE 3 — Sequential Implementation
+├── 8. Dispatch 2 builders SEQUENTIALLY (not in parallel):
 │   ├── task(builder-pom) → creates POM files → .agent/tasks/builder-pom-{ts}.json
 │   │   └── Updates todos/tc-XX.md [x] with POM file:line evidence
-│   └── task(builder-spec) → creates spec files → .agent/tasks/builder-spec-{ts}.json
+│   └── task(builder-spec) → reads POM files from Builder-POM → creates spec files → .agent/tasks/builder-spec-{ts}.json
 │       └── Updates todos/tc-XX.md [x] with spec file:line evidence
 │
-│   ⚠️ Builder-POM needs researcher output. Builder-Spec can run in parallel
-│   because implementation-plan documents all selectors upfront. Target
-│   different codebases (pages/ vs specs/) → no file conflicts.
+│   ⚠️ Race condition: Builder-Spec reads POM files created by Builder-POM.
+│   Builder-Spec MUST wait for Builder-POM to complete. Do NOT dispatch both at once.
 │
 └── PARALLEL: Builders append observations to .agent/memory/entities/{entity}.json
 
 ▼ (handoff via .agent/tasks/builder-pom-{ts}.json + builder-spec-{ts}.json)
 
-PHASE 4 — Verification + Parallel Reflection Sub-Cycles (PARALLEL)
+PHASE 4 — Verification + Sequential Reflection Sub-Cycles
 │
 ├── 9. REFLECTOR-POM (runs first, sequential within reflection)
 │   ├── Reads POM files from Builder-POM
@@ -385,7 +384,7 @@ PHASE 4 — Verification + Parallel Reflection Sub-Cycles (PARALLEL)
 │   ├── If revise → Builder-Spec fixes → re-dispatch Reflector-Spec (cycle ≤3)
 │   └── If pass → append critique annotations to memory entities
 │
-├── 11. QA-GATEKEEPER (runs independently, parallel-ready at any point)
+├── 11. QA-GATEKEEPER (runs independently but not concurrently — dispatch after Reflector)
 │   ├── Runs .agent/hooks/test.sh test --grep "{feature}" --reporter=list
 │   ├── Writes .agent/tasks/qa-gatekeeper-{ts}.json
 │   └── Appends test_run results to memory entities
@@ -411,10 +410,10 @@ PHASE 5 — Teardown (sequential — single writer)
 2. ANALYZE requirements → identify all test scenarios (happy, error, edge)
 3. BREAKDOWN into atomic tasks with FEDO-style IDs
 4. WRITE .agent/plans/implementation-plan-{feature}.md using template
-5. DISPATCH sub-agents in parallel:
-   ├── Researcher: explore codebase, find routes/components/APIs
-   ├── Builder: implement POM files and spec files
-   └── Reviewer: audit output for quality
+5. DISPATCH sub-agents sequentially (task() blocks, one at a time):
+    ├── Researcher: explore codebase, find routes/components/APIs
+    ├── Builder: implement POM files and spec files
+    └── Reviewer: audit output for quality
 6. TRACK progress in .agent/state.json
 7. VERIFY all tasks complete → run quality gate
 8. GENERATE summary → cleanup plan (ask user)

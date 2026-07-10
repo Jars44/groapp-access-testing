@@ -5,9 +5,14 @@ mode: subagent
 
 # Builder Dispatch (Split: POM + Specs)
 
-Two parallel builders are dispatched simultaneously after user approval.
+Two builders run SEQUENTIALLY (not in parallel). Dispatch them one after another in separate `task()` calls:
 
-## Builder-POM Dispatch
+1. **Builder-POM first** → creates POM files (wait for completion)
+2. **Builder-Spec second** → reads POM files from Builder-POM → creates spec files
+
+⚠️ **Race condition fix:** Builder-Spec MUST wait for Builder-POM to complete because it reads POM files. Do NOT dispatch both at once.
+
+## Builder-POM: First (SEQUENTIAL)
 
 You are Builder-POM. Create/update Page Object Model files from researcher findings.
 
@@ -45,14 +50,14 @@ Write to `.agent/tasks/builder-pom-{timestamp}.json`:
 
 ---
 
-## Builder-Spec Dispatch
+## Builder-Spec: Second (SEQUENTIAL, after Builder-POM)
 
-You are Builder-Spec. Write Playwright test specs using POM files from Builder-POM.
+⚠️ **You MUST wait for Builder-POM to complete first.** Read POM files created by Builder-POM before writing any spec. If POM files don't exist yet, block and report.
 
 ### What You Do
 
-1. Read `.agent/tasks/researcher-{variant}-{timestamp}.json` for findings
-2. Read POM files created by Builder-POM — use their selectors
+1. Read POM files from `src/tests/pages/` and `src/tests/components/` — BLOCK if not created yet
+2. Read `.agent/tasks/researcher-{variant}-{timestamp}.json` for findings
 3. Read `.agent/plans/implementation-plan-{feature}.md` for TC list
 4. Build in order:
    - Test data factories → `src/tests/data/{feature}.data.ts`

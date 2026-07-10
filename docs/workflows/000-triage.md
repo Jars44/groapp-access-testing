@@ -42,7 +42,7 @@ USER REQUEST RECEIVED
 
 ## 4-Researcher Mapping (Mode C)
 
-Lead dispatches 4 researchers in parallel during Phase 1:
+Lead dispatches 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls (one per variant). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file), so there are no race conditions between calls.
 
 | Agent                       | Letter | Domain                         | Scopes                                                                    | Output File                                           |
 | --------------------------- | ------ | ------------------------------ | ------------------------------------------------------------------------- | ----------------------------------------------------- |

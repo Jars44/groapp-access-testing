@@ -71,9 +71,7 @@ Write to `.agent/tasks/reflector-{timestamp}.json`:
       "suggestion": "Add readonly keyword"
     }
   ],
-  "reflection_iterations": [
-    { "cycle": 1, "sub_cycle": "pom", "findings_count": 3, "new_findings": 3 }
-  ]
+  "reflection_iterations": [{ "cycle": 1, "sub_cycle": "pom", "findings_count": 3, "new_findings": 3 }]
 }
 ```
 

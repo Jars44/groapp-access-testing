@@ -50,7 +50,7 @@ Skip implementation-plan, todos, halt, and full reflection cycle.
 
 **Research before planning.** Learn codebase before writing plan.
 
-Dispatch 4 researchers SYNCHRONOUSLY (task() is serial):
+Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls (one per variant). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file) — no race conditions.
 
 | Letter | Agent                   | Domain                          | Output File                                           |
 | ------ | ----------------------- | ------------------------------- | ----------------------------------------------------- |
@@ -76,32 +76,34 @@ Apakah ada yang perlu disesuaikan, atau ketik 'Lanjutkan' untuk mengeksekusi scr
 
 **Do NOT proceed to Phase 4 until user explicitly approves.**
 
-### Phase 4: Parallel Implementation (after approval)
+### Phase 4: Implementation (SEQUENTIAL — POM first, Spec second)
 
-**Dispatch 2 builders:**
+**Dispatch 2 builders one at a time:**
 
-- **BUILDER-POM** → creates/updates POM files in `pages/**`, `components/**`
-- **BUILDER-SPEC** → creates/updates spec files in `specs/**`, `data/**`
-- Lead updates todos in real-time: [ ] → [/] → [x] with file:line evidence
+1. **BUILDER-POM** → creates/updates POM files in `pages/**`, `components/**` (dispatch first, wait for completion)
+2. **BUILDER-SPEC** → creates/updates spec files in `specs/**`, `data/**` (dispatch after POM files exist)
+
+⚠️ **Race condition:** Builder-Spec reads POM files from Builder-POM. Do NOT dispatch both at once.
+Lead updates todos in real-time: [ ] → [/] → [x] with file:line evidence
 
 ### Phase 4b: Early Memory Writes (parallel with Phase 5)
 
 - Builders append observations to memory entities as they write code
 - Reflector writes critique annotations to memory in real-time
 
-### Phase 5: Parallel Verification + Reflection Sub-Cycles
+### Phase 5: Verification + Reflection (SEQUENTIAL sub-phases)
 
-**Dispatch 3 agents:**
+Dispatch 3 agents ONE AT A TIME in this order:
 
-- **REFLECTOR-POM** → critiques POM structure (selector priority, BasePage, readonly)
-- **REFLECTOR-SPEC** → critiques spec quality (no timeouts, AAA, every test asserts)
-- **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
+1. **REFLECTOR-POM** → critiques POM structure (selector priority, BasePage, readonly)
+2. **REFLECTOR-SPEC** → critiques spec quality (no timeouts, AAA, every test asserts)
+3. **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 
 **Sequential constraint within Phase 5:**
 
-1. Reflector-POM runs first → if revise → Builder-POM fixes → re-dispatch
-2. Reflector-Spec runs after Reflector-POM pass → if revise → Builder-Spec fixes → re-dispatch
-3. QA-Gatekeeper runs independently (parallel-ready at any point)
+1. Reflector-POM first → if revise → Builder-POM fixes → re-dispatch
+2. Reflector-Spec after POM pass → if revise → Builder-Spec fixes → re-dispatch
+3. QA-Gatekeeper after both pass
 4. Max 3 full cycles per builder before BLOCK
 
 **Lead parallel work:**

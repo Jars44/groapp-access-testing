@@ -29,7 +29,7 @@ Before executing this SOP, classify the request:
 
 ## Mode C: Maximum Parallelism (Optimal)
 
-> **Goal:** Maximize parallel execution to reduce total wall-clock time. Documentation runs simultaneously with code work where safe.
+> **Goal:** Maximize concurrency where safe. Documentation can draft in parallel with code work, but agent dispatch is sequential — task() blocks until return.
 
 ### Parallelization Matrix
 
@@ -164,7 +164,7 @@ Each agent writes to separate entity files — prevents concurrent write conflic
 LEAD AGENT (Phase 1 — Discovery: Research)
 │
 ├── 1. Read PRD / AC (1 call)
-├── 2. DISPATCH 4x researchers in single message (parallel read-only calls)
+├── 2. DISPATCH 4x researchers CONCURRENTLY in single message (4 task() calls, independent domains)
 │      │
 │      ├── RESEARCHER-A (routes) (read-only, file:line tables)
 │      │   └── Writes .agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json

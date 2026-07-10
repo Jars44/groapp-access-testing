@@ -49,20 +49,20 @@ mode: template
 
 ## Pipeline Execution Log
 
-| Phase             | Agent                   | Start  | End    | Duration | Status        | Output                     |
-| ----------------- | ----------------------- | ------ | ------ | -------- | ------------- | -------------------------- |
-| 1a. Research      | Researcher-Routes       | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
-| 1b. Research      | Researcher-Components   | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
-| 1c. Research      | Researcher-Validators   | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
-| 1d. Research      | Researcher-POM-Patterns | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
-| 2. Planning       | Lead                    | {time} | {time} | {ms}     | complete      | implementation-plan, todos |
-| 3. HALT           | Lead → User             | {time} | {time} | {ms}     | approved      | —                          |
-| 4a. Implementation| Builder-POM             | {time} | {time} | {ms}     | complete      | builder-pom-{ts}.json      |
-| 4b. Implementation| Builder-Spec            | {time} | {time} | {ms}     | complete      | builder-spec-{ts}.json     |
-| 5a. Reflection    | Reflector-POM           | {time} | {time} | {ms}     | {pass/revise} | reflector-pom-{ts}.json    |
-| 5b. Reflection    | Reflector-Spec          | {time} | {time} | {ms}     | {pass/revise} | reflector-spec-{ts}.json   |
-| 5c. Verification  | QA Gatekeeper           | {time} | {time} | {ms}     | {pass/block}  | qa-gatekeeper-{ts}.json    |
-| 6. Teardown       | Lead                    | {time} | {time} | {ms}     | complete      | state.json, summary        |
+| Phase              | Agent                   | Start  | End    | Duration | Status        | Output                     |
+| ------------------ | ----------------------- | ------ | ------ | -------- | ------------- | -------------------------- |
+| 1a. Research       | Researcher-Routes       | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 1b. Research       | Researcher-Components   | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 1c. Research       | Researcher-Validators   | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 1d. Research       | Researcher-POM-Patterns | {time} | {time} | {ms}     | complete      | researcher-{ts}.json       |
+| 2. Planning        | Lead                    | {time} | {time} | {ms}     | complete      | implementation-plan, todos |
+| 3. HALT            | Lead → User             | {time} | {time} | {ms}     | approved      | —                          |
+| 4a. Implementation | Builder-POM             | {time} | {time} | {ms}     | complete      | builder-pom-{ts}.json      |
+| 4b. Implementation | Builder-Spec            | {time} | {time} | {ms}     | complete      | builder-spec-{ts}.json     |
+| 5a. Reflection     | Reflector-POM           | {time} | {time} | {ms}     | {pass/revise} | reflector-pom-{ts}.json    |
+| 5b. Reflection     | Reflector-Spec          | {time} | {time} | {ms}     | {pass/revise} | reflector-spec-{ts}.json   |
+| 5c. Verification   | QA Gatekeeper           | {time} | {time} | {ms}     | {pass/block}  | qa-gatekeeper-{ts}.json    |
+| 6. Teardown        | Lead                    | {time} | {time} | {ms}     | complete      | state.json, summary        |
 
 ---
 
@@ -77,7 +77,7 @@ mode: template
 | 5. Verification   | QA-Gatekeeper + Lead summary + Reflector | Run tests + fill summary + critique          | ✓ Different files       |
 | 6. Teardown       | Lead only                                | Single writer                                | ✓ No conflicts          |
 
-**Builder dependency note:** Builder-POM needs researcher output. Builder-Spec can run parallel because implementation-plan documents all selectors upfront. Target directories (`pages/**` vs `specs/**`) are non-overlapping.
+**Builder dependency note:** Builder-POM runs first, Builder-Spec waits for POM files. No parallel builder execution — no race conditions between builders.
 
 ---
 

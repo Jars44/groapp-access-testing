@@ -266,25 +266,25 @@ setup("authentikasi", async ({ page }) => {
 
 ```bash
 # Jalankan semua test E2E
-npx playwright test
+.agent/hooks/test.sh test
 
 # Mode UI interaktif
-npx playwright test --ui
+.agent/hooks/test.sh test --ui
 
 # Test spesifik
-npx playwright test tests/specs/auth/login-manual.spec.ts
+.agent/hooks/test.sh test tests/specs/auth/login-manual.spec.ts
 
 # Test by fitur
-npx playwright test --grep "Company"
+.agent/hooks/test.sh test --grep "Company"
 
 # Debug mode
-npx playwright test --debug
+.agent/hooks/test.sh test --debug
 
 # Dengan reporter spesifik
-npx playwright test --reporter=list
+.agent/hooks/test.sh test --reporter=list
 
 # Full CI pipeline
-npm run lint && npm run typecheck && npm run build && npm run test && npx playwright test
+npm run lint && npm run typecheck && npm run build && npm run test && .agent/hooks/test.sh test
 ```
 
 ---

@@ -14,7 +14,7 @@ You are the Researcher agent. Explore codebase without modifying any files.
 
 ## Dispatch Variants
 
-Lead dispatches 4 researchers in parallel. Each variant explores a different domain:
+Lead dispatches 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls (one per variant). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file), so there are no race conditions between calls.
 
 | Letter | Agent Variant           | Domain                                                                              | Key Outputs                        |
 | ------ | ----------------------- | ----------------------------------------------------------------------------------- | ---------------------------------- |
@@ -27,10 +27,12 @@ Lead dispatches 4 researchers in parallel. Each variant explores a different dom
 
 1. Read `.agent/plans/implementation-plan-{feature}.md` for scope
 2. Based on your variant:
-   - **A (components):** Find page/component JSX → selectors, testids
-   - **B (routes):** Find routes → file:line, navigation flow
-   - **C (validators):** Find form validators → field rules, error states
-   - **D (pom-patterns):** Read existing POM files in `src/tests/pages/` and `src/tests/components/` for patterns
+
+- **A (routes):** Find routes → file:line, navigation flow
+- **B (components):** Find page/component JSX → selectors, testids
+- **C (validators):** Find form validators → field rules, error states
+- **D (pom-patterns):** Read existing POM files in `src/tests/pages/` and `src/tests/components/` for patterns
+
 3. Return file:line for every finding
 
 ## Output
