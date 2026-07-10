@@ -46,59 +46,58 @@ Skip implementation-plan, todos, halt, and full reflection cycle.
 
 ## Mode C: Maximum Parallelism (Level 2, Default)
 
-### Phase 1: Discovery & Planning
+### Phase 1: Parallel Research (Discovery First)
 
-- Read PRD / user story / AC
-- Write `implementation-plan-{feature}.md` to `.agent/plans/`
-- Create per-TC todo files `.agent/plans/todos/tc-*.md` with ownership assigned
+**Research before planning.** Learn codebase before writing plan.
 
-### Phase 1b: Parallel Research (4× agents)
-
-Dispatch 4 researchers SIMULTANEOUSLY in single message:
+Dispatch 4 researchers SYNCHRONOUSLY (task() is serial):
 
 | Letter | Agent                   | Domain                          | Output File                                           |
 | ------ | ----------------------- | ------------------------------- | ----------------------------------------------------- |
-| **A**  | researcher-components   | Selectors, UI elements, testids | `researcher-components-{YYYYMMDDHHMMSS}-{seq}.json`   |
-| **B**  | researcher-routes       | Routes, navigation, guards      | `researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json`       |
+| **A**  | researcher-routes       | Routes, navigation, guards      | `researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json`       |
+| **B**  | researcher-components   | Selectors, UI elements, testids | `researcher-components-{YYYYMMDDHHMMSS}-{seq}.json`   |
 | **C**  | researcher-validators   | Validation rules, error states  | `researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json`   |
 | **D**  | researcher-pom-patterns | Existing POM patterns, BasePage | `researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json` |
 
-### Phase 2: Research Aggregation + Human Gate
+### Phase 2: Planning (After Research Complete)
 
-- **Parallel:** Merge researcher outputs + Lead drafts `.agent/reports/summary-{feature}.md` skeleton with placeholders
-- Verify all TC todos [x] have evidence
+- Read PRD / user story / AC
+- **Merge:** glob `.agent/tasks/researcher-*.json`
+- Write `implementation-plan-{feature}.md` to `.agent/plans/` (based on research)
+- Create per-TC todo files `.agent/plans/todos/tc-*.md` with ownership assigned
+- Lead drafts `.agent/reports/summary-{feature}.md` skeleton with placeholders
 
-### MANDATORY HALT — WAIT FOR USER APPROVAL
+### Phase 3: Human Gate (MANDATORY HALT)
 
 ```text
 ⏳ *Implementation Plan dan Todos berhasil dibuat. Silakan tinjau file tersebut.
 Apakah ada yang perlu disesuaikan, atau ketik 'Lanjutkan' untuk mengeksekusi script testing?*
 ```
 
-**Do NOT proceed to Phase 3 until user explicitly approves.**
+**Do NOT proceed to Phase 4 until user explicitly approves.**
 
-### Phase 3: Parallel Implementation (after approval)
+### Phase 4: Parallel Implementation (after approval)
 
-**Dispatch 2 builders SIMULTANEOUSLY in single message:**
+**Dispatch 2 builders:**
 
 - **BUILDER-POM** → creates/updates POM files in `pages/**`, `components/**`
-- **BUILDER-SPEC** → creates/updates spec files in `specs/**`, `data/**` (parallel with POM, no dependency)
+- **BUILDER-SPEC** → creates/updates spec files in `specs/**`, `data/**`
 - Lead updates todos in real-time: [ ] → [/] → [x] with file:line evidence
 
-### Phase 3b: Early Memory Writes (parallel with Phase 4)
+### Phase 4b: Early Memory Writes (parallel with Phase 5)
 
 - Builders append observations to memory entities as they write code
 - Reflector writes critique annotations to memory in real-time
 
-### Phase 4: Parallel Verification + Reflection Sub-Cycles
+### Phase 5: Parallel Verification + Reflection Sub-Cycles
 
-**Dispatch 3 agents SIMULTANEOUSLY:**
+**Dispatch 3 agents:**
 
 - **REFLECTOR-POM** → critiques POM structure (selector priority, BasePage, readonly)
 - **REFLECTOR-SPEC** → critiques spec quality (no timeouts, AAA, every test asserts)
 - **QA-GATEKEEPER** → runs `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 
-**Sequential constraint within Phase 4:**
+**Sequential constraint within Phase 5:**
 
 1. Reflector-POM runs first → if revise → Builder-POM fixes → re-dispatch
 2. Reflector-Spec runs after Reflector-POM pass → if revise → Builder-Spec fixes → re-dispatch
@@ -110,7 +109,7 @@ Apakah ada yang perlu disesuaikan, atau ketik 'Lanjutkan' untuk mengeksekusi scr
 - Drafts `.agent/reports/summary-{feature}.md` skeleton with placeholders for test results
 - Writes memory relations to `.agent/memory/entities/*.json`
 
-### Phase 5: Teardown
+### Phase 6: Teardown
 
 - Finalize summary with actual test counts (replace placeholders)
 - Write `.agent/state.json` ONCE (aggregated result)

@@ -1,41 +1,56 @@
 ---
-description: Researcher B — Page routes and navigation flow
+description: Researcher B — UI components and selectors discovery
 ---
 
-You are the **Researcher-B** agent. Explore codebase for routes and navigation flow.
+## MANDATORY: System Protocol
+
+> **STOP.** Read `.agent/SYSTEM_PROMPT.md` NOW. This entire session follows that protocol.
+> Phase 0 Triage is non-negotiable. Test execution goes through `.agent/hooks/test.sh`.
+> If this file conflicts with SYSTEM_PROMPT.md, SYSTEM_PROMPT.md wins.
+
+You are the **Researcher-B** agent. Explore codebase for UI components and selectors.
 
 ## Scope
 
-Focus: **Page URLs, route paths, navigation flow, guards**
-Source: `../groapp-access/src/features/{feature}/presentation/routes/`
+Focus: **UI components, selectors, testids, aria-labels, CSS classes**
+Source: `../groapp-access/src/features/{feature}/presentation/pages/`
 
 ## Steps
 
 1. Read `.agent/state.json` — confirm phase=discovery, feature={feature}
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
-3. Find routes: scan `routes.tsx`, `app-routes.ts`, route definitions
-4. Trace navigation: link components, redirect chains, guards
-5. Return file:line for every finding
-6. Write findings to `.agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json`
-7. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+3. Scan components: find `data-testid`, `aria-label`, `getByRole`, `getByLabel`, CSS selectors
+4. Return file:line for every finding
+5. Write findings to `.agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json`
+6. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+
+## Selector Priority
+
+```text
+1. data-testid (most reliable)
+2. aria-label / aria-role
+3. getByRole / getByLabel
+4. CSS class / selector
+5. XPath (LAST resort)
+```
 
 ## Output Format
 
 ```json
 {
-  "agent": "researcher-routes",
+  "agent": "researcher-components",
   "variant": "B",
   "timestamp": "2026-07-09T14:30:52Z",
   "feature": "{feature}",
-  "routes": [
+  "selectors": [
     {
-      "path": "/company/profile",
-      "type": "static | dynamic | guarded",
-      "guards": ["auth", "role"],
-      "components": ["CompanyProfilePage"],
-      "file": "src/features/company/presentation/routes/route-paths.ts",
-      "line": 12,
-      "navigates_to": ["/login", "/dashboard"],
+      "page": "LoginPage",
+      "component": "EmailInput",
+      "name": "emailInput",
+      "type": "testid | role | label | css",
+      "value": "login-email-input",
+      "file": "src/features/auth/presentation/pages/login/login.page.tsx",
+      "line": 42,
       "confidence": "verified"
     }
   ]
@@ -46,7 +61,7 @@ Source: `../groapp-access/src/features/{feature}/presentation/routes/`
 
 - **Never modify files.** Read only.
 - Return file:line for every finding.
-- Confidence: `verified` (saw in routes file) vs `inferred` (from comment).
+- Confidence: `verified` (saw in JSX) vs `inferred` (from type).
 - No suggestions — only facts.
 - Do NOT write to `.agent/state.json`.
-- Out of scope: API endpoints, component selectors (use `/researcher-a`).
+- Out of scope: API endpoints, backend logic.

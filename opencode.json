@@ -141,12 +141,12 @@
       "template": ".opencode/commands/mode-c.md"
     },
     "researcher-a": {
-      "description": "Researcher A: Components & selectors discovery",
+      "description": "Researcher A: Routes & navigation discovery",
       "agent": "researcher",
       "template": ".opencode/commands/researcher-a.md"
     },
     "researcher-b": {
-      "description": "Researcher B: Routes & navigation discovery",
+      "description": "Researcher B: Components & selectors discovery",
       "agent": "researcher",
       "template": ".opencode/commands/researcher-b.md"
     },

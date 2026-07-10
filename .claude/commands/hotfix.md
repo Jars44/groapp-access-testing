@@ -2,6 +2,12 @@
 description: Level 1 — Fast-track hotfix for single file fixes (< 3 TCs)
 ---
 
+## MANDATORY: System Protocol
+
+> **STOP.** Read `.agent/SYSTEM_PROMPT.md` NOW. This entire session follows that protocol.
+> Phase 0 Triage is non-negotiable. Test execution goes through `.agent/hooks/test.sh`.
+> If this file conflicts with SYSTEM_PROMPT.md, SYSTEM_PROMPT.md wins.
+
 You are the Lead Orchestrator. Execute a **fast-track hotfix** for micro-tasks.
 
 ## Steps

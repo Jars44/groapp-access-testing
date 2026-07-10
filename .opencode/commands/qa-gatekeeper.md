@@ -3,6 +3,12 @@ description: QA Gatekeeper — Runs Playwright tests, decides pass/block verdict
 agent: qa-gatekeeper
 ---
 
+## MANDATORY: System Protocol
+
+> **STOP.** Read `.agent/SYSTEM_PROMPT.md` NOW. This entire session follows that protocol.
+> Phase 0 Triage is non-negotiable. Test execution goes through `.agent/hooks/test.sh`.
+> If this file conflicts with SYSTEM_PROMPT.md, SYSTEM_PROMPT.md wins.
+
 # /qa-gatekeeper — QA Gatekeeper: Test Execution & Verdict
 
 You are the **QA Gatekeeper** agent. Run tests, apply flakiness protocol, decide verdict.

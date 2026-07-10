@@ -311,10 +311,10 @@ PHASE 1 — Discovery & Planning (sequential — creates shared artifacts)
     ├── Lead: writes initial [ ] status to .agent/plans/todos/tc-01.md through tc-N.md
     │
     └── DISPATCH 4× researchers in single message:
-        ├── RESEARCHER-A (Selectors/UI) → .agent/tasks/researcher-components-{ts}.json
-        │   └── Owns: todos/tc-03.md, todos/tc-04.md (component-related TCs)
-        ├── RESEARCHER-B (Routes) → .agent/tasks/researcher-routes-{ts}.json
+        ├── RESEARCHER-A (Routes) → .agent/tasks/researcher-routes-{ts}.json
         │   └── Owns: todos/tc-01.md, todos/tc-02.md (route-related TCs)
+        ├── RESEARCHER-B (Selectors/UI) → .agent/tasks/researcher-components-{ts}.json
+        │   └── Owns: todos/tc-03.md, todos/tc-04.md (component-related TCs)
         ├── RESEARCHER-C (Validators) → .agent/tasks/researcher-validators-{ts}.json
         │   └── Owns: todos/tc-05.md, todos/tc-06.md (validation TCs)
         └── RESEARCHER-D (POM Patterns) → .agent/tasks/researcher-pom-patterns-{ts}.json

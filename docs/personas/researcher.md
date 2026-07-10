@@ -38,8 +38,8 @@ Lead dispatches 4 specialized researchers in parallel. Each owns different scope
 
 | Letter | Agent Variant           | Domain                                                                              | Outputs                            |
 | ------ | ----------------------- | ----------------------------------------------------------------------------------- | ---------------------------------- |
-| **A**  | researcher-components   | UI components, selectors, testids                                                   | `selectors` table + entity file    |
-| **B**  | researcher-routes       | Page URLs, route paths, navigation flow                                             | `routes` table + entity file       |
+| **A**  | researcher-routes       | Page URLs, route paths, navigation flow                                             | `routes` table + entity file       |
+| **B**  | researcher-components   | UI components, selectors, testids                                                   | `selectors` table + entity file    |
 | **C**  | researcher-validators   | Form validation rules, error states                                                 | `validators` table + entity file   |
 | **D**  | researcher-pom-patterns | Existing POM patterns, base classes, naming conventions in `groapp-access-testing/` | `pom-patterns` table + entity file |
 

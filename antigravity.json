@@ -62,22 +62,22 @@
     },
     {
       "name": "research-a",
-      "description": "Components and selectors discovery",
+      "description": "Routes and navigation discovery",
       "template": ".opencode/commands/researcher-a.md",
       "steps": [
         "Read implementation-plan.md",
-        "Scan components for selectors, testids, aria-labels",
+        "Scan routes, navigation, guards",
         "Return file:line for every finding",
         "Update TC todo files with evidence"
       ]
     },
     {
       "name": "research-b",
-      "description": "Routes and navigation discovery",
+      "description": "Components and selectors discovery",
       "template": ".opencode/commands/researcher-b.md",
       "steps": [
         "Read implementation-plan.md",
-        "Scan routes, navigation, guards",
+        "Scan components for selectors, testids, aria-labels",
         "Return file:line for every finding",
         "Update TC todo files with evidence"
       ]

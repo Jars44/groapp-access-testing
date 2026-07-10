@@ -5,6 +5,7 @@
 ## Entry Sequence (All Tools)
 
 ```text
+0. READ .agent/SYSTEM_PROMPT.md  — master agent protocol (THIS WINS OVER EVERYTHING)
 1. READ AGENTS.md            — this file, orchestration entry point
 2. READ CLAUDE.md            — AI behavior & output rules
 3. READ .agent/README.md     — agent metadata center
@@ -99,8 +100,8 @@ project/
 | `/triage`         | Lead                    | Phase 0: classify request → hotfix/mode-c/epic       |
 | `/hotfix`         | Lead → Builder          | Level 1: fast-track single file fix (< 3 TCs)        |
 | `/mode-c`         | Lead (orchestrator)     | Level 2: full Mode C pipeline (3-50 TCs)             |
-| `/researcher-a`   | researcher-components   | Components & selectors discovery                     |
-| `/researcher-b`   | researcher-routes       | Routes & navigation discovery                        |
+| `/researcher-a`   | researcher-routes       | Routes & navigation discovery                        |
+| `/researcher-b`   | researcher-components   | Components & selectors discovery                     |
 | `/researcher-c`   | researcher-validators   | Validators & error states discovery                  |
 | `/researcher-d`   | researcher-pom-patterns | POM patterns discovery in test framework             |
 | `/builder-pom`    | builder-pom             | Create/update Page Object Model files                |

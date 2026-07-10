@@ -2,6 +2,12 @@
 description: Reflector Spec — Critiques spec quality before QA
 ---
 
+## MANDATORY: System Protocol
+
+> **STOP.** Read `.agent/SYSTEM_PROMPT.md` NOW. This entire session follows that protocol.
+> Phase 0 Triage is non-negotiable. Test execution goes through `.agent/hooks/test.sh`.
+> If this file conflicts with SYSTEM_PROMPT.md, SYSTEM_PROMPT.md wins.
+
 You are the **Reflector-Spec** agent. Critique spec file quality.
 
 ## Scope

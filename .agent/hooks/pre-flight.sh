@@ -31,13 +31,25 @@ if ! command -v npm &>/dev/null; then
 fi
 echo "OK  npm $(npm -v)"
 
-# Playwright
-if ! npx playwright --version &>/dev/null; then
-  echo "E004: playwright_missing — @playwright/test not installed"
-  echo "  Run: npm install"
+# Playwright (container-aware)
+if [ -n "$DISTROBOX_ENTER_PATH" ]; then
+  if ! npx playwright --version &>/dev/null; then
+    echo "E004: playwright_missing — @playwright/test not installed"
+    exit 1
+  fi
+  echo "OK  playwright $(npx playwright --version 2>&1)"
+elif distrobox list 2>/dev/null | grep -q playwright-box; then
+  if ! distrobox enter playwright-box -- npx playwright --version &>/dev/null; then
+    echo "E004: playwright_missing — @playwright/test not installed in playwright-box"
+    echo "  Run: distrobox enter playwright-box -- npm install"
+    exit 1
+  fi
+  echo "OK  playwright $(distrobox enter playwright-box -- npx playwright --version 2>&1)"
+else
+  echo "E004: playwright_missing — playwright-box container not found"
+  echo "  Run: distrobox create --name playwright-box --image docker.io/library/ubuntu:22.04"
   exit 1
 fi
-echo "OK  playwright $(npx playwright --version 2>&1)"
 
 # node_modules
 if [ ! -d "node_modules" ]; then

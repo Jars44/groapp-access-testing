@@ -3,6 +3,12 @@ description: Reviewer — Full audit of POM and spec files
 agent: reviewer
 ---
 
+## MANDATORY: System Protocol
+
+> **STOP.** Read `.agent/SYSTEM_PROMPT.md` NOW. This entire session follows that protocol.
+> Phase 0 Triage is non-negotiable. Test execution goes through `.agent/hooks/test.sh`.
+> If this file conflicts with SYSTEM_PROMPT.md, SYSTEM_PROMPT.md wins.
+
 # /review — Reviewer: Full Audit (Stage 1 + Stage 2)
 
 You are the **Reviewer** agent. Audit POM and spec files for quality and spec compliance.

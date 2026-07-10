@@ -9,12 +9,12 @@ mode: subagent
 
 ## Tool Access
 
-| Tool                            | Access                                                                      |
-| ------------------------------- | --------------------------------------------------------------------------- |
-| read, glob, grep                | Full                                                                        |
+| Tool                                  | Access                                                                      |
+| ------------------------------------- | --------------------------------------------------------------------------- |
+| read, glob, grep                      | Full                                                                        |
 | bash (.agent/hooks/test.sh test only) | Execute                                                                     |
-| write                           | Only to `.agent/tasks/qa-gatekeeper-{timestamp}.json`                       |
-| **Restricted**                  | write to `.agent/state.json`, `.agent/plans/`, code edits, memory\_\*, task |
+| write                                 | Only to `.agent/tasks/qa-gatekeeper-{timestamp}.json`                       |
+| **Restricted**                        | write to `.agent/state.json`, `.agent/plans/`, code edits, memory\_\*, task |
 
 ## Pre-flight Checklist
 

@@ -3,6 +3,12 @@ description: Researcher D — Existing POM patterns in test framework
 agent: researcher
 ---
 
+## MANDATORY: System Protocol
+
+> **STOP.** Read `.agent/SYSTEM_PROMPT.md` NOW. This entire session follows that protocol.
+> Phase 0 Triage is non-negotiable. Test execution goes through `.agent/hooks/test.sh`.
+> If this file conflicts with SYSTEM_PROMPT.md, SYSTEM_PROMPT.md wins.
+
 # /researcher-d — Researcher D: POM Patterns
 
 You are the **Researcher-D** agent. Explore the test framework for existing POM patterns.

@@ -161,31 +161,30 @@ Each agent writes to separate entity files — prevents concurrent write conflic
 ### Parallel Discovery Workflow
 
 ```text
-LEAD AGENT (Phase 1 — Discovery & Planning)
+LEAD AGENT (Phase 1 — Discovery: Research)
 │
 ├── 1. Read PRD / AC (1 call)
 ├── 2. DISPATCH 4x researchers in single message (parallel read-only calls)
 │      │
-│      ├── RESEARCHER-A (components) (read-only, selectors/testids)
-│      │   └── Writes .agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json
-│      │
-│      ├── RESEARCHER-B (routes) (read-only, file:line tables)
+│      ├── RESEARCHER-A (routes) (read-only, file:line tables)
 │      │   └── Writes .agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json
+│      │
+│      ├── RESEARCHER-B (components) (read-only, selectors/testids)
+│      │   └── Writes .agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json
 │      │
 │      ├── RESEARCHER-C (validators) (read-only, validation rules)
 │      │   └── Writes .agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json
 │      │
 │      └── RESEARCHER-D (pom-patterns) (read-only, existing POM patterns in groapp-access-testing/)
 │        └── Writes .agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json
-├── 3. Write .agent/plans/implementation-plan-{feature}.md (sequential, no parallel)
-└── 4. Write .agent/plans/todos-{feature}.md initial [ ] rows
-
-
-▼ (4 researchers complete in parallel — wall-time = single research call)
+│
+▼ (4 researchers complete)
 
 LEAD AGGREGATES 4 partial findings
 │
-└── glob .agent/tasks/researcher-*.json → merge → update todos in real-time
+├── glob .agent/tasks/researcher-*.json → merge
+└── Write .agent/plans/implementation-plan-{feature}.md (based on research)
+    └── Write .agent/plans/todos-{feature}.md initial [ ] rows
 
 ▼ (handoff = 4 research files merged → feed builders)
 
@@ -350,28 +349,34 @@ LEAD AGENT
 ## Mode B: Sequential Pipeline (Default)
 
 ```text
-LEAD ARCHITECT (Phase 1 — Discovery & Planning)
+LEAD ARCHITECT (Phase 1 — Discovery: Research)
 │
 ├── 1. Read user story / PRD / AC
-├── 2. Identify all test scenarios, routes, APIs, validation rules
+├── 2. DISPATCH researcher (read-only code exploration)
+│
+▼
+
+RESEARCHER (Code Exploration)
+│
+├── 1. Find routes → file:line
+├── 2. Find page/component JSX → selectors, testids
+├── 3. Find API endpoints → request/response shapes
+├── 4. Find form validators → field rules, error states
+├── 5. Write findings to .agent/tasks/researcher-{timestamp}.json
+└── 6. Never modify code
+
+▼ (handoff via .agent/tasks/researcher-{ts}.json — human verifies findings)
+
+LEAD ARCHITECT (Phase 2 — Planning)
+│
+├── 1. Merge researcher findings
+├── 2. Read implementation-plan.md template
 ├── 3. Write .agent/plans/implementation-plan-{feature}.md using template
 │   └── Each TC has: ID, description, type, route, given/when/then,
 │       test data, selectors, verification criteria checklist
 ├── 4. Write .agent/plans/todos-{feature}.md
 │   └── Each TC gets [ ] row with: TC-ID, description, assignee, status, evidence
 └── 5. Read implementation-plan.md to confirm scope before dispatching
-
-▼ (handoff via todos + plan — human verifies implementation-plan-{feature}.md)
-
-RESEARCHER (Phase 2 — Code Exploration)
-│
-├── 1. Read .agent/plans/implementation-plan-{feature}.md for scope
-├── 2. Find routes → file:line
-├── 3. Find page/component JSX → selectors, testids
-├── 4. Find API endpoints → request/response shapes
-├── 5. Find form validators → field rules, error states
-├── 6. Write findings to .agent/tasks/researcher-{timestamp}.json
-└── 7. Never modify code
 
 ▼ (handoff via .agent/tasks/researcher-{ts}.json — human verifies findings)
 
@@ -675,8 +680,8 @@ Lead reads all → aggregates → .agent/state.json (ONCE) + .agent/memory/entit
 
 | Phase   | Agent                                   | Handoff                                |
 | ------- | --------------------------------------- | -------------------------------------- |
-| Phase 1 | Lead writes implementation-plan + todos | → human verifies                       |
-| Phase 2 | task(researcher) → findings             | → .agent/tasks/researcher-{ts}.json    |
+| Phase 1 | task(researcher) → findings             | → .agent/tasks/researcher-{ts}.json    |
+| Phase 2 | Lead writes implementation-plan + todos | → human verifies                       |
 | Phase 3 | task(builder) → files                   | → .agent/tasks/builder-{ts}.json       |
 | Phase 4 | task(qa-gatekeeper) → results           | → .agent/tasks/qa-gatekeeper-{ts}.json |
 | Phase 5 | Lead merges → summary                   | → .agent/state.json (once)             |

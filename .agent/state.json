@@ -30,8 +30,8 @@
     "max_attempts": 3,
     "phases": {
       "triage": { "agent": "lead", "parallel": false },
-      "discovery": { "agents": ["lead", "researcher-A", "researcher-B", "researcher-C", "researcher-D"], "parallel": true },
-      "planning": { "agents": ["lead"], "parallel": false, "depends_on": "discovery" },
+      "research": { "agents": ["researcher-A", "researcher-B", "researcher-C", "researcher-D"], "parallel": true },
+      "planning": { "agents": ["lead"], "parallel": false, "depends_on": "research" },
       "human_gate": { "agents": ["lead", "user"], "parallel": false, "depends_on": "planning" },
       "implementation": { "agents": ["builder-pom", "builder-spec", "lead"], "parallel": true, "depends_on": "human_gate" },
       "reflection_pom": { "agents": ["reflector-pom"], "parallel": false, "depends_on": "implementation" },
@@ -78,8 +78,8 @@
     "strategy": "per-entity-files",
     "ownership": {
       "lead": ["relation_creation", "schema_validation"],
-      "researcher-A": ["component-selector"],
-      "researcher-B": ["route"],
+      "researcher-A": ["route"],
+      "researcher-B": ["component-selector"],
       "researcher-C": ["validation-rule"],
       "researcher-D": ["pom-pattern"],
       "builder-pom": ["observation_updates"],
@@ -234,7 +234,7 @@
       "triage_to_hotfix": { "required": ["triage.level"], "level": "hotfix", "phase": "triage" },
       "triage_to_mode_c": { "required": ["triage.level"], "level": "standard", "phase": "triage" },
       "triage_to_epic": { "required": ["triage.level"], "level": "epic", "phase": "triage", "action": "defer" },
-      "lead_to_researchers": { "required": ["pipeline.phase", "artifacts.implementation_plan"], "phase": "discovery" },
+      "lead_to_researchers": { "required": ["pipeline.phase", "triage.level"], "phase": "research" },
       "researchers_to_builders": { "required": ["artifacts.research_findings"], "phase": "exploration" },
       "halt_to_user": { "required": ["artifacts.implementation_plan", "todos.count"], "phase": "planning_complete" },
       "builders_to_reflector": { "required": ["artifacts.pom_files", "artifacts.spec_files"], "phase": "implementation" },
@@ -253,15 +253,15 @@
         "parallel": false,
         "writes": [".agent/state.json"]
       },
-      "discovery": {
-        "agents": ["lead", "researcher-A", "researcher-B", "researcher-C", "researcher-D"],
+      "research": {
+        "agents": ["researcher-A", "researcher-B", "researcher-C", "researcher-D"],
         "parallel": true,
-        "writes": [".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json", ".agent/tasks/researcher-{variant}-{YYYYMMDDHHMMSS}-{seq}.json"]
+        "writes": [".agent/memory/entities/*.json", ".agent/tasks/researcher-{variant}-{YYYYMMDDHHMMSS}-{seq}.json"]
       },
       "planning": {
         "agents": ["lead"],
         "parallel": false,
-        "depends_on": "discovery",
+        "depends_on": "research",
         "writes": [".agent/plans/implementation-plan-{feature}.md", ".agent/plans/todos/tc-*.md"]
       },
       "human_gate": {
@@ -301,7 +301,7 @@
       }
     },
     "hotfix": {
-      "skip_phases": ["discovery", "planning", "human_gate", "reflection_pom", "reflection_spec"],
+      "skip_phases": ["research", "planning", "human_gate", "reflection_pom", "reflection_spec"],
       "required_phases": ["triage", "implementation", "verification", "teardown"],
       "max_tcs": 3,
       "output_format": "brief_status_message"
