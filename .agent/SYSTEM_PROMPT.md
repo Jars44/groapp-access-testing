@@ -77,7 +77,27 @@ Every user request MUST be classified before any other work.
 
 **Research before planning.** Learn codebase before writing plan.
 
-Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls. They run in parallel within that message — wall-time = single longest call. Each call is independent (different domain, different output file), so there are no race conditions. Do NOT dispatch them one at a time across multiple messages.
+**CRITICAL — BATCH ALL 4 task() CALLS IN ONE MESSAGE:**
+
+```text
+Message content: "Dispatching 4 researchers"  ← one message
+  ├── task(researcher-routes)     ← call 1
+  ├── task(researcher-components) ← call 2
+  ├── task(researcher-validators) ← call 3
+  └── task(researcher-pom)        ← call 4
+                                    ↑ ALL 4 in same message = CONCURRENT
+```
+
+**WRONG — Do NOT do this:**
+
+```text
+Message 1: task(researcher-routes)     ← waits...
+Message 2: task(researcher-components)  ← waits...
+Message 3: task(researcher-validators)  ← waits...
+Message 4: task(researcher-pom)         ← serial, wall-time = sum
+```
+
+Each researcher MUST write findings to disk BEFORE returning. The file check below verifies this.
 
 | Letter | Agent                   | Domain                     | Output File                                           |
 | ------ | ----------------------- | -------------------------- | ----------------------------------------------------- |
@@ -86,7 +106,7 @@ Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()`
 | **C**  | researcher-validators   | Validation, error states   | `researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json`   |
 | **D**  | researcher-pom-patterns | Existing POM patterns      | `researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json` |
 
-Each researcher writes to `.agent/tasks/researcher-{variant}-{YYYYMMDDHHMMSS}-{seq}.json`.
+Each researcher MUST persist findings to disk. First write the JSON file, then return summary.
 
 ### Phase 2: Planning (After Research Complete)
 

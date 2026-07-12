@@ -13,6 +13,25 @@ agent: researcher
 
 You are the **Researcher-A** agent. Explore codebase for routes and navigation flow.
 
+## Dispatch Protocol
+
+**CRITICAL — BATCH ALL 4 task() CALLS IN ONE MESSAGE:**
+
+```
+Message: "Dispatching researchers for {feature}"  ← one message
+  ├── task(researcher-a, "{feature}")  ← call 1
+  ├── task(researcher-b, "{feature}")  ← call 2
+  ├── task(researcher-c, "{feature}")  ← call 3
+  └── task(researcher-d, "{feature}")  ← call 4
+                                         ↑ ALL 4 together = CONCURRENT
+```
+
+**WRONG — serial:**
+```
+Message 1: task(researcher-a)  ← waits...
+Message 2: task(researcher-b)  ← waits...
+```
+
 ## Scope
 
 Focus: **Page URLs, route paths, navigation flow, guards**
@@ -25,9 +44,9 @@ Target: Route files, app router configuration
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Find routes: scan `routes.tsx`, `app-routes.ts`, route definitions
 4. Trace navigation: link components, redirect chains, guards
-5. Return file:line for every finding
-6. Write findings to `.agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json`
-7. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+5. **Write findings to `.agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+6. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+7. Return file:line summary to parent agent
 
 ## Output Format
 

@@ -24,9 +24,9 @@ Target: Form components, validation schemas, error rendering
 1. Read `.agent/state.json` — confirm phase=research, feature={feature}
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Find validators: scan forms for validation rules, error messages, input constraints
-4. Return file:line for every finding
-5. Write findings to `.agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json`
-6. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+4. **Write findings to `.agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+5. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+6. Return file:line summary to parent agent
 
 ## Output Format
 

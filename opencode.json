@@ -100,7 +100,11 @@
       "prompt": "{file:.opencode/agents/reflector.md}",
       "permission": {
         "read": "allow",
-        "edit": "deny",
+        "edit": {
+          ".agent/tasks/reflector-*": "allow",
+          ".agent/memory/entities/*.json": "allow",
+          "*": "deny"
+        },
         "glob": "allow",
         "grep": "allow",
         "bash": "deny",

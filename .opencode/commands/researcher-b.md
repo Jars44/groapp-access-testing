@@ -23,10 +23,10 @@ Target: All `.tsx` component files in the feature directory
 
 1. Read `.agent/state.json` — confirm phase=research, feature={feature}
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
-3. Scan components: find `data-testid`, `aria-label`, `getByRole`, `getByLabel`, CSS selectors
-4. Return file:line for every finding
-5. Write findings to `.agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json`
-6. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+3. Find selectors: scan component JSX for testid, aria, role, label
+4. **Write findings to `.agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+5. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+6. Return file:line summary to parent agent
 
 ## Selector Priority
 

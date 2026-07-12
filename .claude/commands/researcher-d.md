@@ -21,9 +21,9 @@ Source: `src/tests/` (groapp-access-testing, NOT groapp-access)
 2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
 3. Scan existing POM patterns in test framework
 4. Identify conventions to follow (DRY principle)
-5. Return file:line for every finding
-6. Write findings to `.agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json`
-7. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+5. **Write findings to `.agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+6. Update assigned TC todo files: [ ] → [/] → [x] with evidence
+7. Return file:line summary to parent agent
 
 ## Output Format
 

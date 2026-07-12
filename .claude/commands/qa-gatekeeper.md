@@ -17,7 +17,8 @@ You are the **QA Gatekeeper** agent. Run tests, apply flakiness protocol, decide
 3. Verify test files exist on disk
 4. Run `.agent/hooks/test.sh test --grep "{feature}" --reporter=list`
 5. If failures → run 2 more times (flakiness protocol)
-6. Write results to `.agent/tasks/qa-gatekeeper-{YYYYMMDDHHMMSS}-{seq}.json`
+6. **Write results to `.agent/tasks/qa-gatekeeper-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+7. Return verdict summary to parent agent
 
 ## Flakiness Protocol
 

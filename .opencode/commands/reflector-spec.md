@@ -28,7 +28,8 @@ Target: Spec files from Builder-Spec (`src/tests/specs/**/*.spec.ts`, `src/tests
 2. Read `.agent/tasks/reflector-pom-{timestamp}.json` — ensure POM passed
 3. Read spec files from Builder-Spec
 4. Check against constitutions 001-004
-5. Write findings to `.agent/tasks/reflector-{YYYYMMDDHHMMSS}-{seq}.json`
+5. **Write findings to `.agent/tasks/reflector-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+6. Return critique summary to parent agent with verdict + file:line evidence.
 
 ## Spec Critique Checklist
 

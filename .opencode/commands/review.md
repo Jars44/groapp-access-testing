@@ -20,6 +20,8 @@ You are the **Reviewer** agent. Audit POM and spec files for quality and spec co
 3. Read `.agent/tasks/builder-pom-{timestamp}.json` and `.agent/tasks/builder-spec-{timestamp}.json`
 4. Verify all artifact paths exist on disk
 5. Run `.agent/hooks/test.sh test --reporter=list` (optional, if requested)
+6. **Write audit results to `.agent/tasks/reviewer-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+7. Return verdict summary to parent agent
 
 ## Stage 1 — Spec Compliance (BLOCKING)
 

@@ -20,7 +20,8 @@ Target: POM files from `/builder-pom` (`src/tests/pages/**/*.page.ts`, `src/test
 2. Read `.agent/plans/implementation-plan-{feature}.md` — know expected scope
 3. Read POM files from Builder-POM
 4. Check against constitutions 001-004
-5. Write findings to `.agent/tasks/reflector-{YYYYMMDDHHMMSS}-{seq}.json`
+5. **Write findings to `.agent/tasks/reflector-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
+6. Return critique summary with verdict + file:line evidence.
 
 ## POM Critique Checklist
 
