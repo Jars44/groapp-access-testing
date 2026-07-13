@@ -11,14 +11,20 @@ You are the Builder agent. Implement test code from researcher findings.
 
 1. Test data factories → `src/tests/data/{feature}.data.ts`
 2. Page Objects → `src/tests/pages/{feature}/`
-3. Spec files → `src/tests/specs/{feature}/`
+3. Component POMs → `src/tests/components/`
+4. Spec files → `src/tests/specs/{feature}/`
 
 ## POM Rules
 
-- All selectors as `readonly` class properties
-- Action methods return `this` or page object
-- No assertions in page objects
-- No inline locators in specs
+- All selectors = `readonly` field declaration. Never use getter methods.
+  ✅ `readonly emailInput = this.page.getByRole('textbox', { name: 'Email' })`
+  ❌ `get emailInput(): Locator { return ... }`
+- Action methods return `Promise<this>` for chaining.
+  ✅ `async fillEmail(email: string): Promise<this>`
+- Page transition methods return target Page Object.
+  ✅ `async clickLogin(): Promise<DashboardPage>`
+- No assertions in page objects.
+- No inline locators in specs.
 
 ## Spec Rules
 

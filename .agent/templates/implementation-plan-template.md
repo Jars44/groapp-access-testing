@@ -92,7 +92,7 @@ mode: template
 
 | Phase          | Status | File | Line | Notes |
 | -------------- | ------ | ---- | ---- | ----- |
-| Discovery      | [ ]    |      |      |       |
+| Research       | [ ]    |      |      |       |
 | Implementation | [ ]    |      |      |       |
 | Reflection     | [ ]    |      |      |       |
 | Test Run       | [ ]    |      |      |       |

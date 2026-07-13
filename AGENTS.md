@@ -45,22 +45,40 @@ project/
 │   │   ├── researcher.md       ← Code explorer (subagent)
 │   │   ├── builder.md          ← Test implementor (subagent)
 │   │   ├── reflector.md        ← Self-critique (subagent)
-│   │   └── qa-gatekeeper.md    ← Test runner (subagent)
+│   │   ├── qa-gatekeeper.md    ← Test runner (subagent)
+│   │   ├── reviewer.md         ← Code auditor (subagent)
+│   │   └── senior-qa-engineer.md ← Default persona (primary)
+│   ├── commands/
+│   └── skills/
+├── .claude/                    ← Claude Code custom agents + commands + skills
+│   ├── agents/
+│   │   ├── lead.md
+│   │   ├── researcher.md
+│   │   ├── builder.md
+│   │   ├── reflector.md
+│   │   ├── qa-gatekeeper.md
+│   │   ├── reviewer.md
+│   │   └── senior-qa-engineer.md
 │   ├── commands/
 │   └── skills/
 ├── .agent/                     ← Universal metadata center
-│   ├── README.md               ← Master entrypoint
+│   ├── SYSTEM_PROMPT.md        ← Master agent protocol (THIS WINS OVER EVERYTHING)
+│   ├── README.md               ← Agent metadata center entrypoint
 │   ├── state.json              ← Pipeline state machine
 │   ├── settings.json           ← Runtime config, persona tool restrictions
+│   ├── mcp.json                ← MCP tool schema
 │   ├── memory/                 ← Cross-session knowledge graph
+│   │   ├── schema.md           ← Entity/relation schemas
+│   │   └── entities/           ← Per-entity JSON files
 │   ├── plans/                  ← Test plans + per-TC todos
+│   │   └── todos/              ← Per-TC todo files
 │   ├── tasks/                  ← Per-agent output files
 │   ├── reports/                ← Implementation summaries
 │   ├── templates/              ← Dispatch prompts + implementation-plan template
 │   └── hooks/                  ← Pre/post validation scripts
 ├── docs/
 │   ├── constitution/           ← Non-negotiable rules (001-005)
-│   ├── workflows/              ← SOPs (001-003)
+│   ├── workflows/              ← SOPs (000-003)
 │   ├── personas/               ← Agent role definitions
 │   └── reference/              ← Tech stack, directory, test data
 └── skills/                     ← Specialized skills
@@ -71,13 +89,15 @@ project/
 
 ## Agent Personas
 
-| Persona           | File                                 | Role                            |
-| ----------------- | ------------------------------------ | ------------------------------- |
-| Lead Orchestrator | `docs/personas/orchestrator-lead.md` | Planning, delegation, teardown  |
-| Researcher        | `docs/personas/researcher.md`        | Read-only code exploration      |
-| Builder           | `docs/personas/builder.md`           | POM + spec implementation       |
-| Reflector         | `docs/personas/reflector.md`         | Self-critique before QA         |
-| QA Gatekeeper     | `docs/personas/qa-gatekeeper.md`     | Test execution, flakiness check |
+| Persona            | File                                  | Role                            |
+| ------------------ | ------------------------------------- | ------------------------------- |
+| Lead Orchestrator  | `docs/personas/orchestrator-lead.md`  | Planning, delegation, teardown  |
+| Researcher         | `docs/personas/researcher.md`         | Read-only code exploration      |
+| Builder            | `docs/personas/builder.md`            | POM + spec implementation       |
+| Reflector          | `docs/personas/reflector.md`          | Self-critique before QA         |
+| QA Gatekeeper      | `docs/personas/qa-gatekeeper.md`      | Test execution, flakiness check |
+| Reviewer           | `docs/personas/reviewer.md`           | Code audit (Stage 1 + Stage 2)  |
+| Senior QA Engineer | `docs/personas/senior-qa-engineer.md` | Default persona, test strategy  |
 
 ## Templates
 
@@ -110,6 +130,7 @@ project/
 | `/reflector-spec` | reflector-spec          | Critique spec quality (no timeouts, AAA pattern)     |
 | `/qa-gatekeeper`  | qa-gatekeeper           | Run tests, apply flakiness protocol, verdict         |
 | `/review`         | reviewer                | Full audit (Stage 1 compliance + Stage 2 quality)    |
+| `/test`           | —                       | Run full test suite and generate report              |
 
 ## Conflict Prevention
 

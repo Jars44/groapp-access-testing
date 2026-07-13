@@ -21,9 +21,10 @@ Targets: POM files from Builder-POM.
 ### Checklist
 
 - [ ] Page Object extends BasePage?
-- [ ] All selectors = readonly class properties?
+- [ ] All selectors = `readonly` fields (NOT getter methods)?
 - [ ] No inline locators in spec files?
 - [ ] Action methods return `this` or target page?
+- [ ] Page transitions return target Page Object (not `this`)?
 - [ ] No assertions in POM?
 - [ ] Selector priority: testid > role > label > css?
 - [ ] Component POMs used for shared UI?

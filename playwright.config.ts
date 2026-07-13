@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: 'html',
   timeout: 0,
   globalSetup: require.resolve('./src/tests/global-setup'),
-  globalTeardown: require.resolve('./src/tests/global-teardown'),
+
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',

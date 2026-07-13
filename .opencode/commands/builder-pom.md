@@ -28,8 +28,13 @@ Target: `src/tests/pages/**/*.page.ts`, `src/tests/components/**/*.component.ts`
 
 ## Hard Rules
 
-- Every selector = `readonly` class property. No inline locators.
-- Action methods return `this` or target page object for chaining.
+- Every selector = `readonly` field declaration. Never use getter methods.
+  ✅ `readonly emailInput = this.page.getByRole('textbox', { name: 'Email' })`
+  ❌ `get emailInput(): Locator { return ... }`
+- Action methods return `Promise<this>` for chaining.
+  ✅ `async fillEmail(email: string): Promise<this>`
+- Page transitions return target Page Object.
+  ✅ `async clickLogin(): Promise<DashboardPage>`
 - No assertions in POM. Only specs assert.
 - Extends `BasePage`.
 - Selector priority: `testid > role > label > css`.
