@@ -21,15 +21,3 @@ export function generateCompanyPayload(overrides?: Partial<{
     ...overrides,
   };
 }
-
-export const COMPANY_VALIDATION = {
-  nameMinLength: 3,
-  nameMaxLength: 60,
-  postalCodeMaxLength: 5,
-  phoneMaxLength: 13,
-  emailMaxLength: 50,
-  npwpLength: 16,
-  nibLength: 13,
-  logoMaxSizeMB: 2,
-  nameAllowedPattern: /^[A-Za-z0-9., ]+$/,
-};

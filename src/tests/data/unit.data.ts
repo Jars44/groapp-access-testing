@@ -20,8 +20,3 @@ export function generateUnitPayload(overrides?: Partial<{
     ...overrides,
   };
 }
-
-export const UNIT_VALIDATION = {
-  nameMinLength: 3,
-  nameMaxLength: 60,
-};

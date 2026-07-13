@@ -3,25 +3,17 @@ import { SEL } from '../../utils/selectors';
 
 export class ModalComponent {
   readonly root: Locator;
+  readonly closeButton: Locator;
+  readonly title: Locator;
+  readonly confirmButton: Locator;
+  readonly cancelButton: Locator;
 
   constructor(readonly page: Page) {
     this.root = page.locator(SEL.modal.root);
-  }
-
-  get closeButton(): Locator {
-    return this.root.getByRole('button', { name: /close|tutup/i });
-  }
-
-  get title(): Locator {
-    return this.root.locator(SEL.modal.title);
-  }
-
-  get confirmButton(): Locator {
-    return this.root.getByRole('button', { name: /confirm|ya|simpan|hapus/i });
-  }
-
-  get cancelButton(): Locator {
-    return this.root.getByRole('button', { name: /cancel|batal|kembali/i });
+    this.closeButton = this.root.getByRole('button', { name: /close|tutup/i });
+    this.title = this.root.locator(SEL.modal.title);
+    this.confirmButton = this.root.getByRole('button', { name: /confirm|ya|simpan|hapus/i });
+    this.cancelButton = this.root.getByRole('button', { name: /cancel|batal|kembali/i });
   }
 
   async waitForOpen(): Promise<void> {
@@ -32,16 +24,19 @@ export class ModalComponent {
     await expect(this.root).not.toBeVisible();
   }
 
-  async close(): Promise<void> {
+  async close(): Promise<this> {
     await this.closeButton.click();
     await this.waitForClose();
+    return this;
   }
 
-  async confirm(): Promise<void> {
+  async confirm(): Promise<this> {
     await this.confirmButton.click();
+    return this;
   }
 
-  async cancel(): Promise<void> {
+  async cancel(): Promise<this> {
     await this.cancelButton.click();
+    return this;
   }
 }

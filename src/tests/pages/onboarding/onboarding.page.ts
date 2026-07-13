@@ -4,36 +4,26 @@ import { SEL } from '../../utils/selectors';
 
 export class OnboardingPage extends BasePage {
   readonly url = '/onboarding';
+  readonly stepper: Locator;
+  readonly stepIndicators: Locator;
+  readonly workspaceNameInput: Locator;
+  readonly companyNameInput: Locator;
+  readonly businessTypeDropdown: Locator;
+  readonly unitNameInput: Locator;
+  readonly submitButton: Locator;
+  readonly nextButton: Locator;
+  readonly backButton: Locator;
 
   constructor(page: Page) {
     super(page);
-  }
-
-  get stepper(): Locator {
-    return this.page.locator(SEL.indicator.stepper);
-  }
-  get stepIndicators(): Locator {
-    return this.page.getByTestId('step-indicator');
-  }
-  get workspaceNameInput(): Locator {
-    return this.page.locator('input[name="workspaceName"], [name="workspace_name"]');
-  }
-  get companyNameInput(): Locator {
-    return this.page.locator(SEL.form.name);
-  }
-  get businessTypeDropdown(): Locator {
-    return this.page.getByTestId('business-type-select');
-  }
-  get unitNameInput(): Locator {
-    return this.page.locator('input[name="unitName"], [name="unit_name"], [name="unit"]');
-  }
-  get submitButton(): Locator {
-    return this.page.getByRole('button', { name: SEL.button.simpan });
-  }
-  get nextButton(): Locator {
-    return this.page.getByRole('button', { name: SEL.button.lanjut });
-  }
-  get backButton(): Locator {
-    return this.page.getByRole('button', { name: SEL.button.kembali });
+    this.stepper = this.page.getByTestId(SEL.testid.stepper);
+    this.stepIndicators = this.page.getByTestId(SEL.testid.stepIndicator);
+    this.workspaceNameInput = this.page.getByRole('textbox', { name: /workspace/i });
+    this.companyNameInput = this.page.getByRole('textbox', { name: /company|perusahaan/i });
+    this.businessTypeDropdown = this.page.getByTestId(SEL.testid.businessTypeSelect);
+    this.unitNameInput = this.page.getByRole('textbox', { name: /unit/i });
+    this.submitButton = this.page.getByRole('button', { name: SEL.button.simpan });
+    this.nextButton = this.page.getByRole('button', { name: SEL.button.lanjut });
+    this.backButton = this.page.getByRole('button', { name: SEL.button.kembali });
   }
 }

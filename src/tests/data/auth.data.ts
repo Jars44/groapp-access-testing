@@ -1,3 +1,5 @@
+import { requireEnv } from '../utils/env';
+
 export function generateRegisterPayload(overrides?: Partial<{
   name: string;
   email: string;
@@ -16,7 +18,6 @@ export function generateRegisterPayload(overrides?: Partial<{
   agreeToTerms: boolean;
 } {
   const timestamp = Date.now();
-  // Name validator /^[A-Za-z., ]+$/ does not allow numbers. Convert timestamp to letters.
   const nameLetters = String(timestamp)
     .split('')
     .map((d) => String.fromCharCode(97 + Number(d)))
@@ -32,8 +33,6 @@ export function generateRegisterPayload(overrides?: Partial<{
     ...overrides,
   };
 }
-
-import { requireEnv } from '../utils/env';
 
 export const VALID_CREDENTIALS = {
   email: requireEnv('TEST_USER_EMAIL'),

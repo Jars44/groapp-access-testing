@@ -5,9 +5,3 @@ export function generateWorkspacePayload(overrides?: Partial<{ name: string }>):
     ...overrides,
   };
 }
-
-export const WORKSPACE_VALIDATION = {
-  nameMinLength: 3,
-  nameMaxLength: 60,
-  nameAllowedPattern: /^[A-Za-z0-9., ]+$/,
-};

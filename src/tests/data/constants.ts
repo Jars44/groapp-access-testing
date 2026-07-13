@@ -15,18 +15,6 @@ export const TIMEOUTS = {
   animation: 1000,
 } as const;
 
-export const VALIDATION = {
-  companyNameMaxLength: 60,
-  companyNameMinLength: 3,
-  postalCodeMaxLength: 5,
-  phoneMaxLength: 13,
-  npwpLength: 16,
-  workspaceNameMaxLength: 60,
-  workspaceNameMinLength: 3,
-  passwordMinLength: 8,
-  logoMaxSizeMB: 2,
-} as const;
-
 export const ROUTES = {
   login: '/auth/login',
   register: '/auth/register',

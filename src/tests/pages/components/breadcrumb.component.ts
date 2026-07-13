@@ -1,18 +1,17 @@
-import { type Locator, type Page, expect } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
 
 export class BreadcrumbComponent {
   readonly root: Locator;
+  readonly items: Locator;
 
   constructor(readonly page: Page) {
     this.root = page.getByRole('navigation', { name: /breadcrumb/i });
+    this.items = this.root.locator('a, span, button');
   }
 
-  get items(): Locator {
-    return this.root.locator('a, span, button');
-  }
-
-  async clickItem(label: string | RegExp): Promise<void> {
+  async clickItem(label: string | RegExp): Promise<this> {
     await this.root.getByText(label).click();
+    return this;
   }
 
   async getLastItemText(): Promise<string> {

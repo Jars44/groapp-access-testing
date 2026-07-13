@@ -4,53 +4,49 @@ import { SEL } from '../../utils/selectors';
 
 export class NotificationListPage extends BasePage {
   readonly url = '/notifications';
+  readonly notificationList: Locator;
+  readonly emptyState: Locator;
+  readonly filterButton: Locator;
+  readonly loadMoreTrigger: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.notificationList = this.page.getByTestId(SEL.testid.notificationItem);
+    this.emptyState = this.page.getByTestId(SEL.testid.emptyData);
+    this.filterButton = this.page.getByTestId(SEL.testid.filterButton);
+    this.loadMoreTrigger = this.page.getByTestId(SEL.testid.infiniteScrollTrigger);
   }
 
-  get notificationList(): Locator {
-    return this.page.getByTestId('notification-item');
-  }
-  get emptyState(): Locator {
-    return this.page.locator(SEL.state.empty);
-  }
-  get filterButton(): Locator {
-    return this.page.getByTestId('filter-button');
-  }
-  get loadMoreTrigger(): Locator {
-    return this.page.getByTestId('infinite-scroll-trigger');
-  }
-
-  async clickNotification(index = 0): Promise<void> {
+  async clickNotification(index = 0): Promise<this> {
     await this.notificationList.nth(index).click();
+    return this;
   }
 
-  async clickAcceptInvitation(): Promise<void> {
+  async clickAcceptInvitation(): Promise<this> {
     await this.page.getByRole('button', { name: /terima|accept/i }).click();
+    return this;
   }
 
-  async clickDeclineInvitation(): Promise<void> {
+  async clickDeclineInvitation(): Promise<this> {
     await this.page.getByRole('button', { name: /tolak|decline/i }).click();
+    return this;
   }
 }
 
 export class NotificationDetailModalPage extends BasePage {
+  readonly title: Locator;
+  readonly body: Locator;
+  readonly closeButton: Locator;
+
   constructor(page: Page) {
     super(page);
+    this.title = this.page.getByRole('dialog').getByRole('heading');
+    this.body = this.page.getByRole('dialog').getByTestId(SEL.testid.notificationBody);
+    this.closeButton = this.page.getByRole('dialog').getByRole('button', { name: /close|tutup/i });
   }
 
-  get title(): Locator {
-    return this.page.locator(SEL.modal.title);
-  }
-  get body(): Locator {
-    return this.page.getByRole('dialog').getByTestId('notification-body');
-  }
-  get closeButton(): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: /close|tutup/i });
-  }
-
-  async close(): Promise<void> {
+  async close(): Promise<this> {
     await this.closeButton.click();
+    return this;
   }
 }

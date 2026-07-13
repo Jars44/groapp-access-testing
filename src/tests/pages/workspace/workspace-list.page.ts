@@ -4,71 +4,64 @@ import { SEL } from '../../utils/selectors';
 
 export class WorkspaceListPage extends BasePage {
   readonly url = '/workspaces';
+  readonly createButton: Locator;
+  readonly searchInput: Locator;
+  readonly workspaceCards: Locator;
+  readonly emptyState: Locator;
+  readonly loadMoreTrigger: Locator;
+  readonly typeToConfirmInput: Locator;
+  readonly deleteConfirmButton: Locator;
+  readonly impactInfoModal: Locator;
 
   constructor(page: Page) {
     super(page);
+    this.createButton = this.page.getByRole('button', { name: SEL.button.tambah });
+    this.searchInput = this.page.getByRole('searchbox');
+    this.workspaceCards = this.page.getByTestId(SEL.testid.workspaceCard);
+    this.emptyState = this.page.getByTestId(SEL.testid.emptyData);
+    this.loadMoreTrigger = this.page.getByTestId(SEL.testid.infiniteScrollTrigger);
+    this.typeToConfirmInput = this.page.getByPlaceholder(/ketik|type to confirm|ketik nama/i);
+    this.deleteConfirmButton = this.page.getByRole('button', { name: /hapus|delete/i });
+    this.impactInfoModal = this.page.getByRole('dialog').filter({ hasText: /dampak|impact/i });
   }
 
-  get createButton(): Locator {
-    return this.page.getByRole('button', { name: SEL.button.tambah });
-  }
-  get searchInput(): Locator {
-    return this.page.locator(SEL.form.search);
-  }
-  get workspaceCards(): Locator {
-    return this.page.getByTestId('workspace-card');
-  }
-  get emptyState(): Locator {
-    return this.page.getByTestId('empty-data');
-  }
-  get loadMoreTrigger(): Locator {
-    return this.page.getByTestId('infinite-scroll-trigger');
-  }
-  get typeToConfirmInput(): Locator {
-    return this.page.locator('input[name="confirmName"], input[placeholder*="ketik" i]');
-  }
-  get deleteConfirmButton(): Locator {
-    return this.page.getByRole('button', { name: /hapus|delete/i });
-  }
-  get impactInfoModal(): Locator {
-    return this.page.getByRole('dialog').filter({ hasText: /dampak|impact/i });
-  }
-
-  async search(keyword: string): Promise<void> {
+  async search(keyword: string): Promise<this> {
     await this.searchInput.fill(keyword);
+    return this;
   }
 
-  async clickCreate(): Promise<void> {
+  async clickCreate(): Promise<this> {
     await this.createButton.click();
+    return this;
   }
 
-  async clickWorkspace(index = 0): Promise<void> {
+  async clickWorkspace(index = 0): Promise<this> {
     await this.workspaceCards.nth(index).click();
+    return this;
   }
 }
 
 export class WorkspaceFormModalPage extends BasePage {
+  readonly nameInput: Locator;
+  readonly submitButton: Locator;
+  readonly errorText: Locator;
+  readonly cancelButton: Locator;
+
   constructor(page: Page) {
     super(page);
+    this.nameInput = this.page.getByRole('dialog').getByRole('textbox', { name: /name|nama|workspace/i });
+    this.submitButton = this.page.getByRole('dialog').getByRole('button', { name: SEL.button.simpan });
+    this.errorText = this.page.getByRole('dialog').locator(SEL.state.error);
+    this.cancelButton = this.page.getByRole('dialog').getByRole('button', { name: SEL.button.batal });
   }
 
-  get nameInput(): Locator {
-    return this.page.getByRole('dialog').locator('input[name="name"]');
-  }
-  get submitButton(): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: SEL.button.simpan });
-  }
-  get errorText(): Locator {
-    return this.page.getByRole('dialog').locator(SEL.state.error);
-  }
-  get cancelButton(): Locator {
-    return this.page.getByRole('dialog').getByRole('button', { name: SEL.button.batal });
-  }
-
-  async fillName(name: string): Promise<void> {
+  async fillName(name: string): Promise<this> {
     await this.nameInput.fill(name);
+    return this;
   }
-  async submit(): Promise<void> {
+
+  async submit(): Promise<this> {
     await this.submitButton.click();
+    return this;
   }
 }

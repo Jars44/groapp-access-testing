@@ -3,17 +3,13 @@ import { SEL } from '../../utils/selectors';
 
 export class ToastComponent {
   readonly root: Locator;
+  readonly message: Locator;
+  readonly dismissButton: Locator;
 
   constructor(readonly page: Page) {
     this.root = page.locator(SEL.toast.root);
-  }
-
-  get message(): Locator {
-    return this.page.locator(SEL.toast.message);
-  }
-
-  get dismissButton(): Locator {
-    return this.root.getByRole('button', { name: /dismiss|tutup/i });
+    this.message = page.locator(SEL.toast.message);
+    this.dismissButton = this.root.getByRole('button', { name: /dismiss|tutup/i });
   }
 
   async waitForToast(timeout = 10000): Promise<void> {
@@ -25,7 +21,8 @@ export class ToastComponent {
     return await this.message.innerText();
   }
 
-  async dismiss(): Promise<void> {
+  async dismiss(): Promise<this> {
     await this.dismissButton.click();
+    return this;
   }
 }
