@@ -18,11 +18,11 @@ You are the Lead QA Architect. Execute the **full Mode C pipeline** for standard
 
 ## Pipeline Phases
 
-### Phase 1: Parallel Research (Discovery First)
+### Phase 1: Parallel Research
 
 **Research before planning.** Learn codebase before writing plan.
 
-Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls (one per message, blocks until return). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file, different TC ownership) — no race conditions.
+Dispatch 4 researchers CONCURRENTLY in a single message with 4 separate `task()` calls (all 4 in one message). They run in parallel — wall-time = single longest call. Each call is independent (different domain, different output file, different TC ownership) — no race conditions.
 
 | Letter | Agent                   | Domain                          | Output File                                           |
 | ------ | ----------------------- | ------------------------------- | ----------------------------------------------------- |

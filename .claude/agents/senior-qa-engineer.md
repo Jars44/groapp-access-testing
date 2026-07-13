@@ -1,6 +1,6 @@
 ---
+name: senior-qa-engineer
 description: Default agent persona. Playwright E2E testing for React/TypeScript
-mode: primary
 ---
 
 # Senior QA Engineer

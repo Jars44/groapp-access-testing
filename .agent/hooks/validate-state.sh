@@ -39,7 +39,7 @@ case "$PHASE" in
     jq -e '.pipeline.phase == "research"' "$STATE_FILE" >/dev/null 2>&1 || { echo "E002: handoff_invalid — expected phase=research, got $(jq -r '.pipeline.phase' "$STATE_FILE")"; exit 1; }
     ;;
   planning)
-    jq -e '.pipeline.phase == "research"' "$STATE_FILE" >/dev/null 2>&1 || { echo "E002: handoff_invalid — expected phase=research, got $(jq -r '.pipeline.phase' "$STATE_FILE")"; exit 1; }
+    jq -e '.pipeline.phase == "research"' "$STATE_FILE" >/dev/null 2>&1 || { echo "E002: handoff_invalid — expected phase=research (preceding planning), got $(jq -r '.pipeline.phase' "$STATE_FILE")"; exit 1; }
     check_required_field '.artifacts.research_findings' "artifacts.research_findings"
     ;;
   human_gate)
@@ -53,7 +53,7 @@ case "$PHASE" in
     check_required_field '.artifacts.spec_files' "artifacts.spec_files"
     ;;
   verification)
-    jq -e '.pipeline.phase == "implementation"' "$STATE_FILE" >/dev/null 2>&1 || { echo "E002: handoff_invalid — expected phase=implementation, got $(jq -r '.pipeline.phase' "$STATE_FILE")"; exit 1; }
+    jq -e '.pipeline.phase == "reflection_spec"' "$STATE_FILE" >/dev/null 2>&1 || { echo "E002: handoff_invalid — expected phase=reflection_spec (preceding verification), got $(jq -r '.pipeline.phase' "$STATE_FILE")"; exit 1; }
     check_required_field '.artifacts.reports' "artifacts.reports"
     ;;
   teardown)

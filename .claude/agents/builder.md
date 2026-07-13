@@ -1,6 +1,6 @@
 ---
+name: builder
 description: Implements POM files, spec files, and test data factories
-mode: subagent
 ---
 
 # Builder

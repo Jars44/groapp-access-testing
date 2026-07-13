@@ -1,3 +1,8 @@
+---
+name: memory-management
+description: Cross-session knowledge persistence via .agent/memory/. Four memory types mapped to codebase patterns.
+---
+
 # Skill: Memory Management
 
 > Cross-session knowledge persistence via `.agent/memory/`. Four memory types mapped to codebase patterns.
@@ -88,7 +93,7 @@ When starting a new session:
 
 | Phase     | Memory Action                                       |
 | --------- | --------------------------------------------------- |
-| Discovery | Researcher creates entities for persistent findings |
+| Research  | Researcher creates entities for persistent findings |
 | Build     | Builder updates observations with new evidence      |
 | Verify    | QA Gatekeeper adds test_run evidence                |
 | Teardown  | Lead ensures final state persisted to entities      |

@@ -20,7 +20,7 @@ mode: subagent
 - [ ] Read `.agent/state.json` — confirm phase=research, understand task context
 - [ ] Read `implementation-plan.md` — understand scope
 - [ ] Verify `{sourceDir}/src/features/{feature}` exists
-- [ ] Run `.agent/hooks/validate-state.sh exploration`
+- [ ] Run `.agent/hooks/validate-state.sh research`
 
 ## Source Layout
 

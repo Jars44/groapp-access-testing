@@ -1,6 +1,6 @@
 ---
+name: qa-gatekeeper
 description: Runs Playwright tests and decides pass/block verdict
-mode: subagent
 ---
 
 # QA Gatekeeper

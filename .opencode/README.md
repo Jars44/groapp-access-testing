@@ -106,7 +106,8 @@ This codebase implements **Mode C: Maximum Parallelism** — the optimal mode fo
 Documentation (todos, state snapshots, memory) updates in REAL-TIME during execution, NOT batched at end.
 
 ```text
-Discovery:  Lead writes todos/tc-*.md [ ] → Researchers flip to [/] → Researchers flip to [x] with evidence
+Research:   Researchers flip to [/] → flip to [x] with evidence
+Planning:   Lead writes todos/tc-*.md [ ] (after research)
 Build:      Builder writes [x] with file:line per TC → Memory observations updated
 Verify:     QA adds test_run:pass/fail → Memory test results updated
 Teardown:   Lead writes final state → Memory relations created

@@ -1,6 +1,6 @@
 ---
+name: reflector
 description: Self-critique agent: reviews builder output against constitution before QA
-mode: subagent
 ---
 
 # Reflector

@@ -35,7 +35,7 @@ Before executing this SOP, classify the request:
 
 | Phase          | Parallel Tasks                                                                            | Sequential Constraints                                     |
 | -------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Discovery      | 4x Researcher sub-agents + Lead writes todos + Memory entities                            | None                                                       |
+| Research       | 4x Researcher sub-agents + Lead writes todos + Memory entities                            | None                                                       |
 | Implementation | Lead updates todos real-time + Builder writes + Memory observations                       | Builder needs researcher output                            |
 | Verification   | Lead drafts summary structure + QA runs tests + Memory test results + Reflector critiques | QA needs builder artifacts, Reflector needs builder output |
 | Teardown       | Lead finalizes summary + merges state.json + persists memory relations                    | State.json written once                                    |
@@ -58,12 +58,13 @@ Before executing this SOP, classify the request:
 Todos (`.agent/plans/todos-{feature}.md`), state snapshots, and memory entities updated **continuously** during execution — never batched at end.
 
 ```text
-Discovery:    Lead writes [ ] → Researcher adds [/] as exploration begins
+Research:     Researcher adds [/] as exploration begins
               Researchers write memory entities for component selectors/routes/APIs
-Research:     Researcher writes [/] as finds evidence → converts to [x] when complete
-Build:        Builder writes [x] with file:line evidence per TC
+              Researcher writes [/] as finds evidence → converts to [x] when complete
+Planning:     Lead writes [ ] rows (after research complete)
+Implementation: Builder writes [x] with file:line evidence per TC
               Builder adds observations to memory entities (implementation facts)
-Verify:       Reflector critiques → writes [x] with critique annotations to memory
+Verification+Reflection: Reflector critiques → writes [x] with critique annotations to memory
               QA Gatekeeper adds test_run:pass/fail field to evidence
               QA writes test results to memory entities
 Teardown:     Lead writes final state.json (ONCE) + creates memory relations + persists state snapshot
@@ -75,9 +76,9 @@ Teardown:     Lead writes final state.json (ONCE) + creates memory relations + p
 
 | Doc                             | Phase          | Parallel With             | Why Safe                                                              |
 | ------------------------------- | -------------- | ------------------------- | --------------------------------------------------------------------- |
-| `todos/{tc-id}.md`              | Discovery      | Researchers               | Each TC file has one assigned owner                                   |
+| `todos/{tc-id}.md`              | Research       | Researchers               | Each TC file has one assigned owner                                   |
 | `todos/{tc-id}.md`              | Implementation | Builder                   | Builder writes only to implementation TC files                        |
-| `memory/entities/{entity}.json` | Discovery      | Researchers               | Each researcher creates different entity files                        |
+| `memory/entities/{entity}.json` | Research       | Researchers               | Each researcher creates different entity files                        |
 | `memory/entities/{entity}.json` | Implementation | Builder                   | Builder appends to existing — different files than researcher creates |
 | `memory/entities/{entity}.json` | Verification   | QA Gatekeeper + Reflector | QA adds test_results, Reflector adds annotations — different fields   |
 | `state.json`                    | Teardown only  | Nothing                   | Written once, end of pipeline                                         |
@@ -158,10 +159,10 @@ Each agent writes to separate entity files — prevents concurrent write conflic
 5. All entries require evidence (sourceFile, sourceLine)
 6. Write history logged in `writes` array per file
 
-### Parallel Discovery Workflow
+### Parallel Research Workflow
 
 ```text
-LEAD AGENT (Phase 1 — Discovery: Research)
+LEAD AGENT (Phase 1 — Research)
 │
 ├── 1. Read PRD / AC (1 call)
 ├── 2. DISPATCH 4x researchers CONCURRENTLY in single message (4 task() calls, independent domains)
@@ -349,7 +350,7 @@ LEAD AGENT
 ## Mode B: Sequential Pipeline (Default)
 
 ```text
-LEAD ARCHITECT (Phase 1 — Discovery: Research)
+LEAD ARCHITECT (Phase 1 — Research)
 │
 ├── 1. Read user story / PRD / AC
 ├── 2. DISPATCH researcher (read-only code exploration)
@@ -471,7 +472,7 @@ At merge points, Lead reads all partial files before any writer proceeds:
 
 **Merge points:**
 
-- Discovery → Implementation: Lead merges 4 researcher outputs
+- Research → Planning: Lead merges 4 researcher outputs
 - Implementation → Verification: Lead merges builder output
 - Verification → Teardown: Lead merges QA + Reflector outputs
 

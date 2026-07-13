@@ -1,6 +1,6 @@
 ---
+name: researcher
 description: Read-only code explorer for routes, components, selectors, APIs
-mode: subagent
 ---
 
 # Researcher

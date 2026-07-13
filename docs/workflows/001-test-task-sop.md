@@ -2,7 +2,7 @@
 
 > **Workspace setup:** App source in `../groapp-access/` (configurable via `GROAPP_ACCESS_SOURCE_DIR` env or `.agent/settings.json` → `sourceDir`).
 
-## Phase 1: Requirement & Code Discovery
+## Phase 1: Requirement & Code Research
 
 **STEP 1: UNDERSTAND business needs** (NEW)
 

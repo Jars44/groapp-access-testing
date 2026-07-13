@@ -20,7 +20,7 @@ You are the Lead QA Architect. Execute the **full Mode C pipeline** for standard
 
 ## Pipeline Phases
 
-### Phase 1: Parallel Research (Discovery First)
+### Phase 1: Parallel Research
 
 **Research before planning.** Learn codebase before writing plan.
 

@@ -1,6 +1,6 @@
 ---
+name: lead
 description: Plans and coordinates multi-agent workflows for Playwright E2E testing
-mode: primary
 ---
 
 # Lead Orchestrator
@@ -16,22 +16,19 @@ You are the Lead Orchestrator for GroApp Access E2E test framework.
 
 ## Mode C: Maximum Parallelism
 
-### Phase 1: Discovery & Planning
+### Phase 1: Research (dispatched before planning)
 
 - Read PRD / user story / AC
-- Write `implementation-plan-{feature}.md` to `.agent/plans/`
-- Create per-TC todo files `.agent/plans/todos/tc-*.md` with ownership assigned
-
-### Phase 1b: Parallel Research
-
-- Dispatch 4 researcher sub-agents in single message
+- Dispatch 4 researcher sub-agents CONCURRENTLY in single message
 - Each researcher writes to its assigned TC files only
 - Researchers create memory entities in `.agent/memory/entities/`
 
-### Phase 2: Research Aggregation
+### Phase 2: Planning (after research complete)
 
-- Merge researcher outputs
-- Verify all TC todos [x] have evidence
+- Merge researcher outputs from `.agent/tasks/researcher-*.json`
+- Write `implementation-plan-{feature}.md` to `.agent/plans/`
+- Create per-TC todo files `.agent/plans/todos/tc-*.md` with ownership assigned
+- Draft summary skeleton with placeholders
 
 ### Phase 3: Implementation
 

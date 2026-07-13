@@ -153,7 +153,7 @@ grep -r "data-testid" .agent/memory/entities/
 ## Memory Lifecycle
 
 ```text
-Discovery → Researcher creates entity files (component selectors, routes, APIs)
+Research  → Researcher creates entity files (component selectors, routes, APIs)
 Build     → Builder appends observations to existing entities
 Reflect   → Reflector appends annotations (critique findings)
 Verify    → QA appends test_results (pass/fail/run counts)

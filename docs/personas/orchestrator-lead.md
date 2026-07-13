@@ -53,13 +53,13 @@ When generating `summary-{feature}-{YYYYMMDD}.md`:
 
 **How:**
 
-| Phase     | Spec Update                                                                 |
-| --------- | --------------------------------------------------------------------------- |
-| Discovery | Lead writes initial spec in `.agent/plans/implementation-plan-{feature}.md` |
-| Research  | Researchers add selector findings to spec                                   |
-| Build     | Builder adds POM structure, test locations                                  |
-| Verify    | Reflector annotates issues, QA adds test results                            |
-| Teardown  | Lead finalizes spec → moves to `.agent/reports/summary-{feature}.md`        |
+| Phase    | Spec Update                                                                 |
+| -------- | --------------------------------------------------------------------------- |
+| Planning | Lead writes initial spec in `.agent/plans/implementation-plan-{feature}.md` |
+| Research | Researchers add selector findings to spec                                   |
+| Build    | Builder adds POM structure, test locations                                  |
+| Verify   | Reflector annotates issues, QA adds test results                            |
+| Teardown | Lead finalizes spec → moves to `.agent/reports/summary-{feature}.md`        |
 
 ## Memory Writing (Parallel with Code Work)
 
@@ -301,63 +301,39 @@ USER REQUEST
 > **Primary mode.** Parallelize researcher sub-agents. Documentation runs alongside code work.
 
 ```text
-PHASE 1 — Discovery & Planning (sequential — creates shared artifacts)
+PHASE 1 — Research (dispatched before planning)
 ├── 1. Read user story / PRD / AC
-├── 2. Write .agent/plans/implementation-plan-{feature}.md using template
-├── 3. Identify all test scenarios → list TC-01 through TC-N
-└── 4. Create per-TC todo files with ownership assigned
-
-    PARALLEL Phase 1b (DISPATCH researchers + Lead writes todos):
-    ├── Lead: writes initial [ ] status to .agent/plans/todos/tc-01.md through tc-N.md
-    │
-    └── DISPATCH 4× researchers in single message:
-        ├── RESEARCHER-A (Routes) → .agent/tasks/researcher-routes-{ts}.json
-        │   └── Owns: todos/tc-01.md, todos/tc-02.md (route-related TCs)
-        ├── RESEARCHER-B (Selectors/UI) → .agent/tasks/researcher-components-{ts}.json
-        │   └── Owns: todos/tc-03.md, todos/tc-04.md (component-related TCs)
-        ├── RESEARCHER-C (Validators) → .agent/tasks/researcher-validators-{ts}.json
-        │   └── Owns: todos/tc-05.md, todos/tc-06.md (validation TCs)
-        └── RESEARCHER-D (POM Patterns) → .agent/tasks/researcher-pom-patterns-{ts}.json
-            └── Owns: todos/tc-07.md, todos/tc-08.md (POM pattern TCs)
-
-        PARALLEL: Researchers write to their assigned TC files + create memory entities
-        ├── Researcher-B (Routes): flips [ ] → [/] → [x] on tc-01.md, tc-02.md
-        │   └── Creates: .agent/memory/entities/{route-entity}.json
-        ├── Researcher-A (Selectors/UI): flips [ ] → [/] → [x] on tc-03.md, tc-04.md
-        │   └── Creates: .agent/memory/entities/{component-entity}.json
-        ├── Researcher-C (Validators): flips [ ] → [/] → [x] on tc-05.md, tc-06.md
-        │   └── Creates: .agent/memory/entities/{validator-entity}.json
-        └── Researcher-D (POM Patterns): flips [ ] → [/] → [x] on tc-07.md, tc-08.md
-            └── Creates: .agent/memory/entities/{pom-patterns-entity}.json
-
+├── 2. DISPATCH 4× researchers CONCURRENTLY in single message:
+│   ├── RESEARCHER-A (Routes) → .agent/tasks/researcher-routes-{ts}.json
+│   ├── RESEARCHER-B (Selectors/UI) → .agent/tasks/researcher-components-{ts}.json
+│   ├── RESEARCHER-C (Validators) → .agent/tasks/researcher-validators-{ts}.json
+│   └── RESEARCHER-D (POM Patterns) → .agent/tasks/researcher-pom-patterns-{ts}.json
+│
+│   PARALLEL: Each researcher writes TC files [ ]→[/]→[x] + creates memory entities
+│
 ▼ (4 researchers complete — wall-time = single call)
 
-PHASE 2 — Research Aggregation + Early Documentation (PARALLEL)
-├── 5. glob .agent/tasks/researcher-*.json → merge findings
-├── 6. glob .agent/plans/todos/tc-*.md → verify all [x] have evidence
-├── 7. If any [x] lacks evidence → re-dispatch researcher (max 3 retries)
-└── PARALLEL: Lead drafts .agent/reports/summary-{feature}.md skeleton with placeholders
+PHASE 2 — Planning (after research complete)
+├── 3. glob .agent/tasks/researcher-*.json → merge findings
+├── 4. Write .agent/plans/implementation-plan-{feature}.md using template
+├── 5. Identify all test scenarios → list TC-01 through TC-N
+├── 6. Create per-TC todo files with ownership assigned
+├── 7. Write initial [ ] status to .agent/plans/todos/tc-*.md
+└── 8. Lead drafts .agent/reports/summary-{feature}.md skeleton with placeholders
 
-▼ (handoff = 4 research files merged + all TC todos [x] + summary skeleton)
+▼ (handoff = research merged + plan written + todos created + summary skeleton)
 
-PHASE 3 — Implementation
-├── 8. task(builder) with all 4 researcher outputs
-│   ├── Builder: POM + spec + data factories
-│   ├── Builder: updates todos/tc-XX.md [x] with file:line evidence per TC
-│   │   └── Writes ONLY to TC files owned by Builder (tc-08, tc-09, etc.)
-│   ├── Builder: writes .agent/tasks/builder-{ts}.json
-│   └── Builder: appends observations to .agent/memory/entities/{entity}.json
+PHASE 3 — Human Gate (MANDATORY HALT)
+├── 8. Present plan to user
+└── 9. WAIT for explicit approval before proceeding
 
-    PARALLEL Phase 3b (Reflection runs while Builder continues):
-    └── task(reflector) critiques Builder output → .agent/tasks/reflector-{ts}.json
-        ├── If revise → return findings to Builder → Builder fixes → re-dispatch Reflector
-        │   └── Reflection cycle ≤3 max
-        └── If pass → append critique annotations to .agent/memory/entities/{entity}.json
+⏳ *Implementation Plan dan Todos berhasil dibuat. Silakan tinjau file tersebut.
+Apakah ada yang perlu disesuaikan, atau ketik 'Lanjutkan' untuk mengeksekusi script testing?*
 
-▼ (handoff = 4 research files merged + all TC todos [x] + summary skeleton)
+▼ (user approval received)
 
-PHASE 3 — Sequential Implementation
-├── 8. Dispatch 2 builders SEQUENTIALLY (not in parallel):
+PHASE 4 — Sequential Implementation
+├── 10. Dispatch 2 builders SEQUENTIALLY (not in parallel):
 │   ├── task(builder-pom) → creates POM files → .agent/tasks/builder-pom-{ts}.json
 │   │   └── Updates todos/tc-XX.md [x] with POM file:line evidence
 │   └── task(builder-spec) → reads POM files from Builder-POM → creates spec files → .agent/tasks/builder-spec-{ts}.json
@@ -370,37 +346,37 @@ PHASE 3 — Sequential Implementation
 
 ▼ (handoff via .agent/tasks/builder-pom-{ts}.json + builder-spec-{ts}.json)
 
-PHASE 4 — Verification + Sequential Reflection Sub-Cycles
+PHASE 5 — Verification + Sequential Reflection Sub-Cycles
 │
-├── 9. REFLECTOR-POM (runs first, sequential within reflection)
+├── 11. REFLECTOR-POM (runs first, sequential within reflection)
 │   ├── Reads POM files from Builder-POM
 │   ├── Checks: selector priority, BasePage, readonly, no assertions
 │   ├── If revise → Builder-POM fixes → re-dispatch Reflector-POM (cycle ≤3)
 │   └── If pass → proceed to Reflector-Spec
 │
-├── 10. REFLECTOR-SPEC (parallel-ready, waits for Reflector-POM pass)
+├── 12. REFLECTOR-SPEC (parallel-ready, waits for Reflector-POM pass)
 │   ├── Reads spec files from Builder-Spec
 │   ├── Checks: no hardcoded timeouts, Arrange→Act→Assert, assertions
 │   ├── If revise → Builder-Spec fixes → re-dispatch Reflector-Spec (cycle ≤3)
 │   └── If pass → append critique annotations to memory entities
 │
-├── 11. QA-GATEKEEPER (runs independently but not concurrently — dispatch after Reflector)
+├── 13. QA-GATEKEEPER (runs independently but not concurrently — dispatch after Reflector)
 │   ├── Runs .agent/hooks/test.sh test --grep "{feature}" --reporter=list
 │   ├── Writes .agent/tasks/qa-gatekeeper-{ts}.json
 │   └── Appends test_run results to memory entities
 │
-└── 12. Lead: DRAFT summary with placeholders → .agent/reports/summary-{feature}.md
+└── 14. Lead: DRAFT summary with placeholders → .agent/reports/summary-{feature}.md
     └── Placeholders for pass/fail counts (filled after QA results)
 
 ▼ (QA results + reflector verdict + summary skeleton ready)
 
-PHASE 5 — Teardown (sequential — single writer)
-├── 13. Finalize summary with actual test counts
-├── 14. Merge all todos/tc-*.md → .agent/reports/summary-{feature}.md
-├── 15. Write .agent/state.json ONCE (aggregated result)
-├── 16. Write .agent/memory/entities/relations.json (Lead only)
-├── 17. Run validate-state.sh teardown
-└── 18. Ask user: ".agent/plans/todos/ complete. Keep or delete?"
+PHASE 6 — Teardown (sequential — single writer)
+├── 15. Finalize summary with actual test counts
+├── 16. Merge all todos/tc-*.md → .agent/reports/summary-{feature}.md
+├── 17. Write .agent/state.json ONCE (aggregated result)
+├── 18. Write .agent/memory/entities/relations.json (Lead only)
+├── 19. Run validate-state.sh teardown
+└── 20. Ask user: ".agent/plans/todos/ complete. Keep or delete?"
 ```
 
 ### Mode A — Parallel Dispatch (Legacy)
@@ -422,12 +398,12 @@ PHASE 5 — Teardown (sequential — single writer)
 ### Mode B — Sequential Pipeline
 
 ```text
-PHASE 1 — Discovery & Planning
+PHASE 1 — Research & Planning
 ├── 1. Read user story / PRD / AC
 ├── 2. Identify test scenarios (happy, error, edge)
 ├── 3. Write .agent/plans/implementation-plan-{feature}.md using template
 ├── 4. Set phase=research in .agent/state.json
-└── 5. Run validate-state.sh discovery → handoff to Researcher
+└── 5. Run validate-state.sh research → handoff to Researcher
 │
 PHASE 5 — Teardown (after QA Gatekeeper)
 ├── 1. Run validate-state.sh teardown
@@ -454,7 +430,7 @@ Todos (`.agent/plans/todos-{feature}.md`) updated continuously during execution.
 ### Real-Time Update Rules
 
 ```text
-Discovery:    Lead writes [ ] rows BEFORE dispatching researchers
+Planning:     Lead writes [ ] rows BEFORE dispatching researchers
 Research:     Each researcher flips [ ] → [/] when starting exploration of that TC's scope
               Each researcher flips [/] → [x] with evidence when finding complete
 Build:        Builder updates rows as POM/spec written per TC — NOT batched at end
@@ -574,7 +550,7 @@ At teardown, generate `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md` f
 
 | Phase          | Agent                                   | Output                                                                             | Parallel With                 |
 | -------------- | --------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------- |
-| Discovery      | Lead writes implementation-plan + todos | `.agent/plans/implementation-plan-{feature}.md`, `.agent/plans/todos-{feature}.md` | 4× Researchers                |
+| Planning       | Lead writes implementation-plan + todos | `.agent/plans/implementation-plan-{feature}.md`, `.agent/plans/todos-{feature}.md` | 4× Researchers                |
 | Research       | 4× Researchers                          | `.agent/tasks/researcher-{domain}-{ts}.json`                                       | Each other                    |
 | Aggregation    | Lead                                    | Merged findings + updated todos                                                    | —                             |
 | Implementation | Builder                                 | POM + spec files + todos [x]                                                       | Lead updates todos            |
@@ -593,10 +569,10 @@ At teardown, generate `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md` f
 
 ### Mode B (Pipeline)
 
-| Phase          | Agent         | Output                                                      | Human-verifiable artifact   |
-| -------------- | ------------- | ----------------------------------------------------------- | --------------------------- |
-| Discovery      | Lead          | `.agent/plans/implementation-plan-{feature}.md`             | Checklist human can follow  |
-| Exploration    | Researcher    | File:line findings → state.json                             | Source paths human can open |
-| Implementation | Builder       | POM + spec files, implementation-plan.md [x] with file:line | Code human can inspect      |
-| Verification   | QA Gatekeeper | Test results → state.json + audit                           | Test output + flakiness log |
-| Teardown       | Lead          | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md`    | Full traceability report    |
+| Phase               | Agent         | Output                                                      | Human-verifiable artifact   |
+| ------------------- | ------------- | ----------------------------------------------------------- | --------------------------- |
+| Research & Planning | Lead          | `.agent/plans/implementation-plan-{feature}.md`             | Checklist human can follow  |
+| Research            | Researcher    | File:line findings → state.json                             | Source paths human can open |
+| Implementation      | Builder       | POM + spec files, implementation-plan.md [x] with file:line | Code human can inspect      |
+| Verification        | QA Gatekeeper | Test results → state.json + audit                           | Test output + flakiness log |
+| Teardown            | Lead          | `.agent/reports/summary-{feature}-{YYYYMMDD}[-{seq}].md`    | Full traceability report    |

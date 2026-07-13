@@ -46,7 +46,7 @@ Skip implementation-plan, todos, halt, and full reflection cycle.
 
 ## Mode C: Maximum Parallelism (Level 2, Default)
 
-### Phase 1: Parallel Research (Discovery First)
+### Phase 1: Parallel Research
 
 **Research before planning.** Learn codebase before writing plan.
 

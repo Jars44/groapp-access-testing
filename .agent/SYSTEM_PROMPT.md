@@ -73,7 +73,7 @@ Every user request MUST be classified before any other work.
 **Trigger:** 3-50 TCs, new feature, normal pipeline.
 **Run:** `/mode-c` or execute phases manually.
 
-### Phase 1: Parallel Research (Discovery First)
+### Phase 1: Parallel Research
 
 **Research before planning.** Learn codebase before writing plan.
 

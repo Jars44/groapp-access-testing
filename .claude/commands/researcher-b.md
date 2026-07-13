@@ -1,6 +1,6 @@
 ---
 description: Researcher B — UI components and selectors
-agent: researcher discovery
+agent: researcher
 ---
 
 ## MANDATORY: System Protocol

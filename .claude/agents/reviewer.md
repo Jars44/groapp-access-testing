@@ -1,6 +1,6 @@
 ---
+name: reviewer
 description: Code auditor: spec compliance + code quality review
-mode: subagent
 ---
 
 # Reviewer
