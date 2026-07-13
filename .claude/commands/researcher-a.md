@@ -1,5 +1,6 @@
 ---
 description: Researcher A — Page routes and navigation flow
+agent: researcher
 ---
 
 ## MANDATORY: System Protocol

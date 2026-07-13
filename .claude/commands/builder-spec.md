@@ -1,5 +1,6 @@
 ---
 description: Builder Specs — Creates/updates Playwright test spec files
+agent: builder
 ---
 
 ## MANDATORY: System Protocol

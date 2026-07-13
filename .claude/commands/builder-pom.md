@@ -1,5 +1,6 @@
 ---
 description: Builder POM — Creates/updates Page Object Model files
+agent: builder
 ---
 
 ## MANDATORY: System Protocol

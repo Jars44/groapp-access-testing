@@ -1,5 +1,6 @@
 ---
 description: QA Gatekeeper — Runs Playwright tests, decides pass/block verdict
+agent: qa-gatekeeper
 ---
 
 ## MANDATORY: System Protocol

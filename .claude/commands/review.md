@@ -1,5 +1,6 @@
 ---
 description: Reviewer — Full audit of POM and spec files
+agent: reviewer
 ---
 
 ## MANDATORY: System Protocol

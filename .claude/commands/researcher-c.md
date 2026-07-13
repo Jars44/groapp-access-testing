@@ -1,5 +1,6 @@
 ---
 description: Researcher C — Form validation and error states
+agent: researcher
 ---
 
 ## MANDATORY: System Protocol

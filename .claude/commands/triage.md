@@ -1,5 +1,6 @@
 ---
 description: Phase 0 Triage — classify request, route to hotfix/mode-c/epic
+agent: lead
 ---
 
 ## MANDATORY: System Protocol

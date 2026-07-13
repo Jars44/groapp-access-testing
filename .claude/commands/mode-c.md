@@ -1,5 +1,6 @@
 ---
 description: Level 2 — Full Mode C pipeline for standard features (3-50 TCs)
+agent: lead
 ---
 
 ## MANDATORY: System Protocol

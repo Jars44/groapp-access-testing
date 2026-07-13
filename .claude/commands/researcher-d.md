@@ -1,5 +1,6 @@
 ---
 description: Researcher D — Existing POM patterns in test framework
+agent: researcher
 ---
 
 ## MANDATORY: System Protocol

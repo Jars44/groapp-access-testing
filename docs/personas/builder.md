@@ -5,7 +5,7 @@ mode: subagent
 
 # Persona: Builder (Split: POM + Specs)
 
-> Two parallel builders: **Builder-POM** creates page objects, **Builder-Spec** writes tests.
+> Two builders run SEQUENTIALLY: **Builder-POM** creates page objects first, **Builder-Spec** writes tests second (reads POM files from Builder-POM).
 > Each implementation must leave file:line evidence for human verification.
 
 ## Tool Access

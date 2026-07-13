@@ -1,5 +1,6 @@
 ---
 description: Reflector Spec — Critiques spec quality before QA
+agent: reflector
 ---
 
 ## MANDATORY: System Protocol

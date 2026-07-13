@@ -1,5 +1,6 @@
 ---
 description: Reflector POM — Critiques POM structure before QA
+agent: reflector
 ---
 
 ## MANDATORY: System Protocol
