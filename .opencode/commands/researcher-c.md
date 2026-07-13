@@ -22,7 +22,7 @@ Target: Form components, validation schemas, error rendering
 ## What You Do
 
 1. Read `.agent/state.json` — confirm phase=research, feature={feature}
-2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
+2. Read user story / PRD / AC for {feature} — understand scope
 3. Find validators: scan forms for validation rules, error messages, input constraints
 4. **Write findings to `.agent/tasks/researcher-validators-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
 5. Update assigned TC todo files: [ ] → [/] → [x] with evidence

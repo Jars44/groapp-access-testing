@@ -151,7 +151,7 @@ mode: template
 
 ## Verification Checklist
 
-### Discovery
+### Research
 
 - [ ] Route verified in `routes.tsx`
 - [ ] Component verified in `src/features/`

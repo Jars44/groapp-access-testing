@@ -19,7 +19,7 @@ Source: `../groapp-access/src/features/{feature}/presentation/pages/`
 ## Steps
 
 1. Read `.agent/state.json` — confirm phase=research, feature={feature}
-2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
+2. Read user story / PRD / AC for {feature} — understand scope
 3. Scan components: find `data-testid`, `aria-label`, `getByRole`, `getByLabel`, CSS selectors
 4. **Write findings to `.agent/tasks/researcher-components-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
 5. Update assigned TC todo files: [ ] → [/] → [x] with evidence

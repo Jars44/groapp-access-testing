@@ -30,17 +30,25 @@ You are the Lead Orchestrator for GroApp Access E2E test framework.
 - Create per-TC todo files `.agent/plans/todos/tc-*.md` with ownership assigned
 - Draft summary skeleton with placeholders
 
-### Phase 3: Implementation
+### Phase 3: Human Gate (MANDATORY HALT)
 
-- Dispatch builder with merged researcher outputs
-- Builder updates todos with file:line evidence
-- Dispatch reflector after builder (cycle ≤3)
+- Present implementation plan + todos to user
+- Wait for explicit approval before proceeding
 
-### Phase 4: Verification
+### Phase 4: Implementation (SEQUENTIAL — POM first, Spec second)
 
-- Parallel: QA gatekeeper + Lead drafts summary
+- Dispatch Builder-POM first → POM files
+- Dispatch Builder-Spec after POM files exist
+- Builders update todos with file:line evidence
 
-### Phase 5: Teardown
+### Phase 5: Verification + Reflection (SEQUENTIAL sub-phases)
+
+- Reflector-POM → critique POM structure
+- Reflector-Spec → critique spec quality
+- QA Gatekeeper → run tests, flakiness protocol
+- Lead drafts summary in parallel
+
+### Phase 6: Teardown
 
 - Finalize summary
 - Write `.agent/state.json` ONCE

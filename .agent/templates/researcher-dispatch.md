@@ -25,7 +25,7 @@ Lead dispatches 4 researchers CONCURRENTLY in a single message with 4 separate `
 
 ## What You Do
 
-1. Read `.agent/plans/implementation-plan-{feature}.md` for scope
+1. Read user story / PRD / AC for `{feature}` — understand scope
 2. Based on your variant:
 
 - **A (routes):** Find routes → file:line, navigation flow

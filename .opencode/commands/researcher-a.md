@@ -41,7 +41,7 @@ Target: Route files, app router configuration
 ## What You Do
 
 1. Read `.agent/state.json` — confirm phase=research, feature={feature}
-2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
+2. Read user story / PRD / AC for {feature} — understand scope
 3. Find routes: scan `routes.tsx`, `app-routes.ts`, route definitions
 4. Trace navigation: link components, redirect chains, guards
 5. **Write findings to `.agent/tasks/researcher-routes-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**

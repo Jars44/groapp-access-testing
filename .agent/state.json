@@ -33,7 +33,7 @@
       "research": { "agents": ["researcher-A", "researcher-B", "researcher-C", "researcher-D"], "parallel": true },
       "planning": { "agents": ["lead"], "parallel": false, "depends_on": "research" },
       "human_gate": { "agents": ["lead", "user"], "parallel": false, "depends_on": "planning" },
-      "implementation": { "agents": ["builder-pom", "builder-spec", "lead"], "parallel": true, "depends_on": "human_gate" },
+      "implementation": { "agents": ["builder-pom", "builder-spec", "lead"], "parallel": false, "depends_on": "human_gate", "note": "Builder-POM and Builder-Spec run SEQUENTIALLY (race condition: Spec reads POM files)" },
       "reflection_pom": { "agents": ["reflector-pom"], "parallel": false, "depends_on": "implementation" },
       "reflection_spec": { "agents": ["reflector-spec"], "parallel": false, "depends_on": "reflection_pom" },
       "verification": { "agents": ["qa-gatekeeper", "lead"], "parallel": true, "depends_on": "reflection_spec" },
@@ -186,7 +186,7 @@
           "verification_notes": "human-readable notes for reviewer"
         },
         "owner": {
-          "discovery": "researcher-{A|B|C|D}",
+          "research": "researcher-{A|B|C|D}",
           "implementation": "builder-pom | builder-spec",
           "reflection": "reflector-pom | reflector-spec",
           "verification": "qa-gatekeeper"
@@ -272,7 +272,8 @@
       },
       "implementation": {
         "agents": ["builder-pom", "builder-spec", "lead"],
-        "parallel": true,
+        "parallel": false,
+        "note": "Builder-POM and Builder-Spec run SEQUENTIALLY — race condition: Spec reads POM files",
         "writes": ["src/tests/pages/**/*.page.ts", "src/tests/components/**/*.component.ts", "src/tests/specs/**/*.spec.ts", ".agent/plans/todos/tc-*.md", ".agent/memory/entities/*.json", ".agent/tasks/builder-{pom|spec}-{YYYYMMDDHHMMSS}-{seq}.json"]
       },
       "reflection_pom": {

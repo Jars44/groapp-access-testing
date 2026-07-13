@@ -26,6 +26,7 @@ No `// ... rest`, no `/* TODO */`, no `...`, no ellipsis. Every file = complete.
 ## Distrobox Container Rule
 
 Playwright + browsers live inside `playwright-box` distrobox container. Always run tests through the wrapper:
+
 - `.agent/hooks/test.sh` — wraps `npx playwright` via `distrobox enter playwright-box --`
 - Already inside container (`DISTROBOX_ENTER_PATH` set)? Runs directly.
 - `.agent/hooks/test.sh` passes all args through. Use it instead of `npx playwright test`.

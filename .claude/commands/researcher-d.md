@@ -19,7 +19,7 @@ Source: `src/tests/` (groapp-access-testing, NOT groapp-access)
 ## Steps
 
 1. Read `.agent/state.json` — confirm phase=research, feature={feature}
-2. Read `.agent/plans/implementation-plan-{feature}.md` — understand scope
+2. Read user story / PRD / AC for {feature} — understand scope
 3. Scan existing POM patterns in test framework
 4. Identify conventions to follow (DRY principle)
 5. **Write findings to `.agent/tasks/researcher-pom-patterns-{YYYYMMDDHHMMSS}-{seq}.json` (MANDATORY — do this BEFORE returning)**
